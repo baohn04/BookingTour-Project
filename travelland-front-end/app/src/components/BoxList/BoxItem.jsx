@@ -64,17 +64,17 @@ function BoxItem(props) {
 
         <div className="flex flex-col gap-1 mb-4 mt-auto">
           <Text className="text-gray-500 text-xs flex items-center gap-2">
-            <CalendarOutlined className="text-orange-500" /> Khởi hành: <span className="font-medium text-gray-700">{formattedDate}</span>
+            <CalendarOutlined className="text-primary" /> Khởi hành: <span className="font-medium text-gray-700">{formattedDate}</span>
           </Text>
           <Text className="text-gray-500 text-xs flex items-center gap-2">
-            <ClockCircleOutlined className="text-orange-500" /> Còn chỗ: <span className="font-medium text-gray-700">{stock || 0} vé</span>
+            <ClockCircleOutlined className="text-primary" /> Còn chỗ: <span className="font-medium text-gray-700">{stock || 0} vé</span>
           </Text>
         </div>
 
         <div className="border-t border-gray-100 pt-4 mt-2 flex justify-between items-end">
           <Button
             type="primary"
-            className="!h-10 !px-6 !rounded-full !bg-orange-500 hover:!bg-orange-600 !text-white !font-bold !border-none !shadow-md hover:!shadow-orange-200"
+            className="!h-10 !px-6 !rounded-full !bg-primary hover:!bg-primary-hover !text-white !font-bold !border-none !shadow-md hover:!shadow-primary/30"
           >
             Đặt ngay
           </Button>
@@ -85,14 +85,14 @@ function BoxItem(props) {
                 <Text className="text-gray-400 text-xs line-through mb-0.5">
                   {formatPrice(price)}
                 </Text>
-                <Text className="!text-orange-600 text-lg font-bold leading-none">
+                <Text className="!text-primary text-lg font-bold leading-none">
                   {formatPrice(price_special)}
                 </Text>
               </>
             ) : (
               <>
                 <Text className="text-transparent text-xs select-none mb-0.5">-</Text>
-                <Text className="!text-orange-600 text-lg font-bold leading-none">
+                <Text className="!text-primary text-lg font-bold leading-none">
                   {formatPrice(price)}
                 </Text>
               </>

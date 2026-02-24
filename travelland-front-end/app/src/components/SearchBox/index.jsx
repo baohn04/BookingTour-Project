@@ -13,7 +13,7 @@ function SearchBox(props) {
         <Col xs={24} md={8} lg={7}>
           <div className="flex flex-col h-full justify-center px-3">
             <span className="text-base font-semibold text-gray-800 mb-2 block">Tên tour</span>
-            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-orange-200 focus-within:border-orange-400 focus-within:shadow-sm">
+            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
               <EnvironmentOutlined className="text-xl text-gray-400 mr-3" />
               <Input
                 placeholder="Nhập tên tour"
@@ -28,7 +28,7 @@ function SearchBox(props) {
         <Col xs={24} md={8} lg={7}>
           <div className="flex flex-col h-full justify-center px-3">
             <span className="text-base font-semibold text-gray-800 mb-2 block">Thời gian</span>
-            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-orange-200 focus-within:border-orange-400 focus-within:shadow-sm">
+            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
               <CalendarOutlined className="text-xl text-gray-400 mr-3" />
               <RangePicker
                 bordered={false}
@@ -46,7 +46,7 @@ function SearchBox(props) {
         <Col xs={24} md={8} lg={6}>
           <div className="flex flex-col h-full justify-center px-3">
             <span className="text-base font-semibold text-gray-800 mb-2 block">Loại tour</span>
-            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-orange-200 focus-within:border-orange-400 focus-within:shadow-sm">
+            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
               <FlagOutlined className="text-xl text-gray-400 mr-3" />
 
               <Select
@@ -71,7 +71,7 @@ function SearchBox(props) {
           <Button
             type="primary"
             icon={<SearchOutlined />}
-            className="w-full !h-14 !rounded-xl !text-base !font-semibold !bg-gradient-to-br !from-orange-500 !to-orange-600 !border-none !shadow-[0_4px_12px_rgba(249,115,22,0.3)] mt-7 flex items-center justify-center hover:!from-orange-600 hover:!to-orange-700"
+            className="w-full !h-14 !rounded-xl !text-base !font-semibold !bg-gradient-to-br !from-primary !to-primary-hover !border-none !shadow-[0_4px_12px_rgb(var(--color-primary)/0.3)] mt-7 flex items-center justify-center hover:!from-primary-hover hover:!to-primary"
           >
             Tìm kiếm
           </Button>

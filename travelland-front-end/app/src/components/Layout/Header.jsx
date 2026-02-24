@@ -89,7 +89,7 @@ function Header() {
             <Link to="/" style={{ textDecoration: 'none' }}>
               <Space align="center" size={8}>
                 <img src={settingGeneral.logo} alt="Logo" className="max-h-20 w-auto object-contain rounded-md" />
-                <Text className="text-[22px] font-bold text-orange-500 ml-2">{settingGeneral.websiteName}</Text>
+                <Text className="text-[22px] font-bold text-primary ml-2">{settingGeneral.websiteName}</Text>
               </Space>
             </Link>
           </Col>

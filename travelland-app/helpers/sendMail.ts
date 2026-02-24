@@ -5,7 +5,7 @@ const sendMail = (email: string, subject: string, html: string) => {
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD, // app password nếu có 2FA
+      pass: process.env.EMAIL_PASSWORD,
     }
   });
 

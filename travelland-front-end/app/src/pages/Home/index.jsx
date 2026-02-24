@@ -107,7 +107,7 @@ function Home() {
             <Title level={2} className="!text-[var(--color-text1)] !text-2xl md:!text-[28px] !font-bold !m-0 tracking-tight">
               Danh mục tour du lịch
             </Title>
-            <Button type="text" className="!text-[var(--color-text1)] hover:!text-orange-600 !font-semibold !text-sm">
+            <Button type="text" className="!text-[var(--color-text1)] hover:!text-primary-hover !font-semibold !text-sm">
               Xem thêm
             </Button>
           </div>
@@ -143,7 +143,7 @@ function Home() {
                   <SwiperSlide key={item.id} className="px-3 md:px-4 py-2">
                     <Link to={`/tours/${item.slug}`}>
                       <div className="flex flex-col items-center group cursor-pointer">
-                        <div className="relative w-32 h-32 md:w-36 md:h-36 lg:w-[150px] lg:h-[150px] rounded-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 ease-in-out border-[3px] border-transparent group-hover:border-orange-500">
+                        <div className="relative w-32 h-32 md:w-36 md:h-36 lg:w-[150px] lg:h-[150px] rounded-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 ease-in-out border-[3px] border-transparent group-hover:border-primary">
                           <img
                             src={item.image}
                             alt={item.title}
@@ -152,7 +152,7 @@ function Home() {
                         </div>
 
                         <div className="mt-5 text-center">
-                          <Text className="block !text-[17px] !font-bold !text-gray-900 group-hover:!text-orange-600 transition-colors">
+                          <Text className="block !text-[17px] !font-bold !text-gray-900 group-hover:!text-primary-hover transition-colors">
                             {item.title}
                           </Text>
                         </div>
@@ -189,7 +189,7 @@ function Home() {
                   <Button
                     type="primary"
                     size="large"
-                    className="!h-14 !px-10 !rounded-full !bg-orange-500 hover:!bg-orange-600 !text-white !text-lg !font-bold !border-none !shadow-lg hover:!shadow-orange-200"
+                    className="!h-14 !px-10 !rounded-full !bg-primary hover:!bg-primary-hover !text-white !text-lg !font-bold !border-none !shadow-lg hover:!shadow-primary/30"
                   >
                     Tìm hiểu thêm
                   </Button>
@@ -218,7 +218,7 @@ function Home() {
             <Title level={2} className="!text-[var(--color-text1)] !text-2xl md:!text-[28px] !font-bold !m-0 tracking-tight">
               Các tour phổ biến
             </Title>
-            <Button type="text" className="!text-[var(--color-text1)] hover:!text-orange-600 !font-semibold !text-sm">
+            <Button type="text" className="!text-[var(--color-text1)] hover:!text-primary-hover !font-semibold !text-sm">
               Xem thêm
             </Button>
           </div>
@@ -258,7 +258,7 @@ function Home() {
                         />
                       </div>
 
-                      <Text className="!text-orange-500 !text-lg !font-semibold mb-3 block">
+                      <Text className="!text-primary !text-lg !font-semibold mb-3 block">
                         {review.title}
                       </Text>
 
