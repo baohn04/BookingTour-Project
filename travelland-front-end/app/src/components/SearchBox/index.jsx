@@ -7,18 +7,18 @@ function SearchBox(props) {
   const { categories } = props;
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-full max-w-[1200px] relative mx-auto">
+    <div className="bg-background rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-full max-w-[1200px] relative mx-auto">
       <Row gutter={[24, 16]} align="middle">
         {/* Tour name */}
         <Col xs={24} md={8} lg={7}>
           <div className="flex flex-col h-full justify-center px-3">
-            <span className="text-base font-semibold text-gray-800 mb-2 block">Tên tour</span>
-            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
-              <EnvironmentOutlined className="text-xl text-gray-400 mr-3" />
+            <span className="text-base font-semibold text-text1 mb-2 block">Tên tour</span>
+            <div className="flex items-center bg-background rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
+              <EnvironmentOutlined className="text-xl text-text1 mr-3" />
               <Input
                 placeholder="Nhập tên tour"
                 bordered={false}
-                className="!p-0 !bg-transparent text-[15px] w-full text-gray-700 font-medium placeholder:text-gray-400"
+                className="!p-0 !bg-transparent text-[15px] w-full text-text1 font-medium placeholder:text-text1"
               />
             </div>
           </div>
@@ -27,16 +27,16 @@ function SearchBox(props) {
         {/* When - Date Range */}
         <Col xs={24} md={8} lg={7}>
           <div className="flex flex-col h-full justify-center px-3">
-            <span className="text-base font-semibold text-gray-800 mb-2 block">Thời gian</span>
-            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
-              <CalendarOutlined className="text-xl text-gray-400 mr-3" />
+            <span className="text-base font-semibold text-text1 mb-2 block">Thời gian</span>
+            <div className="flex items-center bg-background rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
+              <CalendarOutlined className="text-xl text-text1 mr-3" />
               <RangePicker
                 bordered={false}
                 suffixIcon={null}
                 className="!p-0 !bg-transparent w-full text-[15px] font-medium"
                 placeholder={['Ngày đi', 'Ngày về']}
                 format="DD/MM/YYYY"
-                separator={<span className="text-gray-400 mx-1">~</span>}
+                separator={<span className="text-text1 mx-1">~</span>}
               />
             </div>
           </div>
@@ -45,9 +45,9 @@ function SearchBox(props) {
         {/* Tour Type */}
         <Col xs={24} md={8} lg={6}>
           <div className="flex flex-col h-full justify-center px-3">
-            <span className="text-base font-semibold text-gray-800 mb-2 block">Loại tour</span>
-            <div className="flex items-center bg-gray-50 rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
-              <FlagOutlined className="text-xl text-gray-400 mr-3" />
+            <span className="text-base font-semibold text-text1 mb-2 block">Loại tour</span>
+            <div className="flex items-center bg-background rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
+              <FlagOutlined className="text-xl text-text1 mr-3" />
 
               <Select
                 defaultValue="all"

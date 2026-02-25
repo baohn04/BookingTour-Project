@@ -28,7 +28,7 @@ function FloatingActions() {
       {/* Back to Top */}
       <FloatButton.BackTop
         type="primary"
-        className="!bg-primary hover:!bg-primary-hover !w-12 !h-12 md:!w-14 md:!h-14 shadow-lg shadow-gray-400"
+        className="!bg-primary hover:!bg-primary-hover !w-12 !h-12 md:!w-14 md:!h-14 shadow-lg shadow-text1/20"
         visibilityHeight={300}
         duration={500}
         tooltip={<span className="font-medium">Lên đầu trang</span>}

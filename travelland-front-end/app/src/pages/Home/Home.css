@@ -6,7 +6,7 @@
 .swiper-pagination-bullet {
   width: 8px;
   height: 8px;
-  background-color: #1f2937 !important; /* Dark color */
+  background-color: var(--color-text1) !important; /* Dark color */
   opacity: 0.3 !important;
   transition: all 0.3s ease;
 }
@@ -15,6 +15,6 @@
   width: 24px;
   height: 8px;
   border-radius: 10px;
-  background-color: #0f172a !important; /* Darker color for active state */
+  background-color: var(--color-text1) !important; /* Darker color for active state */
   opacity: 1 !important;
 }

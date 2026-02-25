@@ -85,10 +85,10 @@ function Home() {
 
           {/* Content Wrapper */}
           <div className="relative z-[2] w-full px-5 flex flex-col items-center max-w-7xl mx-auto">
-            <Title level={1} className="!text-[var(--color-text2)] !text-3xl md:!text-5xl !font-bold !text-center !mb-4 !drop-shadow-lg tracking-tight">
+            <Title level={1} className="text-text2 !text-3xl md:!text-5xl !font-bold !text-center !mb-4 !drop-shadow-lg tracking-tight">
               Trải nghiệm khác biệt trong từng hành trình
             </Title>
-            <Text className="!text-[var(--color-text2)] !text-base md:!text-lg !text-center !mb-10 max-w-2xl !drop-shadow-md font-medium">
+            <Text className="text-text2 !text-base md:!text-lg !text-center !mb-10 max-w-2xl !drop-shadow-md font-medium">
               Khám phá thế giới cùng TravelLand. Tour giá tốt mỗi ngày
             </Text>
 
@@ -103,11 +103,11 @@ function Home() {
       <div className="max-w-[1400px] mx-auto mt-16 px-4 md:px-10">
 
         <div className="mb-20">
-          <div className="flex items-end justify-between mb-10 pb-2 border-b-0 border-gray-100">
-            <Title level={2} className="!text-[var(--color-text1)] !text-2xl md:!text-[28px] !font-bold !m-0 tracking-tight">
+          <div className="flex items-end justify-between mb-10 pb-2 border-b-0 border-text1">
+            <Title level={2} className="text-text1 !text-2xl md:!text-[28px] !font-bold !m-0 tracking-tight">
               Danh mục tour du lịch
             </Title>
-            <Button type="text" className="!text-[var(--color-text1)] hover:!text-primary-hover !font-semibold !text-sm">
+            <Button type="text" className="text-text1 hover:!text-primary-hover !font-semibold !text-sm">
               Xem thêm
             </Button>
           </div>
@@ -152,7 +152,7 @@ function Home() {
                         </div>
 
                         <div className="mt-5 text-center">
-                          <Text className="block !text-[17px] !font-bold !text-gray-900 group-hover:!text-primary-hover transition-colors">
+                          <Text className="block !text-[17px] !font-bold text-text1 group-hover:!text-primary-hover transition-colors">
                             {item.title}
                           </Text>
                         </div>
@@ -168,7 +168,7 @@ function Home() {
         {loading ? (
           <Skeleton.Button active block style={{ height: 400, borderRadius: 30, marginBottom: 80 }} />
         ) : (
-          <div className="mb-20 rounded-[30px] overflow-hidden" style={{ background: '#FFF7F2' }}>
+          <div className="mb-20 rounded-[30px] overflow-hidden" style={{ background: 'var(--color-primary)' }}>
             <Row gutter={0} className="flex-col-reverse md:flex-row">
               <Col xs={24} md={12} className="relative flex items-center p-8 md:p-14 lg:p-20 overflow-hidden">
                 <div
@@ -180,16 +180,16 @@ function Home() {
                   }}
                 ></div>
                 <div className="relative z-10 max-w-lg">
-                  <Title level={2} className="!text-[var(--color-text1)] !text-3xl md:!text-4xl !font-extrabold mb-6 !leading-tight">
+                  <Title level={2} className="text-text1 !text-3xl md:!text-4xl !font-extrabold mb-6 !leading-tight">
                     Khám phá những điểm đến tuyệt vời nhất thế giới
                   </Title>
-                  <Text className="!text-gray-600 text-lg block mb-8 font-medium">
+                  <Text className="text-text1 text-lg block mb-8 font-medium">
                     Chúng tôi mang đến những trải nghiệm du lịch độc đáo, giúp bạn khám phá vẻ đẹp tiềm ẩn của mỗi vùng đất.
                   </Text>
                   <Button
                     type="primary"
                     size="large"
-                    className="!h-14 !px-10 !rounded-full !bg-primary hover:!bg-primary-hover !text-white !text-lg !font-bold !border-none !shadow-lg hover:!shadow-primary/30"
+                    className="!h-14 !px-10 !rounded-full !bg-primary hover:!bg-primary-hover text-text2 !text-lg !font-bold !border-none !shadow-lg hover:!shadow-primary/30"
                   >
                     Tìm hiểu thêm
                   </Button>
@@ -206,7 +206,7 @@ function Home() {
                       maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 100%)'
                     }}
                   />
-                  <div className="absolute top-0 bottom-0 left-0 w-16 md:w-24 bg-gradient-to-r from-[#FFF7F2] to-transparent"></div>
+                  <div className="absolute top-0 bottom-0 left-0 w-16 md:w-24 bg-gradient-to-r from-[var(--color-primary)] to-transparent"></div>
                 </div>
               </Col>
             </Row>
@@ -214,11 +214,11 @@ function Home() {
         )}
 
         <div className="mb-20">
-          <div className="flex items-end justify-between mb-8 pb-2 border-b-0 border-gray-100">
-            <Title level={2} className="!text-[var(--color-text1)] !text-2xl md:!text-[28px] !font-bold !m-0 tracking-tight">
+          <div className="flex items-end justify-between mb-8 pb-2 border-b-0 border-text1">
+            <Title level={2} className="text-text1 !text-2xl md:!text-[28px] !font-bold !m-0 tracking-tight">
               Các tour phổ biến
             </Title>
-            <Button type="text" className="!text-[var(--color-text1)] hover:!text-primary-hover !font-semibold !text-sm">
+            <Button type="text" className="text-text1 hover:!text-primary-hover !font-semibold !text-sm">
               Xem thêm
             </Button>
           </div>
@@ -227,7 +227,7 @@ function Home() {
         </div>
 
         <div className="mb-20">
-          <Title level={2} className="!text-[var(--color-text1)] !text-3xl md:!text-4xl !font-bold !text-center !mb-12">
+          <Title level={2} className="text-text1 !text-3xl md:!text-4xl !font-bold !text-center !mb-12">
             Customer Reviews
           </Title>
 
@@ -262,15 +262,15 @@ function Home() {
                         {review.title}
                       </Text>
 
-                      <Text className="!text-[var(--color-text1)] !text-lg md:!text-2xl !leading-relaxed max-w-2xl mx-auto mb-6 block font-medium">
+                      <Text className="text-text1 !text-lg md:!text-2xl !leading-relaxed max-w-2xl mx-auto mb-6 block font-medium">
                         "{review.content}"
                       </Text>
 
                       <div>
-                        <Text className="!text-[var(--color-text1)] !text-base !font-bold block">
+                        <Text className="text-text1 !text-base !font-bold block">
                           {review.name}
                         </Text>
-                        <Text className="!text-gray-500 !text-sm">
+                        <Text className="text-text1 !text-sm">
                           {review.role}
                         </Text>
                       </div>

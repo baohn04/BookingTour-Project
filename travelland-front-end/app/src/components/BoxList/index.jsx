@@ -10,7 +10,7 @@ function BoxList(props) {
       <Row gutter={[24, 32]}>
         {[...Array(8)].map((_, i) => (
           <Col xs={24} sm={12} md={8} lg={6} key={i}>
-            <div className="rounded-2xl border border-gray-100 p-4 h-full">
+            <div className="rounded-2xl border border-text2 p-4 h-full">
               <Skeleton.Image active className="!w-full !h-48 mb-4 rounded-xl" />
               <Skeleton active paragraph={{ rows: 3 }} />
             </div>
@@ -21,7 +21,7 @@ function BoxList(props) {
   }
 
   if (!tours || tours.length === 0) {
-    return <div className="text-center text-gray-500 py-10 w-full">Không tìm thấy tour nào.</div>;
+    return <div className="text-center text-text1 py-10 w-full">Không tìm thấy tour nào.</div>;
   }
 
   return (

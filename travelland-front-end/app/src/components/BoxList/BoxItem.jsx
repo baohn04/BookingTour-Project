@@ -17,10 +17,10 @@ function BoxItem(props) {
   const formattedDate = timeStart ? new Date(timeStart).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Đang cập nhật';
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col relative">
+    <div className="group bg-background rounded-2xl border border-text2 hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col relative">
       {/* Discount Badge */}
       {discount > 0 && (
-        <div className="absolute top-4 right-4 z-10 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold shadow-md">
+        <div className="absolute top-4 right-4 z-10 bg-red-500 text-text2 px-2 py-1 rounded-md text-xs font-bold shadow-md">
           Giảm {discount}%
         </div>
       )}
@@ -35,12 +35,12 @@ function BoxItem(props) {
         {/* Favorite Button */}
         <button
           onClick={onFavoriteClick}
-          className="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-colors cursor-pointer border-none"
+          className="absolute bottom-3 right-3 w-10 h-10 bg-background rounded-full flex items-center justify-center shadow-md hover:bg-background transition-colors cursor-pointer border-none"
         >
           {isFavorite ? (
-            <HeartFilled className="text-red-500 text-lg" />
+            <HeartFilled className="text-text1 text-lg" />
           ) : (
-            <HeartOutlined className="text-gray-400 text-lg hover:text-red-500" />
+            <HeartOutlined className="text-text1 text-lg hover:text-text1" />
           )}
         </button>
       </div>
@@ -48,33 +48,33 @@ function BoxItem(props) {
       {/* Content */}
       <div className="px-4 pt-2 pb-4 flex flex-col flex-grow">
         <div className="flex justify-between items-center mb-1">
-          <Text className="text-gray-400 text-xs uppercase font-medium tracking-wide flex items-center gap-1">
+          <Text className="text-text1 text-xs uppercase font-medium tracking-wide flex items-center gap-1">
             <NumberOutlined /> {code || 'N/A'}
           </Text>
           {stock && stock <= 5 ? <Tag color="error" className="m-0 !text-[10px]"><FireOutlined /> Sắp hết</Tag> : null}
         </div>
 
-        <Title level={5} className="!text-[var(--color-text1)] !mb-2 !font-bold line-clamp-2 min-h-[48px]" title={title}>
+        <Title level={5} className="text-text1 !mb-2 !font-bold line-clamp-2 min-h-[48px]" title={title}>
           {title}
         </Title>
 
-        <Text className="text-gray-500 text-sm line-clamp-2 min-h-[42px] mb-3" title={information}>
+        <Text className="text-text1 text-sm line-clamp-2 min-h-[42px] mb-3" title={information}>
           {information || 'Chưa có thông tin'}
         </Text>
 
         <div className="flex flex-col gap-1 mb-4 mt-auto">
-          <Text className="text-gray-500 text-xs flex items-center gap-2">
-            <CalendarOutlined className="text-primary" /> Khởi hành: <span className="font-medium text-gray-700">{formattedDate}</span>
+          <Text className="text-text1 text-xs flex items-center gap-2">
+            <CalendarOutlined className="text-primary" /> Khởi hành: <span className="font-medium text-text1">{formattedDate}</span>
           </Text>
-          <Text className="text-gray-500 text-xs flex items-center gap-2">
-            <ClockCircleOutlined className="text-primary" /> Còn chỗ: <span className="font-medium text-gray-700">{stock || 0} vé</span>
+          <Text className="text-text1 text-xs flex items-center gap-2">
+            <ClockCircleOutlined className="text-primary" /> Còn chỗ: <span className="font-medium text-text1">{stock || 0} vé</span>
           </Text>
         </div>
 
-        <div className="border-t border-gray-100 pt-4 mt-2 flex justify-between items-end">
+        <div className="border-t pt-4 mt-2 flex justify-between items-end">
           <Button
             type="primary"
-            className="!h-10 !px-6 !rounded-full !bg-primary hover:!bg-primary-hover !text-white !font-bold !border-none !shadow-md hover:!shadow-primary/30"
+            className="!h-10 !px-6 !rounded-full !bg-primary hover:!bg-primary-hover text-text2 !font-bold !border-none !shadow-md hover:!shadow-primary/30"
           >
             Đặt ngay
           </Button>
@@ -82,7 +82,7 @@ function BoxItem(props) {
           <div className="flex flex-col">
             {discount > 0 ? (
               <>
-                <Text className="text-gray-400 text-xs line-through mb-0.5">
+                <Text className="text-text1 text-xs line-through mb-0.5">
                   {formatPrice(price)}
                 </Text>
                 <Text className="!text-primary text-lg font-bold leading-none">

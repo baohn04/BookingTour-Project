@@ -81,7 +81,7 @@ function Header() {
   ];
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm px-4">
+    <header className="bg-background border-b border-text2 sticky top-0 z-50 shadow-sm px-4">
       <div className="max-w-7xl mx-auto py-3">
         <Row align="middle" justify="space-between" gutter={[16, 12]}>
           {/* Logo */}
@@ -98,9 +98,9 @@ function Header() {
           <Col xs={0} sm={8} md={10} lg={10} xl={11}>
             <Input
               placeholder="Tìm kiếm tour du lịch..."
-              prefix={<SearchOutlined className="text-gray-400" />}
+              prefix={<SearchOutlined className="text-text1" />}
               size="large"
-              className="rounded-3xl bg-gray-50 border-gray-200 hover:bg-white focus:bg-white"
+              className="rounded-3xl bg-background border-text1 hover:bg-background"
             />
           </Col>
 
@@ -110,14 +110,14 @@ function Header() {
               <Space size={12}>
                 {/* Home */}
                 <Link to="/">
-                  <Button type="text" className="font-medium text-gray-600 hover:text-primary border-none shadow-none" icon={<HomeOutlined />}>
+                  <Button type="text" className="font-medium text-text1 hover:text-primary border-none shadow-none" icon={<HomeOutlined />}>
                     Trang Chủ
                   </Button>
                 </Link>
 
                 {/* Tour Types */}
                 <Link to="/categories">
-                  <Button type="text" className="font-medium text-gray-600 hover:text-primary border-none shadow-none" icon={<AppstoreOutlined />}>
+                  <Button type="text" className="font-medium text-text1 hover:text-primary border-none shadow-none" icon={<AppstoreOutlined />}>
                     Loại Tour
                   </Button>
                 </Link>
@@ -137,7 +137,7 @@ function Header() {
 
                 {/* Language Switcher */}
                 <Dropdown menu={{ items: languageItems }} placement="bottomRight" trigger={['click']}>
-                  <Button type="text" className="font-medium text-gray-600 hover:text-primary border-none shadow-none flex items-center gap-2">
+                  <Button type="text" className="font-medium text-text1 hover:text-primary border-none shadow-none flex items-center gap-2">
                     {currentLang === 'vi'
                       ? <img src="https://flagcdn.com/w20/vn.png" srcSet="https://flagcdn.com/w40/vn.png 2x" alt="Vietnamese" className="w-5 h-auto rounded-[2px]" />
                       : <img src="https://flagcdn.com/w20/us.png" srcSet="https://flagcdn.com/w40/us.png 2x" alt="English" className="w-5 h-auto rounded-[2px]" />
@@ -157,7 +157,7 @@ function Header() {
                 <Dropdown menu={{ items: languageItems }} placement="bottomRight" trigger={['click']}>
                   <Button
                     type="text"
-                    className="border-none shadow-none px-2 text-gray-600 hover:text-primary flex items-center justify-center p-0 h-[40px]"
+                    className="border-none shadow-none px-2 text-text1 hover:text-primary flex items-center justify-center p-0 h-[40px]"
                   >
                     {currentLang === 'vi'
                       ? <img src="https://flagcdn.com/w40/vn.png" alt="Vietnamese" className="w-[26px] h-auto rounded-[3px] shadow-sm transform scale-[1.1]" />
@@ -172,7 +172,7 @@ function Header() {
                     <Button
                       type="text"
                       icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
-                      className="border-none shadow-none px-2 text-gray-600 hover:text-primary"
+                      className="border-none shadow-none px-2 text-text1 hover:text-primary"
                     />
                   </Badge>
                 </Link>
@@ -182,7 +182,7 @@ function Header() {
                   type="text"
                   icon={<MenuOutlined style={{ fontSize: 20 }} />}
                   onClick={() => setMobileMenuOpen(true)}
-                  className="border-none shadow-none px-2 text-gray-600 hover:text-primary"
+                  className="border-none shadow-none px-2 text-text1 hover:text-primary"
                 />
               </Space>
             </Row>
@@ -192,9 +192,9 @@ function Header() {
           <Col xs={24} sm={0}>
             <Input
               placeholder="Search destinations or activities"
-              prefix={<SearchOutlined className="text-gray-400" />}
+              prefix={<SearchOutlined className="text-text1" />}
               size="middle"
-              className="rounded-3xl bg-gray-50 border-gray-200"
+              className="rounded-3xl bg-background border-text1"
             />
           </Col>
         </Row>

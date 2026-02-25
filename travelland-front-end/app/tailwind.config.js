@@ -10,7 +10,11 @@ module.exports = {
         primary: {
           DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
           hover: 'rgb(var(--color-primary-hover) / <alpha-value>)',
-        }
+        },
+        background: 'var(--color-background)',
+        text1: 'var(--color-text1)',
+        text2: 'var(--color-text2)',
+        text3: 'var(--color-text3)',
       }
     },
   },
