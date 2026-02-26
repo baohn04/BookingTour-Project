@@ -1,18 +1,14 @@
 import React from 'react';
 import { Typography, Tag, Button } from 'antd';
-import { HeartOutlined, HeartFilled, ClockCircleOutlined, NumberOutlined, CalendarOutlined, FireOutlined } from '@ant-design/icons';
+import { NumberOutlined, CalendarOutlined, FireOutlined, HistoryOutlined, TeamOutlined } from '@ant-design/icons';
+import formatPrice from '../../helpers/formatPrice';
 
 const { Text, Title } = Typography;
 
 function BoxItem(props) {
-  const { item, onFavoriteClick } = props;
-  const { title, code, image, images, price, discount, price_special, information, timeStart, stock, isFavorite } = item;
-  const tourImage = image || (images && images.length > 0 ? images[0] : "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3");
-
-  const formatPrice = (val) => {
-    if (!val && val !== 0) return '0 ₫';
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-  };
+  const { item } = props;
+  const { title, code, images, price, discount, price_special, information, timeStart, stock } = item;
+  const tourImage = images[0];
 
   const formattedDate = timeStart ? new Date(timeStart).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Đang cập nhật';
 
@@ -32,17 +28,6 @@ function BoxItem(props) {
           alt={title}
           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
         />
-        {/* Favorite Button */}
-        <button
-          onClick={onFavoriteClick}
-          className="absolute bottom-3 right-3 w-10 h-10 bg-background rounded-full flex items-center justify-center shadow-md hover:bg-background transition-colors cursor-pointer border-none"
-        >
-          {isFavorite ? (
-            <HeartFilled className="text-text1 text-lg" />
-          ) : (
-            <HeartOutlined className="text-text1 text-lg hover:text-text1" />
-          )}
-        </button>
       </div>
 
       {/* Content */}
@@ -64,10 +49,13 @@ function BoxItem(props) {
 
         <div className="flex flex-col gap-1 mb-4 mt-auto">
           <Text className="text-text1 text-xs flex items-center gap-2">
-            <CalendarOutlined className="text-primary" /> Khởi hành: <span className="font-medium text-text1">{formattedDate}</span>
+            <CalendarOutlined className="text-primary" /> Ngày đi: <span className="font-medium text-text1">{formattedDate}</span>
           </Text>
           <Text className="text-text1 text-xs flex items-center gap-2">
-            <ClockCircleOutlined className="text-primary" /> Còn chỗ: <span className="font-medium text-text1">{stock || 0} vé</span>
+            <HistoryOutlined className="text-primary" /> Thời gian: <span className="font-medium text-text1">5N4Đ</span>
+          </Text>
+          <Text className="text-text1 text-xs flex items-center gap-2">
+            <TeamOutlined className="text-primary" /> Số chỗ còn: <span className="font-medium text-text1">{stock || 0}</span>
           </Text>
         </div>
 

@@ -11,24 +11,33 @@ export const index = async (req: Request, res: Response) => {
       slug: slugCategory,
       deleted: false,
       status: "active"
-    });
+    }).select("-__v -createdAt -updatedAt");
 
     let tours = [];
 
     if (category) {
       const categoryId = category.id;
 
-      tours = await Tour.find({
+      let find = {
         category_ids: categoryId,
         deleted: false,
         status: "active"
-      }).select("-__v -createdAt -updatedAt").lean();
+      };
+
+      const sort = {};
+      if (req.query.sortKey && req.query.sortValue) {
+        const sortKey = req.query.sortKey.toString();
+        sort[sortKey] = req.query.sortValue.toString();
+      } else {
+        sort["position"] = "desc";
+      }
+
+      tours = await Tour.find(find)
+        .select("-__v -createdAt -updatedAt")
+        .sort(sort)
+        .lean();
 
       for (const tour of tours) {
-        if (tour.images.length > 0) {
-          tour["image"] = tour.images[0];
-        }
-
         if (tour.price) {
           tour["price_special"] = tour.price * (1 - tour.discount / 100);
         }
@@ -37,7 +46,8 @@ export const index = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: "Success",
-      data: tours
+      data: tours,
+      infoCategory: category
     });
   } catch (error) {
     res.status(500).json({

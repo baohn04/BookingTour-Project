@@ -65,12 +65,6 @@ function Home() {
     fetchApi();
   }, []);
 
-  const toggleFavorite = (id) => {
-    setFeaturedTours(featuredTours.map(tour =>
-      (tour.id === id) ? { ...tour, isFavorite: !tour.isFavorite } : tour
-    ));
-  };
-
   return (
     <div className="home-page pb-20">
       {/* Hero Section */}
@@ -85,10 +79,10 @@ function Home() {
 
           {/* Content Wrapper */}
           <div className="relative z-[2] w-full px-5 flex flex-col items-center max-w-7xl mx-auto">
-            <Title level={1} className="text-text2 !text-3xl md:!text-5xl !font-bold !text-center !mb-4 !drop-shadow-lg tracking-tight">
+            <Title level={1} className="!text-text2 !text-3xl md:!text-5xl !font-bold !text-center !mb-4 !drop-shadow-lg tracking-tight">
               Trải nghiệm khác biệt trong từng hành trình
             </Title>
-            <Text className="text-text2 !text-base md:!text-lg !text-center !mb-10 max-w-2xl !drop-shadow-md font-medium">
+            <Text className="!text-text2 !text-base md:!text-lg !text-center !mb-10 max-w-2xl !drop-shadow-md font-medium">
               Khám phá thế giới cùng TravelLand. Tour giá tốt mỗi ngày
             </Text>
 
@@ -180,16 +174,16 @@ function Home() {
                   }}
                 ></div>
                 <div className="relative z-10 max-w-lg">
-                  <Title level={2} className="text-text1 !text-3xl md:!text-4xl !font-extrabold mb-6 !leading-tight">
+                  <Title level={2} className="!text-text1 !text-3xl md:!text-4xl !font-extrabold mb-6 !leading-tight">
                     Khám phá những điểm đến tuyệt vời nhất thế giới
                   </Title>
-                  <Text className="text-text1 text-lg block mb-8 font-medium">
+                  <Text className="!text-text1 !text-lg block mb-8 font-medium">
                     Chúng tôi mang đến những trải nghiệm du lịch độc đáo, giúp bạn khám phá vẻ đẹp tiềm ẩn của mỗi vùng đất.
                   </Text>
                   <Button
                     type="primary"
                     size="large"
-                    className="!h-14 !px-10 !rounded-full !bg-primary hover:!bg-primary-hover text-text2 !text-lg !font-bold !border-none !shadow-lg hover:!shadow-primary/30"
+                    className="!h-14 !px-10 !rounded-full !bg-primary hover:!bg-primary-hover !text-text2 !text-lg !font-bold !border-none !shadow-lg hover:!shadow-primary/30"
                   >
                     Tìm hiểu thêm
                   </Button>
@@ -223,7 +217,7 @@ function Home() {
             </Button>
           </div>
 
-          <BoxList tours={featuredTours} loading={loading} toggleFavorite={toggleFavorite} />
+          <BoxList tours={featuredTours} loading={loading} />
         </div>
 
         <div className="mb-20">

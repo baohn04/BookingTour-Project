@@ -3,7 +3,7 @@ import { Row, Col, Skeleton } from 'antd';
 import BoxItem from './BoxItem';
 
 function BoxList(props) {
-  const { tours, loading, toggleFavorite } = props;
+  const { tours, loading } = props;
 
   if (loading) {
     return (
@@ -31,7 +31,6 @@ function BoxList(props) {
           <div className="h-full">
             <BoxItem
               item={item}
-              onFavoriteClick={() => toggleFavorite && toggleFavorite(item.id)}
             />
           </div>
         </Col>
