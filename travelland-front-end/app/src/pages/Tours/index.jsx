@@ -5,7 +5,7 @@ import TourList from '../../features/tours/TourList';
 import { useState, useEffect } from 'react';
 import { getTours } from '../../services/tourServices';
 
-function ListTours() {
+function Tours() {
   const { slug } = useParams();
   const [loading, setLoading] = useState(false);
   const [infoCategory, setInfoCategory] = useState({});
@@ -29,7 +29,7 @@ function ListTours() {
           setInfoCategory(result.infoCategory);
         }
       } catch (error) {
-        console.error("Error download data", error);
+        console.error("Error fetching tours data", error);
       } finally {
         setLoading(false);
       }
@@ -88,4 +88,4 @@ function ListTours() {
   );
 }
 
-export default ListTours;
+export default Tours;

@@ -1,6 +1,7 @@
 import LayoutDefault from "../components/Layout";
 import Home from "../pages/Home";
-import ListTours from "../pages/ListTours";
+import Tours from "../pages/Tours";
+import TourDetail from "../pages/Tours/TourDetail";
 
 
 export const routes = [
@@ -15,7 +16,11 @@ export const routes = [
       },
       {
         path: "tours/:slug",
-        element: <ListTours />
+        element: <Tours />
+      },
+      {
+        path: "tours/detail/:slug",
+        element: <TourDetail />
       }
     ]
   }

@@ -57,7 +57,7 @@ function Home() {
           setFeaturedTours(result.data.featuredTours);
         }
       } catch (error) {
-        console.error("Error download data", error);
+        console.error("Error fetching home page data", error);
       } finally {
         setLoading(false);
       }
@@ -74,7 +74,6 @@ function Home() {
           className="relative h-[500px] md:h-[600px] bg-cover bg-center flex items-center justify-center flex-col rounded-[20px] overflow-hidden mt-6"
           style={{ backgroundImage: `url("${HERO_BG}")` }}
         >
-          {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-transparent z-[1]" />
 
           {/* Content Wrapper */}

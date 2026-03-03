@@ -100,7 +100,7 @@ function Header() {
               placeholder="Tìm kiếm tour du lịch..."
               prefix={<SearchOutlined className="text-text1" />}
               size="large"
-              className="rounded-3xl bg-background border-text1 hover:bg-background"
+              className="rounded-3xl border-text1 hover:bg-background hover:!border-primary"
             />
           </Col>
 

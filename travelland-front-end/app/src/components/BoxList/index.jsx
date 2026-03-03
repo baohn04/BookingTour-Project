@@ -30,6 +30,7 @@ function BoxList(props) {
         <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
           <div className="h-full">
             <BoxItem
+              key={item.id}
               item={item}
             />
           </div>
