@@ -133,7 +133,7 @@ function Home() {
                 className="pb-12"
               >
                 {categories && categories.length > 0 ? categories.map((item) => (
-                  <SwiperSlide key={item.id} className="px-3 md:px-4 py-2">
+                  <SwiperSlide key={item.id || item._id} className="px-3 md:px-4 py-2">
                     <Link to={`/tours/${item.slug}`}>
                       <div className="flex flex-col items-center group cursor-pointer">
                         <div className="relative w-32 h-32 md:w-36 md:h-36 lg:w-[150px] lg:h-[150px] rounded-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 ease-in-out border-[3px] border-transparent group-hover:border-primary">
@@ -241,7 +241,7 @@ function Home() {
                 className="pb-12"
               >
                 {reviews.map((review) => (
-                  <SwiperSlide key={review.id} className="px-4 text-center">
+                  <SwiperSlide key={review.id || review._id} className="px-4 text-center">
                     <div className="flex flex-col items-center">
                       <div className="relative mb-6">
                         <Avatar

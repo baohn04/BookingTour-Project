@@ -15,7 +15,7 @@ function TourFilter() {
         <Row gutter={[12, 12]}>
           {['Dưới 5 triệu', 'Từ 5 - 10 triệu', 'Từ 10 - 20 triệu', 'Trên 20 triệu'].map((item, index) => (
             <Col span={12} key={index}>
-              <div className="border  rounded-md py-2 px-2 text-center text-[14px] text-text1 cursor-pointer hover:border-primary hover:text-primary transition-colors bg-background">
+              <div className="border rounded-md py-2 px-2 text-center text-[14px] text-text1 cursor-pointer hover:border-primary hover:text-primary transition-colors bg-background">
                 {item}
               </div>
             </Col>

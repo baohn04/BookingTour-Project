@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Button, Typography, Space, Card } from "antd";
+import { Button, Typography, Space, Card, message } from "antd";
 import { MinusOutlined, PlusOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import formatPrice from "../../helpers/formatPrice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, updateQuantity } from "../../actions/cart";
 
 const { Title, Text } = Typography;
 
@@ -10,6 +12,10 @@ function BookingSidebar(props) {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [toddlers, setToddlers] = useState(0);
+
+  //Redux
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cartReducer);
 
   const formattedDate = tourDetail?.timeStart
     ? new Date(tourDetail.timeStart).toLocaleString('vi-VN', {
@@ -37,6 +43,26 @@ function BookingSidebar(props) {
   const handleIncrease = (onChange, value) => {
     onChange(value + 1);
   };
+
+  const handleAddToCart = () => {
+    if (!tourDetail) return;
+    const tourId = tourDetail.id || tourDetail._id;
+    const totalQuantity = adults + children + toddlers;
+
+    if (totalQuantity <= 0 || !tourId) return;
+
+    const currentQuantity = { adults, children, toddlers };
+
+    // Kiểm tra item theo id hoặc tourId (giữ tính tương thích)
+    if (cart.some(item => item.id === tourId || item.tourId === tourId)) {
+      dispatch(updateQuantity(tourId, currentQuantity));
+    } else {
+      dispatch(addToCart(tourId, currentQuantity));
+    }
+
+    // Hiển thị message thông báo
+    message.success("Thêm vào giỏ hàng thành công!");
+  }
 
   return (
     <Card
@@ -193,6 +219,7 @@ function BookingSidebar(props) {
         <Button
           type="primary"
           size="large"
+          onClick={handleAddToCart}
           block
           disabled={loading || !tourDetail}
           className="bg-primary hover:!bg-primary-hover border-none font-bold rounded-xl h-[52px] text-[18px] shadow-sm disabled:opacity-50 text-white transition-colors"

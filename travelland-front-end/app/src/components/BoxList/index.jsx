@@ -27,12 +27,9 @@ function BoxList(props) {
   return (
     <Row gutter={[24, 32]}>
       {tours.map((item) => (
-        <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
+        <Col xs={24} sm={12} md={8} lg={6} key={item.id || item._id}>
           <div className="h-full">
-            <BoxItem
-              key={item.id}
-              item={item}
-            />
+            <BoxItem item={item} />
           </div>
         </Col>
       ))}

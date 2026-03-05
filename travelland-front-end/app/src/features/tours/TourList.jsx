@@ -48,7 +48,7 @@ function TourList(props) {
         ) : tours && tours.length > 0 ? (
           tours.map((tour) => (
             <TourCard
-              key={tour._id}
+              key={tour.id || tour._id}
               tour={tour}
             />
           ))
