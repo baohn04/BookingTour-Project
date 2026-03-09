@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Row,
   Col,
@@ -27,6 +28,9 @@ function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [settingGeneral, setSettingGeneral] = useState({});
   const [currentLang, setCurrentLang] = useState('vi');
+
+  const cart = useSelector(state => state.cartReducer);
+  const totalQuantity = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -124,7 +128,7 @@ function Header() {
 
                 {/* Cart */}
                 <Link to="/cart">
-                  <Badge count={0} showZero={false}>
+                  <Badge count={totalQuantity} showZero={false}>
                     <Button
                       type="primary"
                       icon={<ShoppingCartOutlined />}
@@ -168,7 +172,7 @@ function Header() {
 
                 {/* Cart Icon */}
                 <Link to="/cart">
-                  <Badge count={0} showZero={false}>
+                  <Badge count={totalQuantity} showZero={false}>
                     <Button
                       type="text"
                       icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}

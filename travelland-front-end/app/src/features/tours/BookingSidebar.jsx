@@ -9,9 +9,7 @@ const { Title, Text } = Typography;
 
 function BookingSidebar(props) {
   const { tourDetail, loading } = props;
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [toddlers, setToddlers] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   //Redux
   const dispatch = useDispatch();
@@ -27,40 +25,37 @@ function BookingSidebar(props) {
     })
     : 'Đang cập nhật';
 
-  // Logic giá và tính tổng
+  // Logic giá và tính tổng (quy về 1 giá chung: price_special hoặc price)
   const priceAdult = tourDetail?.price_special ?? tourDetail?.price ?? 11990000;
-  const priceChild = priceAdult * 0.8;
-  const priceToddler = priceAdult * 0.5;
-
-  const total = adults * priceAdult + children * priceChild + toddlers * priceToddler;
-
+  const total = quantity * priceAdult;
   const stock = tourDetail?.stock ?? 5;
 
-  const handleDecrease = (onChange, value, min = 0) => {
-    onChange(Math.max(min, value - 1));
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
 
-  const handleIncrease = (onChange, value) => {
-    onChange(value + 1);
+  const handleIncrease = () => {
+    if (quantity < stock) {
+      setQuantity(quantity + 1);
+    }
   };
 
   const handleAddToCart = () => {
     if (!tourDetail) return;
     const tourId = tourDetail.id || tourDetail._id;
-    const totalQuantity = adults + children + toddlers;
 
-    if (totalQuantity <= 0 || !tourId) return;
-
-    const currentQuantity = { adults, children, toddlers };
+    if (quantity <= 0 || !tourId) return;
 
     // Kiểm tra item theo id hoặc tourId (giữ tính tương thích)
     if (cart.some(item => item.id === tourId || item.tourId === tourId)) {
-      dispatch(updateQuantity(tourId, currentQuantity));
+      // updateQuantity ở đây là tăng thêm quantity vé chớ không phải gán cứng
+      dispatch(updateQuantity(tourId, quantity));
     } else {
-      dispatch(addToCart(tourId, currentQuantity));
+      dispatch(addToCart(tourId, quantity));
     }
 
-    // Hiển thị message thông báo
     message.success("Thêm vào giỏ hàng thành công!");
   }
 
@@ -93,13 +88,10 @@ function BookingSidebar(props) {
 
       {/* Tickets form Section */}
       <Space direction="vertical" size={16} className="w-full mb-6 pt-2">
-        {/* Người lớn */}
         <div className="bg-background border-b border-gray-100 pb-4 flex justify-between items-center w-full">
           <div className="flex flex-col w-[130px]">
-            <Text className="text-[15px] font-medium text-text1 block leading-tight">Người lớn</Text>
-            <Text type="secondary" className="text-[13px] mt-0.5 block">
-              &gt; 10 tuổi
-            </Text>
+            {/* Just generalized label */}
+            <Text className="text-[15px] font-medium text-text1 block leading-tight">Vé Tour</Text>
           </div>
           <div className="flex-1 text-left px-2">
             <Text className="text-text1 font-bold text-[15px]">
@@ -110,85 +102,17 @@ function BookingSidebar(props) {
             <Button
               type="default"
               shape="circle"
-              onClick={() => handleDecrease(setAdults, adults, 1)}
+              onClick={handleDecrease}
               icon={<MinusOutlined className="text-[14px]" />}
               className="text-gray-400 border-gray-200 bg-white hover:!border-primary hover:!text-primary"
             />
             <Text className="text-[16px] font-semibold text-text1 w-[20px] text-center">
-              {adults}
+              {quantity}
             </Text>
             <Button
               type="default"
               shape="circle"
-              onClick={() => handleIncrease(setAdults, adults)}
-              icon={<PlusOutlined className="text-[14px]" />}
-              className="text-gray-400 border-gray-200 bg-white hover:!border-primary hover:!text-primary"
-            />
-          </Space>
-        </div>
-
-        {/* Trẻ em */}
-        <div className="bg-background border-b border-gray-100 pb-4 flex justify-between items-center w-full">
-          <div className="flex flex-col flex-1 w-[130px]">
-            <Text className="text-[15px] font-medium text-text1 block leading-tight">Trẻ em</Text>
-            <Text type="secondary" className="text-[13px] mt-0.5 block">
-              2 - 10 tuổi
-            </Text>
-          </div>
-          <div className="flex-1 text-left px-2">
-            <Text className="text-text1 font-bold text-[15px]">
-              {formatPrice(priceChild)}
-            </Text>
-          </div>
-          <Space size={10} align="center">
-            <Button
-              type="default"
-              shape="circle"
-              onClick={() => handleDecrease(setChildren, children)}
-              icon={<MinusOutlined className="text-[14px]" />}
-              className="text-gray-400 border-gray-200 bg-white hover:!border-primary hover:!text-primary"
-            />
-            <Text className="text-[16px] font-semibold text-text1 w-[20px] text-center">
-              {children}
-            </Text>
-            <Button
-              type="default"
-              shape="circle"
-              onClick={() => handleIncrease(setChildren, children)}
-              icon={<PlusOutlined className="text-[14px]" />}
-              className="text-gray-400 border-gray-200 bg-white hover:!border-primary hover:!text-primary"
-            />
-          </Space>
-        </div>
-
-        {/* Trẻ nhỏ */}
-        <div className="bg-background flex justify-between items-center w-full">
-          <div className="flex flex-col flex-1 w-[130px]">
-            <Text className="text-[15px] font-medium text-text1 block leading-tight">Trẻ nhỏ</Text>
-            <Text type="secondary" className="text-[13px] mt-0.5 block">
-              &lt; 2 tuổi
-            </Text>
-          </div>
-          <div className="flex-1 text-left px-2">
-            <Text className="text-text1 font-bold text-[15px]">
-              {formatPrice(priceToddler)}
-            </Text>
-          </div>
-          <Space size={10} align="center">
-            <Button
-              type="default"
-              shape="circle"
-              onClick={() => handleDecrease(setToddlers, toddlers)}
-              icon={<MinusOutlined className="text-[14px]" />}
-              className="text-gray-400 border-gray-200 bg-white hover:!border-primary hover:!text-primary"
-            />
-            <Text className="text-[16px] font-semibold text-text1 w-[20px] text-center">
-              {toddlers}
-            </Text>
-            <Button
-              type="default"
-              shape="circle"
-              onClick={() => handleIncrease(setToddlers, toddlers)}
+              onClick={handleIncrease}
               icon={<PlusOutlined className="text-[14px]" />}
               className="text-gray-400 border-gray-200 bg-white hover:!border-primary hover:!text-primary"
             />

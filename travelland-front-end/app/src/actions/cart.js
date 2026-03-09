@@ -6,11 +6,12 @@ export const addToCart = (id, quantity) => {
   }
 }
 
-export const updateQuantity = (id, quantity) => {
+export const updateQuantity = (id, quantity, absolute = false) => {
   return {
     type: "UPDATE_QUANTITY",
     id: id,
-    quantity: quantity
+    quantity: quantity,
+    absolute: absolute
   }
 }
 

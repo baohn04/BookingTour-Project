@@ -23,17 +23,9 @@ const cartReducer = (state = initCart, action) => {
     case "UPDATE_QUANTITY": {
       newState = state.map(item => {
         if (item.tourId === action.id) {
-          const oldQuantity = typeof item.quantity === 'number'
-            ? { adults: item.quantity, children: 0, toddlers: 0 }
-            : (item.quantity || { adults: 0, children: 0, toddlers: 0 });
-
           return {
             ...item,
-            quantity: {
-              adults: oldQuantity.adults + (action.quantity?.adults || 0),
-              children: oldQuantity.children + (action.quantity?.children || 0),
-              toddlers: oldQuantity.toddlers + (action.quantity?.toddlers || 0)
-            }
+            quantity: action.absolute ? action.quantity : item.quantity + action.quantity
           };
         }
         return item;

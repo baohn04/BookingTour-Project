@@ -15,7 +15,7 @@ export const listJson = async (req: Request, res: Response) => {
         _id: tourId,
         deleted: false,
         status: "active"
-      }).select("-__v -createdAt -updatedAt").lean();
+      }).select("-__v -createdAt -updatedAt").lean() as any;
 
       if (infoTour) {
         tour["info"] = infoTour;
@@ -25,8 +25,19 @@ export const listJson = async (req: Request, res: Response) => {
           tour["image"] = infoTour.images[0];
         }
 
-        tour["price_special"] = infoTour.price * (1 - infoTour.discount / 100);
-        tour["total"] = tour.price_special * quantity;
+        const price = infoTour.price || 11990000;
+        const discount = infoTour.discount || 0;
+        let priceAdult = infoTour.price_special;
+
+        if (!priceAdult) {
+          priceAdult = price * (1 - discount / 100);
+        }
+
+        const priceChild = priceAdult * 0.8;
+        const priceToddler = priceAdult * 0.5;
+
+        tour["price_special"] = priceAdult;
+        tour["total"] = priceAdult * (Number(quantity) || 1);
 
         toursResult.push(tour);
       }
