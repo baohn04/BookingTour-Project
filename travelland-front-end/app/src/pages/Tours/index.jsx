@@ -1,7 +1,7 @@
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Row, Col, Breadcrumb } from 'antd';
-import TourFilter from '../../features/tours/TourFilter';
-import TourList from '../../features/tours/TourList';
+import TourFilter from '../../features/Tours/TourFilter';
+import TourList from '../../features/Tours/TourList';
 import { useState, useEffect } from 'react';
 import { getTours } from '../../services/tourServices';
 

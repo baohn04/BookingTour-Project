@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import CartList from "./CartList";
 import { clearCart } from "../../actions/cart";
 import { getListCart } from "../../services/cartServices";
-import { Spin, Button } from "antd";
+import { Button } from "antd";
 
 function Cart() {
   const cart = useSelector((state) => state.cartReducer);

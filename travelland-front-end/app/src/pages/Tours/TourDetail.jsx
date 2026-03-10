@@ -24,9 +24,10 @@ import {
   TeamOutlined,
   BarcodeOutlined,
 } from "@ant-design/icons";
-import BookingSidebar from "../../features/tours/BookingSidebar";
 import { getTourDetail } from "../../services/tourServices";
 import dayjs from "dayjs";
+import BookingSidebar from "../../features/Tours_temp/BookingSidebar";
+
 
 function TourDetail() {
   const { slug } = useParams();
