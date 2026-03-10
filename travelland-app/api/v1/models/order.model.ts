@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema(
     fullName: String,
     phone: String,
     note: String,
+    paymentMethod: String,
     status: String,
     deleted: {
       type: Boolean,

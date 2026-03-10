@@ -4,6 +4,7 @@ import CartList from "./CartList";
 import { clearCart } from "../../actions/cart";
 import { getListCart } from "../../services/cartServices";
 import { Button } from "antd";
+import InfoBooking from "../../features/Cart/InfoBooking";
 
 function Cart() {
   const cart = useSelector((state) => state.cartReducer);
@@ -72,6 +73,7 @@ function Cart() {
               </span>
             </div>
           </div>
+          <InfoBooking cartDetails={cartDetails} total={total} />
         </div>
       ) : (
         <div className="text-center bg-gray-50 border border-gray-200 rounded-2xl py-12 px-4 shadow-sm">

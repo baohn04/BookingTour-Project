@@ -15,6 +15,7 @@ export const order = async (req: Request, res: Response) => {
       fullName: data.info.fullName,
       phone: data.info.phone,
       note: data.info.note,
+      paymentMethod: data.paymentMethod,
       status: "pending",
     };
 
