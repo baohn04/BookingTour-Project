@@ -26,7 +26,7 @@ import {
 } from "@ant-design/icons";
 import { getTourDetail } from "../../services/tourServices";
 import dayjs from "dayjs";
-import BookingSidebar from "../../features/Tours_temp/BookingSidebar";
+import BookingSidebar from "../../features/Tours/BookingSidebar";
 
 
 function TourDetail() {
