@@ -9,7 +9,7 @@ const { Header, Content, Footer } = Layout;
 function LayoutDefault() {
   return (
     <Layout className="min-h-screen !bg-background relative">
-      <Header className="!p-0 !h-auto !bg-transparent !leading-normal z-50">
+      <Header className="!p-0 !h-auto !bg-transparent !leading-normal sticky top-0 z-50">
         <AppHeader />
       </Header>
 

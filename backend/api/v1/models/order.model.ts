@@ -10,6 +10,7 @@ const orderSchema = new mongoose.Schema(
     phone: String,
     note: String,
     paymentMethod: String,
+    totalAmount: Number,
     status: String,
     deleted: {
       type: Boolean,

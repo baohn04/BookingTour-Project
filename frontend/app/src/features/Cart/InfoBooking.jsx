@@ -31,11 +31,16 @@ function InfoBooking(props) {
       const data = {
         info: formData,
         cart: cart,
-        paymentMethod: paymentMethod
+        paymentMethod: paymentMethod,
+        totalAmount: total
       };
 
       const res = await postOrder(data);
       if (res) {
+        if (res.data && res.data.payUrl) {
+          window.location.href = res.data.payUrl;
+          return;
+        }
         message.success("Đặt tour thành công! Cảm ơn bạn.");
         form.resetFields();
         dispatch(clearCart());

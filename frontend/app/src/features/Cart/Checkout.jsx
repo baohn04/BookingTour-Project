@@ -6,7 +6,7 @@ const { Text, Title } = Typography;
 
 function Checkout(props) {
   const { isVisible, onClose, onConfirm, loading, cartDetails = [], total = 0 } = props;
-  const [paymentMethod, setPaymentMethod] = useState('vnpay');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
 
   const handleConfirm = () => {
     onConfirm(paymentMethod);

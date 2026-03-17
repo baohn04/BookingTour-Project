@@ -3,6 +3,7 @@ import Order from "../../models/order.model";
 import Tour from "../../models/tour.model";
 import OrderItem from "../../models/order-item.model";
 import { generateOrderCode } from "../../../../helpers/generate";
+import { generateMomoPaymentUrl } from "../../../../helpers/payment";
 
 // [POST] /order/
 export const order = async (req: Request, res: Response) => {
@@ -16,6 +17,7 @@ export const order = async (req: Request, res: Response) => {
       phone: data.info.phone,
       note: data.info.note,
       paymentMethod: data.paymentMethod,
+      totalAmount: data.totalAmount,
       status: "pending",
     };
 
@@ -57,6 +59,20 @@ export const order = async (req: Request, res: Response) => {
       await new OrderItem(dataItem).save();
     }
 
+    if (data.paymentMethod === "momo") {
+      const origin = req.headers.origin as string;
+      const payUrl = await generateMomoPaymentUrl(code, data.totalAmount, origin);
+
+      return res.status(201).json({
+        message: "Booking tour successfully!",
+        data: {
+          orderCode: code,
+          payUrl: payUrl
+        }
+      });
+    }
+
+    // Default cash response
     res.status(201).json({
       message: "Booking tour successfully!",
       data: {
@@ -73,18 +89,26 @@ export const order = async (req: Request, res: Response) => {
 // [GET] /order/success
 export const orderSuccess = async (req: Request, res: Response) => {
   try {
-    const orderCode = req.query.orderCode;
+    const orderCode = req.query.orderCode || req.query.orderInfo;
 
     const order = await Order.findOne({
       code: orderCode,
       deleted: false,
-    }).select("-__v -createdAt -updatedAt").lean();
+    });
+
     if (!order) {
       res.status(404).json({
         message: "Order not found"
       });
       return;
     }
+
+    if (order.status === "pending") {
+      order.status = "success";
+      await order.save();
+    }
+
+    const orderData = order.toObject();
 
     const orderItems = await OrderItem.find({
       orderId: order._id.toString(),
@@ -111,7 +135,7 @@ export const orderSuccess = async (req: Request, res: Response) => {
       message: "Success",
       data: {
         order: {
-          ...order,
+          ...orderData,
           total_price: totalPrice
         },
         orderItems: orderItems
