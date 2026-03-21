@@ -11,6 +11,8 @@ import {
   Input,
   Calendar,
   Skeleton,
+  Rate,
+  message,
 } from "antd";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -24,7 +26,7 @@ import {
   TeamOutlined,
   BarcodeOutlined,
 } from "@ant-design/icons";
-import { getTourDetail } from "../../services/tourServices";
+import { getTourDetail, postReview, getReviews } from "../../services/tourServices";
 import dayjs from "dayjs";
 import BookingSidebar from "../../features/Tours/BookingSidebar";
 
@@ -34,6 +36,12 @@ function TourDetail() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tourDetail, setTourDetail] = useState([]);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [reviewForm] = Form.useForm();
+  const [reviews, setReviews] = useState([]);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const INITIAL_LIMIT = 2;
+  const LOAD_MORE_LIMIT = 5;
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -50,6 +58,29 @@ function TourDetail() {
     };
     fetchApi();
   }, [slug]);
+
+  // Fetch reviews khi có tourDetail._id
+  const fetchReviews = async (tourId, skip = 0, limit = INITIAL_LIMIT) => {
+    try {
+      const result = await getReviews(tourId, limit, skip);
+      if (result && result.data) {
+        if (skip === 0) {
+          setReviews(result.data);
+        } else {
+          setReviews(prev => [...prev, ...result.data]);
+        }
+        setTotalReviews(result.totalReviews || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (tourDetail?._id) {
+      fetchReviews(tourDetail._id, 0, INITIAL_LIMIT);
+    }
+  }, [tourDetail]);
 
   // Lấy danh sách ảnh, nếu không có thì dùng fallback
   const images = tourDetail?.images && tourDetail.images.length > 0
@@ -87,7 +118,7 @@ function TourDetail() {
           )}
         </Col>
 
-        {/* Meta info row */}
+        {/* Meta info */}
         <Col xs={24}>
           <Row justify="space-between" align="middle" gutter={[16, 16]}>
             <Col xs={24} md={16}>
@@ -391,72 +422,107 @@ function TourDetail() {
           {/* Customer Reviews */}
           <section>
             <h2 className="text-2xl font-bold text-text1 mb-6">
-              Đánh giá khách hàng
+              Đánh giá khách hàng ({totalReviews})
             </h2>
 
-            <div className="space-y-8">
-              <div className="flex flex-col sm:flex-row gap-4 border-b border-gray-100 pb-8">
-                <Avatar
-                  size={50}
-                  icon={<UserOutlined />}
-                  src="https://i.pravatar.cc/150?img=32"
-                />
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h4 className="font-bold text-text1 text-base m-0">
-                        Ali Tufan
-                      </h4>
-                      <span className="text-sm text-gray-500">
-                        Tháng 4, 2024
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Tour tuyệt vời! Mọi thứ từ lúc đón đến lúc tiễn đều hoàn
-                    hảo. Hướng dẫn viên nhiệt tình, cảnh đẹp ngoạn mục.
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                    {images.slice(0, 3).map((src, i) => (
-                      <Image
-                        key={i}
-                        src={src}
-                        className="w-20 h-20 rounded-lg object-cover"
-                        alt="review"
+            {reviews.length > 0 ? (
+              <>
+                <div className="space-y-8">
+                  {reviews.map((item) => (
+                    <div key={item._id} className="flex flex-col sm:flex-row gap-4 border-b border-gray-100 pb-8">
+                      <Avatar
+                        size={50}
+                        icon={<UserOutlined />}
+                        className="bg-primary/10 text-primary shrink-0"
                       />
-                    ))}
-                  </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-bold text-text1 text-base m-0">
+                              {item.name}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              {item.email}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm")}
+                            </p>
+                          </div>
+                          <Rate
+                            disabled
+                            allowHalf
+                            value={item.rating}
+                            className="text-sm text-yellow-500"
+                          />
+                        </div>
+                        <p className="text-gray-600 mb-0 leading-relaxed">
+                          {item.comment}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+                {reviews.length < totalReviews && (
+                  <Button
+                    onClick={() => fetchReviews(tourDetail?._id, reviews.length, LOAD_MORE_LIMIT)}
+                    className="mt-6 border border-gray-200 text-text1 hover:!border-primary hover:!text-primary font-bold px-8 h-12 rounded-lg"
+                  >
+                    Xem thêm đánh giá
+                  </Button>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-10 border border-dashed border-gray-200 rounded-2xl">
+                <p className="text-gray-400 m-0">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
               </div>
-            </div>
-
-            <Button className="mt-6 border border-gray-200 text-text1 hover:border-primary hover:text-primary font-bold px-8 h-12 rounded-lg">
-              Xem tất cả đánh giá
-            </Button>
+            )}
           </section>
 
           <Divider className="my-10 border-gray-100" />
 
-          {/* Leave a Reply */}
+          {/* Rating */}
           <section>
             <h2 className="text-2xl font-bold text-text1 mb-2">
               Gửi đánh giá
             </h2>
-            <p className="text-gray-500 mb-6">
-              Email của bạn sẽ không được hiển thị công khai. *
-            </p>
 
-            <Form layout="vertical">
+            <Form
+              form={reviewForm}
+              layout="vertical"
+              onFinish={async (values) => {
+                try {
+                  setSubmitLoading(true);
+                  const data = {
+                    ...values,
+                    tourId: tourDetail?._id,
+                  };
+                  const result = await postReview(data);
+                  if (result && result.data) {
+                    message.success("Đã gửi đánh giá thành công! Cảm ơn bạn.");
+                    reviewForm.resetFields();
+                    fetchReviews(tourDetail?._id, 0, INITIAL_LIMIT);
+                  } else {
+                    message.error(result?.message || "Gửi đánh giá thất bại.");
+                  }
+                } catch (error) {
+                  message.error("Có lỗi xảy ra, vui lòng thử lại.");
+                } finally {
+                  setSubmitLoading(false);
+                }
+              }}
+            >
               <Row gutter={16}>
                 <Col xs={24} md={12}>
                   <Form.Item
                     label={
-                      <span className="font-semibold text-text1">Họ tên *</span>
+                      <span className="font-semibold text-text1">Họ và tên</span>
                     }
                     name="name"
+                    rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
                   >
                     <Input
                       size="large"
+                      placeholder="Nhập họ tên của bạn"
                       className="rounded-lg bg-gray-50 border border-gray-200 hover:!border-primary focus:!border-primary focus:bg-white h-12 transition-colors"
                     />
                   </Form.Item>
@@ -464,25 +530,17 @@ function TourDetail() {
                 <Col xs={24} md={12}>
                   <Form.Item
                     label={
-                      <span className="font-semibold text-text1">Email *</span>
+                      <span className="font-semibold text-text1">Email</span>
                     }
                     name="email"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập email!" },
+                      { type: "email", message: "Email không hợp lệ!" },
+                    ]}
                   >
                     <Input
                       size="large"
-                      className="rounded-lg bg-gray-50 border border-gray-200 hover:!border-primary focus:!border-primary focus:bg-white h-12 transition-colors"
-                    />
-                  </Form.Item>
-                </Col>
-                <Col xs={24}>
-                  <Form.Item
-                    label={
-                      <span className="font-semibold text-text1">Tiêu đề *</span>
-                    }
-                    name="title"
-                  >
-                    <Input
-                      size="large"
+                      placeholder="Nhập email của bạn"
                       className="rounded-lg bg-gray-50 border border-gray-200 hover:!border-primary focus:!border-primary focus:bg-white h-12 transition-colors"
                     />
                   </Form.Item>
@@ -491,21 +549,37 @@ function TourDetail() {
                   <Form.Item
                     label={
                       <span className="font-semibold text-text1">
-                        Nội dung *
+                        Nội dung
                       </span>
                     }
                     name="comment"
+                    rules={[{ required: true, message: "Vui lòng nhập nội dung đánh giá!" }]}
                   >
                     <Input.TextArea
                       rows={5}
+                      placeholder="Chia sẻ trải nghiệm của bạn về tour này..."
                       className="rounded-lg bg-gray-50 border border-gray-200 hover:!border-primary focus:!border-primary focus:bg-white transition-colors"
                     />
                   </Form.Item>
                 </Col>
               </Row>
+              <Form.Item
+                label={
+                  <span className="font-semibold text-text1">Đánh giá Tour</span>
+                }
+                name="rating"
+                rules={[{ required: true, message: "Vui lòng chọn số sao đánh giá!" }]}
+              >
+                <Rate
+                  allowHalf
+                  className="text-2xl [&_.ant-rate-star]:!mr-2 text-yellow-500"
+                />
+              </Form.Item>
               <Button
                 type="primary"
                 size="large"
+                htmlType="submit"
+                loading={submitLoading}
                 className="bg-primary hover:!bg-primary-hover border-none font-bold px-8 h-12 rounded-lg mt-2 shadow-md"
               >
                 Gửi

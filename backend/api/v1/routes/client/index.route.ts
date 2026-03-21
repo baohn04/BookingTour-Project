@@ -4,11 +4,14 @@ import { cartRoutes } from './cart.route';
 import { orderRoutes } from './order.route';
 import { homeRoutes } from './home.route';
 import { tourRoutes } from './tour.route';
+import { reviewRoutes } from './review.route';
 
 const clientV1Routes = (app: Express): void => {
   const version = "/api/v1";
 
   app.use(version + "/", homeRoutes);
+
+  app.use(version + "/reviews", reviewRoutes);
 
   app.use(version + "/tours", tourRoutes);
 

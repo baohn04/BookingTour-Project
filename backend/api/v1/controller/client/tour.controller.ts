@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Tour from "../../models/tour.model";
 import Category from "../../models/category.model";
+import Review from "../../models/review.model";
 
 // [GET] /tours/:slugCategory
 export const index = async (req: Request, res: Response) => {
@@ -77,5 +78,64 @@ export const detail = async (req: Request, res: Response) => {
     res.status(500).json({
       message: error.message
     });
+  }
+}
+
+// [GET] /tours/review
+export const review = async (req: Request, res: Response) => {
+  try {
+    const tourId = req.query.tourId;
+
+    if (!tourId) {
+      res.status(400).json({ message: "tourId là bắt buộc!" });
+      return;
+    }
+
+    const limit = parseInt(req.query.limit as string) || 5;
+    const skip = parseInt(req.query.skip as string) || 0;
+
+    const totalReviews = await Review.countDocuments({
+      tourId: tourId,
+      deleted: false
+    });
+
+    const reviews = await Review.find({
+      tourId: tourId,
+      deleted: false
+    }).sort({ createdAt: "desc" }).skip(skip).limit(limit).lean();
+
+    res.status(200).json({
+      message: "Success",
+      data: reviews,
+      totalReviews: totalReviews
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+}
+
+// [POST] /tour/review
+export const reviewPost = async (req: Request, res: Response) => {
+  try {
+    const { name, email, comment, rating, tourId } = req.body;
+
+    const review = await Review.findOneAndUpdate(
+      { email: email, tourId: tourId },
+      { name, email, comment, rating, tourId },
+      { new: true, upsert: true }
+    );
+
+    res.status(201).json({
+      message: "Đã gửi đánh giá thành công!",
+      data: {
+        review: review
+      }
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
   }
 }
