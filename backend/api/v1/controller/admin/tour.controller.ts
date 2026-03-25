@@ -72,7 +72,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(200).json({
-      message: "Get list tours successfully!",
+      message: "Lấy danh sách tour thành công",
       data: tours,
     });
   } catch (error) {
@@ -91,7 +91,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     }).select("_id title slug");
 
     res.status(200).json({
-      message: "Get categories for create tour successfully!",
+      message: "Lấy danh sách danh mục thành công",
       data: {
         categories: categories
       }
@@ -158,7 +158,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     const data = await tour.save();
 
     res.status(200).json({
-      message: "Create tour successfully!",
+      message: "Tạo tour thành công",
       data: data,
     });
   } catch (error) {

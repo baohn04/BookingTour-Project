@@ -32,7 +32,7 @@ export const editPatch = async (req: Request, res: Response) => {
 
     await Admin.updateOne({ _id: id }, dataAcount);
     res.status(200).json({
-      message: "Update account successfully!",
+      message: "Đã cập nhật thông tin",
     });
   } catch (error) {
     res.status(500).json({

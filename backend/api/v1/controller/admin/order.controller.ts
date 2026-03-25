@@ -71,7 +71,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     };
 
     res.status(200).json({
-      message: "Get list orders successfully!",
+      message: "Lấy danh sách đơn hàng thành công",
       data: {
         orders: orders,
         filterStatus: filterStatus,

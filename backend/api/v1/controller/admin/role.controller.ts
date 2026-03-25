@@ -13,7 +13,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     const records = await Role.find(find);
 
     res.status(200).json({
-      message: "Get roles successfully!",
+      message: "Lấy danh sách role thành công",
       data: records
     });
   } catch (error) {
@@ -30,7 +30,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     const records = new Role(req.body);
     await records.save();
     res.status(201).json({
-      message: "Create role successfully!",
+      message: "Tạo role thành công",
       data: records
     });
   } catch (error) {
@@ -48,7 +48,7 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
 
     await Role.updateOne({ _id: id }, req.body);
     res.status(200).json({
-      message: "Update role successfully!",
+      message: "Cập nhật role thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -71,7 +71,7 @@ export const deleteItem = async (req: Request, res: Response): Promise<void> => 
     );
 
     res.status(200).json({
-      message: "Delete role successfully!",
+      message: "Xóa role thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -90,7 +90,7 @@ export const permissions = async (req: Request, res: Response): Promise<void> =>
     const records = await Role.find(find);
 
     res.status(200).json({
-      message: "Get permissions successfully!",
+      message: "Lấy danh sách phân quyền thành công",
       data: records
     });
   } catch (error) {
@@ -108,7 +108,7 @@ export const permissionsPatch = async (req: Request, res: Response): Promise<voi
       await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
     }
     res.status(200).json({
-      message: "Update permissions successfully!",
+      message: "Cập nhật phân quyền thành công",
     });
   } catch (error) {
     res.status(500).json({

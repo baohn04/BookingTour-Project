@@ -14,14 +14,14 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 
       if (!user) {
         res.status(401).json({
-          message: "Invalid token"
+          message: "Token không hợp lệ"
         });
         return;
       }
 
       if (user.status === "inactive") {
         res.status(401).json({
-          message: "Account is inactive"
+          message: "Tài khoản không hoạt động"
         });
         return;
       }
@@ -43,13 +43,13 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
       next();
     } else {
       res.status(401).json({
-        message: "Please attach token in header"
+        message: "Vui lòng đính kèm token trong header"
       });
       return;
     }
   } catch (error) {
     res.status(500).json({
-      message: "Authentication error",
+      message: "Lỗi xác thực",
       error: error.message
     });
   }

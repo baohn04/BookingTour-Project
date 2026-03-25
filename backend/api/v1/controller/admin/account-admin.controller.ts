@@ -76,7 +76,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     }
 
     res.status(200).json({
-      message: "Get list accounts successfully!",
+      message: "Lấy danh sách tài khoản thành công",
       data: records,
       filterStatus: filterStatus,
       keyword: keyword,
@@ -100,7 +100,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
 
     if (emailExist) {
       res.status(400).json({
-        message: `Email ${req.body.email} already exists!`
+        message: `Email ${req.body.email} đã tồn tại`
       });
       return;
     }
@@ -122,7 +122,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     const records = new Admin(dataAccount);
     await records.save();
     res.status(200).json({
-      message: "Create account successfully!",
+      message: "Tạo tài khoản thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -143,7 +143,7 @@ export const edit = async (req: Request, res: Response): Promise<void> => {
 
     if (!data) {
       res.status(404).json({
-        message: "Not found account!"
+        message: "Không tìm thấy tài khoản"
       });
       return;
     }
@@ -177,7 +177,7 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
 
     if (emailExist) {
       res.status(400).json({
-        message: `Email ${req.body.email} already exists!`
+        message: `Email ${req.body.email} đã tồn tại`
       });
       return;
     }
@@ -200,7 +200,7 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
 
     await Admin.updateOne({ _id: id }, dataAccount);
     res.status(200).json({
-      message: "Update account successfully!",
+      message: "Cập nhật tài khoản thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -223,7 +223,7 @@ export const deleteItem = async (req: Request, res: Response): Promise<void> => 
     );
 
     res.status(200).json({
-      message: "Delete account successfully!",
+      message: "Xóa tài khoản thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -241,7 +241,7 @@ export const changeStatus = async (req: Request, res: Response): Promise<void> =
     await Admin.updateOne({ _id: id }, { status: status });
 
     res.status(200).json({
-      message: "Change status successfully!",
+      message: "Thay đổi trạng thái thành công",
     });
   } catch (error) {
     res.status(500).json({

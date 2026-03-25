@@ -33,7 +33,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
       .limit(5).select("-__v -deletedAt -createdAt -updatedAt");
 
     res.status(200).json({
-      message: "Success",
+      message: "Lấy dữ liệu thành công",
       statistics: {
         tours: {
           total: totalTours,

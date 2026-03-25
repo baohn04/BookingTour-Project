@@ -63,7 +63,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
       .limit(objectPagination.limitItems);
 
     res.status(200).json({
-      message: "Get list categories successfully!",
+      message: "Lấy danh mục thành công",
       data: categories,
     });
   } catch (error) {
@@ -96,7 +96,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     const data = await category.save();
 
     res.status(200).json({
-      message: "Create category successfully!",
+      message: "Tạo danh mục thành công",
       data: data,
     });
   } catch (error) {
@@ -138,7 +138,7 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.status(200).json({
-      message: "Edit category successfully!",
+      message: "Cập nhật danh mục thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -158,7 +158,7 @@ export const detail = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(200).json({
-      message: "Get detail category successfully!",
+      message: "Lấy chi tiết danh mục thành công",
       data: category,
     });
   } catch (error) {
@@ -182,7 +182,7 @@ export const deleteItem = async (req: Request, res: Response): Promise<void> => 
     );
 
     res.status(200).json({
-      message: "Delete category successfully!",
+      message: "Xóa danh mục thành công",
     });
   } catch (error) {
     res.status(500).json({
@@ -200,7 +200,7 @@ export const changeStatus = async (req: Request, res: Response): Promise<void> =
     await Category.updateOne({ _id: id }, { status: status });
 
     res.status(200).json({
-      message: "Change status category successfully!",
+      message: "Thay đổi trạng thái danh mục thành công",
     });
   } catch (error) {
     res.status(500).json({

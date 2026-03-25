@@ -3,8 +3,17 @@ import Tour from "../../models/tour.model";
 import Category from "../../models/category.model";
 import Review from "../../models/review.model";
 
+export interface ITourIndexParams {
+  slugCategory: string;
+}
+
+export interface ITourIndexQuery {
+  sortKey?: string;
+  sortValue?: string;
+}
+
 // [GET] /tours/:slugCategory
-export const index = async (req: Request, res: Response) => {
+export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQuery>, res: Response): Promise<void> => {
   try {
     const slugCategory = req.params.slugCategory;
 
@@ -25,10 +34,9 @@ export const index = async (req: Request, res: Response) => {
         status: "active"
       };
 
-      const sort = {};
+      const sort: Record<string, any> = {};
       if (req.query.sortKey && req.query.sortValue) {
-        const sortKey = req.query.sortKey.toString();
-        sort[sortKey] = req.query.sortValue.toString();
+        sort[req.query.sortKey] = req.query.sortValue;
       } else {
         sort["position"] = "desc";
       }
@@ -57,8 +65,12 @@ export const index = async (req: Request, res: Response) => {
   }
 }
 
+export interface ITourDetailParams {
+  slugTour: string;
+}
+
 // [GET] /tours/detail/:slugTour
-export const detail = async (req: Request, res: Response) => {
+export const detail = async (req: Request<ITourDetailParams>, res: Response): Promise<void> => {
   try {
     const slugTour = req.params.slugTour;
 
@@ -81,8 +93,14 @@ export const detail = async (req: Request, res: Response) => {
   }
 }
 
+export interface ITourReviewQuery {
+  tourId?: string;
+  limit?: string;
+  skip?: string;
+}
+
 // [GET] /tours/review
-export const review = async (req: Request, res: Response) => {
+export const review = async (req: Request<{}, any, any, ITourReviewQuery>, res: Response): Promise<void> => {
   try {
     const tourId = req.query.tourId;
 
@@ -116,8 +134,16 @@ export const review = async (req: Request, res: Response) => {
   }
 }
 
+export interface ITourReviewPostBody {
+  name: string;
+  email: string;
+  comment: string;
+  rating: number;
+  tourId: string;
+}
+
 // [POST] /tour/review
-export const reviewPost = async (req: Request, res: Response) => {
+export const reviewPost = async (req: Request<{}, any, ITourReviewPostBody>, res: Response): Promise<void> => {
   try {
     const { name, email, comment, rating, tourId } = req.body;
 

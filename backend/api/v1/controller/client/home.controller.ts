@@ -3,7 +3,7 @@ import Category from "../../models/category.model";
 import Tour from "../../models/tour.model";
 
 // [GET] /
-export const home = async (req: Request, res: Response) => {
+export const home = async (req: Request, res: Response): Promise<void> => {
   try {
     const categories = await Category.find({
       deleted: false,
@@ -25,7 +25,7 @@ export const home = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
-      message: "Success",
+      message: "Lấy dữ liệu trang chủ thành công",
       data: {
         categories: categories,
         featuredTours: featuredTours

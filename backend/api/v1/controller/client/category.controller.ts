@@ -10,7 +10,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     }).select("-__v -createdAt -updatedAt");
 
     res.status(200).json({
-      message: "Success",
+      message: "Lấy danh sách danh mục thành công",
       data: categories
     });
   } catch (error) {

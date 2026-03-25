@@ -1,8 +1,17 @@
 import { Request, Response } from "express";
 import Tour from "../../models/tour.model";
 
+export interface ICartItem {
+  tourId: string;
+  quantity: number;
+  info?: any;
+  image?: string;
+  price_special?: number;
+  total?: number;
+}
+
 // [POST] /cart/list-json
-export const listJson = async (req: Request, res: Response) => {
+export const listJson = async (req: Request<{}, any, ICartItem[]>, res: Response): Promise<void> => {
   try {
     const tours = req.body;
     const toursResult = [];
@@ -33,9 +42,6 @@ export const listJson = async (req: Request, res: Response) => {
           priceAdult = price * (1 - discount / 100);
         }
 
-        const priceChild = priceAdult * 0.8;
-        const priceToddler = priceAdult * 0.5;
-
         tour["price_special"] = priceAdult;
         tour["total"] = priceAdult * (Number(quantity) || 1);
 
@@ -44,7 +50,7 @@ export const listJson = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
-      message: "Get list cart successfully",
+      message: "Lấy danh sách giỏ hàng thành công",
       data: toursResult
     });
   } catch (error) {

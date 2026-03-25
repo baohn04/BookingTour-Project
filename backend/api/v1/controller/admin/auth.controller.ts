@@ -18,21 +18,21 @@ export const loginPost = async (req: Request, res: Response) => {
 
     if (!admin) {
       res.status(401).json({
-        message: "Email does not exist"
+        message: "Email không tồn tại"
       });
       return;
     }
 
     if (md5(password) !== admin.password) {
       res.status(401).json({
-        message: "Incorrect password"
+        message: "Sai mật khẩu"
       });
       return;
     }
 
     if (admin.status === "inactive") {
       res.status(401).json({
-        message: "Account is inactive"
+        message: "Tài khoản không hoạt động"
       });
       return;
     }
@@ -40,7 +40,7 @@ export const loginPost = async (req: Request, res: Response) => {
     const token = admin.token;
 
     res.status(200).json({
-      message: "Logged in successfully",
+      message: "Đăng nhập thành công",
       token: token
     });
   } catch (error) {
@@ -56,7 +56,7 @@ export const logout = async (req: Request, res: Response) => {
     res.clearCookie("token");
 
     res.status(200).json({
-      message: "Logged out successfully"
+      message: "Đăng xuất thành công"
     });
   } catch (error) {
     res.status(500).json({
@@ -77,7 +77,7 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
 
     if (!admin) {
       res.status(404).json({
-        message: "Email does not exist"
+        message: "Email không tồn tại"
       });
       return;
     }
@@ -101,7 +101,7 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
     sendMail(email, subject, html);
 
     res.status(200).json({
-      message: "OTP sent successfully"
+      message: "OTP đã được gửi thành công"
     });
   } catch (error) {
     res.status(500).json({
@@ -123,7 +123,7 @@ export const otpPasswordPost = async (req: Request, res: Response) => {
 
     if (!result) {
       res.status(400).json({
-        message: "Invalid OTP"
+        message: "OTP không hợp lệ"
       });
       return;
     }
@@ -134,7 +134,7 @@ export const otpPasswordPost = async (req: Request, res: Response) => {
 
     if (!admin) {
       res.status(404).json({
-        message: "Email does not exist"
+        message: "Email không tồn tại"
       });
       return;
     }
@@ -142,7 +142,7 @@ export const otpPasswordPost = async (req: Request, res: Response) => {
     const token = admin.token;
 
     res.status(200).json({
-      message: "OTP verified successfully",
+      message: "Xác thực OTP thành công",
       token: token
     });
   } catch (error) {
@@ -165,21 +165,21 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
 
     if (!admin) {
       res.status(401).json({
-        message: "Invalid or expired token"
+        message: "Token không hợp lệ hoặc đã hết hạn"
       });
       return;
     }
 
     if (password !== confirmPassword) {
       res.status(400).json({
-        message: "Passwords do not match"
+        message: "Mật khẩu không khớp"
       });
       return;
     }
 
     if (md5(password) === admin.password) {
       res.status(400).json({
-        message: "New password cannot be the same as current password"
+        message: "Mật khẩu mới không được trùng với mật khẩu cũ. Vui lòng nhập lại"
       });
       return;
     }
@@ -191,7 +191,7 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({
-      message: "Password reset successfully"
+      message: "Đặt lại mật khẩu thành công"
     });
   } catch (error) {
     res.status(500).json({

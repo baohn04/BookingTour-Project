@@ -5,8 +5,26 @@ import OrderItem from "../../models/order-item.model";
 import { generateOrderCode } from "../../../../helpers/generate";
 import { generateMomoPaymentUrl } from "../../../../helpers/payment";
 
+export interface IOrderInfo {
+  fullName: string;
+  phone: string;
+  note?: string;
+}
+
+export interface IOrderItem {
+  tourId: string;
+  quantity: number;
+}
+
+export interface IOrderRequest {
+  info: IOrderInfo;
+  paymentMethod: string;
+  totalAmount: number;
+  cart: IOrderItem[];
+}
+
 // [POST] /order/
-export const order = async (req: Request, res: Response) => {
+export const order = async (req: Request<{}, any, IOrderRequest>, res: Response): Promise<any> => {
   try {
     const data = req.body;
 
@@ -86,8 +104,13 @@ export const order = async (req: Request, res: Response) => {
   }
 };
 
+export interface IOrderSuccessQuery {
+  orderCode?: string;
+  orderInfo?: string;
+}
+
 // [GET] /order/success
-export const orderSuccess = async (req: Request, res: Response) => {
+export const orderSuccess = async (req: Request<{}, any, any, IOrderSuccessQuery>, res: Response): Promise<void> => {
   try {
     const orderCode = req.query.orderCode || req.query.orderInfo;
 
@@ -98,7 +121,7 @@ export const orderSuccess = async (req: Request, res: Response) => {
 
     if (!order) {
       res.status(404).json({
-        message: "Order not found"
+        message: "Không tìm thấy đơn hàng"
       });
       return;
     }
@@ -132,7 +155,7 @@ export const orderSuccess = async (req: Request, res: Response) => {
     const totalPrice = orderItems.reduce((sum, item) => sum + (item["total"] || 0), 0);
 
     res.status(200).json({
-      message: "Success",
+      message: "Lấy thông tin đơn hàng thành công",
       data: {
         order: {
           ...orderData,

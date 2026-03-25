@@ -6,7 +6,7 @@ export const general = async (req: Request, res: Response) => {
   const settingGeneral = await SettingGeneral.findOne({}); // Lấy ra bảng ghi đầu tiên vì collection settings-general chỉ có 1 bảng ghi duy nhất
 
   res.status(200).json({
-    message: "Get setting general successfully!",
+    message: "Lấy setting thành công",
     data: settingGeneral
   });
 }
@@ -25,6 +25,6 @@ export const generalPatch = async (req: Request, res: Response) => {
   }
 
   res.status(200).json({
-    message: "Update setting general successfully!",
+    message: "Cập nhật setting thành công",
   });
 };
