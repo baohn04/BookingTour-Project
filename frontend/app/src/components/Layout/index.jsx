@@ -3,6 +3,7 @@ import AppHeader from "./Header";
 import AppFooter from "./Footer";
 import Main from "./Main";
 import FloatingActions from "../FloatingActions";
+import PopupOrder from "../PopupOrder";
 
 const { Header, Content, Footer } = Layout;
 
@@ -22,6 +23,7 @@ function LayoutDefault() {
       </Footer>
 
       <FloatingActions />
+      <PopupOrder />
     </Layout>
   );
 }

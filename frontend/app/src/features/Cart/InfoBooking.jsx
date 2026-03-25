@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { postOrder } from '../../services/orderServices';
 import { clearCart } from '../../actions/cart';
 import Checkout from './Checkout';
+import { socket } from '../../socket/socket';
 
 const { Title } = Typography;
 
@@ -11,10 +12,11 @@ function InfoBooking(props) {
   const { cartDetails, total } = props;
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const cart = useSelector(state => state.cartReducer);
-  const dispatch = useDispatch();
   const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
   const [formData, setFormData] = useState(null);
+
+  const cart = useSelector(state => state.cartReducer);
+  const dispatch = useDispatch();
 
   const onFinish = (values) => {
     if (cart.length === 0) {
@@ -37,8 +39,14 @@ function InfoBooking(props) {
 
       const res = await postOrder(data);
       if (res) {
+        if (res.data && res.data.orderCode) {
+          socket.emit("CLIENT_ORDER_SUCCESS", res.data.orderCode);
+        }
+
         if (res.data && res.data.payUrl) {
-          window.location.href = res.data.payUrl;
+          setTimeout(() => {
+            window.location.href = res.data.payUrl;
+          }, 300);
           return;
         }
         message.success("Đặt tour thành công! Cảm ơn bạn.");

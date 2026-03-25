@@ -1,7 +1,10 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import http from "http";
 import cors from "cors";
+import { Server } from "socket.io";
+import orderSocket from "./api/v1/sockets/client/order.socket";
 
 import * as database from "./config/database";
 import clientV1Routes from "./api/v1/routes/client/index.route";
@@ -17,6 +20,19 @@ const port: number | string = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// SocketIO
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+  },
+});
+global._io = io;
+
+// Đăng ký socket handlers
+orderSocket(io);
+
 // CORS
 app.use(cors());
 
@@ -27,6 +43,6 @@ app.use(cookieParser(process.env.TRAVELLAND_SECRET));
 clientV1Routes(app);
 adminV1Routes(app);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
