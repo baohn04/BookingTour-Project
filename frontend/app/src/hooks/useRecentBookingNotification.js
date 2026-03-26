@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
-import { notification } from "antd";
-import { socket } from "../../socket/socket";
+import { socket } from "../socket/socket";
 
-const PopupOrder = () => {
-  const [api, contextHolder] = notification.useNotification();
-
+export const useRecentBookingNotification = (api) => {
   useEffect(() => {
     socket.on("SERVER_ORDER_SUCCESS", (data) => {
       if (!data || !data.tours || data.tours.length === 0) return;
@@ -50,8 +47,4 @@ const PopupOrder = () => {
       socket.off("SERVER_ORDER_SUCCESS");
     };
   }, [api]);
-
-  return <>{contextHolder}</>;
 };
-
-export default PopupOrder;

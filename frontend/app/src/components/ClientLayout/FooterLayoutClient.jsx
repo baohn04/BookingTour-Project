@@ -13,7 +13,7 @@ import { getSettingGeneral } from "../../services/settingGeneralServices";
 
 const { Title, Text } = Typography;
 
-function Footer() {
+function FooterLayoutClient() {
   const [settingGeneral, setSettingGeneral] = useState({});
 
   useEffect(() => {
@@ -171,4 +171,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default FooterLayoutClient;

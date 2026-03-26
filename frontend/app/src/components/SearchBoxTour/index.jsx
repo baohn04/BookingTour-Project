@@ -3,7 +3,7 @@ import { EnvironmentOutlined, CalendarOutlined, FlagOutlined, SearchOutlined } f
 
 const { RangePicker } = DatePicker;
 
-function SearchBox(props) {
+function SearchBoxTour(props) {
   const { categories } = props;
 
   return (
@@ -81,4 +81,4 @@ function SearchBox(props) {
   );
 }
 
-export default SearchBox;
+export default SearchBoxTour;

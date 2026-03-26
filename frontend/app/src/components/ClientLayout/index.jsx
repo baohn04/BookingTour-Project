@@ -1,10 +1,10 @@
 import { Layout } from "antd";
 import { ScrollRestoration } from "react-router-dom";
-import AppHeader from "./Header";
-import AppFooter from "./Footer";
-import Main from "./Main";
-import FloatingActions from "../FloatingActions";
-import PopupOrder from "../PopupOrder";
+import HeaderLayoutClient from "./HeaderLayoutClient";
+import MainLayoutClient from "./MainLayoutClient";
+import FooterLayoutClient from "./FooterLayoutClient";
+import FloatingActionButtons from "../FloatingActionButtons";
+import RecentBookingNotification from "../RecentBookingNotification";
 
 const { Header, Content, Footer } = Layout;
 
@@ -13,19 +13,19 @@ function LayoutDefault() {
     <Layout className="min-h-screen !bg-background relative">
       <ScrollRestoration />
       <Header className="!p-0 !h-auto !bg-transparent !leading-normal sticky top-0 z-50">
-        <AppHeader />
+        <HeaderLayoutClient />
       </Header>
 
       <Content className="!bg-background flex flex-col">
-        <Main />
+        <MainLayoutClient />
       </Content>
 
       <Footer className="!p-0 !bg-transparent">
-        <AppFooter />
+        <FooterLayoutClient />
       </Footer>
 
-      <FloatingActions />
-      <PopupOrder />
+      <FloatingActionButtons />
+      <RecentBookingNotification />
     </Layout>
   );
 }

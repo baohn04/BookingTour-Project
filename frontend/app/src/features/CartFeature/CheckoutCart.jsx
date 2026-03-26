@@ -4,7 +4,7 @@ import { WalletOutlined, CheckCircleFilled } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
 
-function Checkout(props) {
+function CheckoutCart(props) {
   const { isVisible, onClose, onConfirm, loading, cartDetails = [], total = 0 } = props;
   const [paymentMethod, setPaymentMethod] = useState('cash');
 
@@ -134,4 +134,4 @@ function Checkout(props) {
   );
 }
 
-export default Checkout;
+export default CheckoutCart;

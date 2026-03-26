@@ -1,42 +1,18 @@
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Row, Col, Breadcrumb } from 'antd';
-import TourFilter from '../../features/Tours/TourFilter';
-import TourList from '../../features/Tours/TourList';
-import { useState, useEffect } from 'react';
-import { getTours } from '../../services/tourServices';
+import TourFilter from '../../features/ToursFeature/TourFilter';
+import TourList from '../../features/ToursFeature/TourList';
+import { useFetchTours } from '../../hooks/useTours';
 
 function Tours() {
   const { slug } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [infoCategory, setInfoCategory] = useState({});
-  const [tours, setTours] = useState([]);
-
   const [searchParams, setSearchParams] = useSearchParams();
+  const { loading, infoCategory, tours } = useFetchTours(slug, searchParams);
 
   let currentSort = 'all';
   if (searchParams.get('sortKey') === 'price' && searchParams.get('sortValue') === 'desc') currentSort = 'price_desc';
   else if (searchParams.get('sortKey') === 'price' && searchParams.get('sortValue') === 'asc') currentSort = 'price_asc';
   else if (searchParams.get('sortKey') === 'timeStart' && searchParams.get('sortValue') === 'asc') currentSort = 'time_start_asc';
-
-  useEffect(() => {
-    const fetchApi = async () => {
-      try {
-        setLoading(true);
-        const query = searchParams.toString();
-        const result = await getTours(slug, query);
-        if (result && result.data) {
-          setTours(result.data);
-          setInfoCategory(result.infoCategory);
-        }
-      } catch (error) {
-        console.error("Error fetching tours data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchApi();
-  }, [slug, searchParams]);
 
   const handleSortChange = (value) => {
     const newParams = new URLSearchParams(searchParams);

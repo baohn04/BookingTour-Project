@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, Typography, Space, Card, message } from "antd";
 import { MinusOutlined, PlusOutlined, ThunderboltOutlined } from "@ant-design/icons";
-import formatPrice from "../../helpers/formatPrice";
+import formatPriceHelper from "../../helpers/formatPriceHelper";
+import formatDateHelper from "../../helpers/formatDateHelper";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, updateQuantity } from "../../actions/cart";
+import { addToCart, updateQuantity } from "../../actions/cartAction";
 
 const { Title, Text } = Typography;
 
@@ -15,19 +16,11 @@ function BookingSidebar(props) {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cartReducer);
 
-  const formattedDate = tourDetail?.timeStart
-    ? new Date(tourDetail.timeStart).toLocaleString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-    : 'Đang cập nhật';
+  const formattedDate = formatDateHelper(tourDetail?.timeStart);
 
   // Logic giá và tính tổng (quy về 1 giá chung: price_special hoặc price)
-  const priceAdult = tourDetail?.price_special ?? tourDetail?.price ?? 11990000;
-  const total = quantity * priceAdult;
+  const price = tourDetail?.price_special ?? tourDetail?.price ?? undefined;
+  const total = quantity * price;
   const stock = tourDetail?.stock ?? 5;
 
   const handleDecrease = () => {
@@ -48,7 +41,7 @@ function BookingSidebar(props) {
 
     if (quantity <= 0 || !tourId) return;
 
-    // Kiểm tra item theo id hoặc tourId (giữ tính tương thích)
+    // Kiểm tra item theo id hoặc tourId
     if (cart.some(item => item.id === tourId || item.tourId === tourId)) {
       // updateQuantity ở đây là tăng thêm quantity vé chớ không phải gán cứng
       dispatch(updateQuantity(tourId, quantity));
@@ -95,7 +88,7 @@ function BookingSidebar(props) {
           </div>
           <div className="flex-1 text-left px-2">
             <Text className="text-text1 font-bold text-[15px]">
-              {formatPrice(priceAdult)}
+              {formatPriceHelper(price)}
             </Text>
           </div>
           <Space size={10} align="center">
@@ -134,7 +127,7 @@ function BookingSidebar(props) {
           Tổng Cộng:
         </Text>
         <Text className="text-[28px] font-bold text-text1 leading-none">
-          {formatPrice(total)}
+          {formatPriceHelper(total)}
         </Text>
       </div>
 

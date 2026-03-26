@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Breadcrumb,
   Row,
@@ -26,61 +26,18 @@ import {
   TeamOutlined,
   BarcodeOutlined,
 } from "@ant-design/icons";
-import { getTourDetail, postReview, getReviews } from "../../services/tourServices";
+import { postReview } from "../../services/tourServices";
+import { useFetchTourDetail } from "../../hooks/useTours";
 import dayjs from "dayjs";
-import BookingSidebar from "../../features/Tours/BookingSidebar";
-
+import BookingSidebar from "../../features/ToursFeature/BookingSidebar";
 
 function TourDetail() {
   const { slug } = useParams();
+  const { loading, tourDetail, reviews, totalReviews, fetchReviews, INITIAL_LIMIT } = useFetchTourDetail(slug);
   const [previewVisible, setPreviewVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [tourDetail, setTourDetail] = useState([]);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [reviewForm] = Form.useForm();
-  const [reviews, setReviews] = useState([]);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const INITIAL_LIMIT = 2;
   const LOAD_MORE_LIMIT = 5;
-
-  useEffect(() => {
-    const fetchApi = async () => {
-      try {
-        const result = await getTourDetail(slug);
-        if (result.data) {
-          setTourDetail(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching tour detail data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchApi();
-  }, [slug]);
-
-  // Fetch reviews khi có tourDetail._id
-  const fetchReviews = async (tourId, skip = 0, limit = INITIAL_LIMIT) => {
-    try {
-      const result = await getReviews(tourId, limit, skip);
-      if (result && result.data) {
-        if (skip === 0) {
-          setReviews(result.data);
-        } else {
-          setReviews(prev => [...prev, ...result.data]);
-        }
-        setTotalReviews(result.totalReviews || 0);
-      }
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (tourDetail?._id) {
-      fetchReviews(tourDetail._id, 0, INITIAL_LIMIT);
-    }
-  }, [tourDetail]);
 
   // Lấy danh sách ảnh, nếu không có thì dùng fallback
   const images = tourDetail?.images && tourDetail.images.length > 0

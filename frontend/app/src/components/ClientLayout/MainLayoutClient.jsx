@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 
-function Main() {
+function MainLayoutClient() {
   return (
     <main>
       <Outlet />
@@ -8,4 +8,4 @@ function Main() {
   )
 }
 
-export default Main
+export default MainLayoutClient

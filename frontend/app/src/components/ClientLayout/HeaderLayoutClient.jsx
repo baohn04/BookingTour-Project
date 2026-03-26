@@ -24,7 +24,7 @@ import { getSettingGeneral } from "../../services/settingGeneralServices";
 
 const { Text } = Typography;
 
-function Header() {
+function HeaderLayoutClient() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [settingGeneral, setSettingGeneral] = useState({});
   const [currentLang, setCurrentLang] = useState('vi');
@@ -230,4 +230,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HeaderLayoutClient;

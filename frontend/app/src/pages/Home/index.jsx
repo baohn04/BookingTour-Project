@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Typography, Button, Row, Col, Avatar, Skeleton } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
-import SearchBox from '../../components/SearchBox';
-import BoxList from '../../components/BoxList';
-import './Home.css';
-import { getHomePage } from '../../services/homeServices';
+import SearchBoxTour from '../../components/SearchBoxTour';
+import BoxListTour from '../../components/BoxListTour';
+import './Home.module.css';
+import { useFetchHomeInfo } from '../../hooks/useFetchHomeInfo';
 
 const { Title, Text } = Typography;
 
@@ -43,27 +43,7 @@ const reviews = [
 ];
 
 function Home() {
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
-  const [featuredTours, setFeaturedTours] = useState([]);
-
-  useEffect(() => {
-    const fetchApi = async () => {
-      try {
-        setLoading(true);
-        const result = await getHomePage();
-        if (result && result.data) {
-          setCategories(result.data.categories);
-          setFeaturedTours(result.data.featuredTours);
-        }
-      } catch (error) {
-        console.error("Error fetching home page data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchApi();
-  }, []);
+  const { loading, categories, featuredTours } = useFetchHomeInfo();
 
   return (
     <div className="home-page pb-20">
@@ -87,7 +67,7 @@ function Home() {
 
             {/* Component Search Box */}
             <div className="w-full max-w-[1200px] mt-8">
-              <SearchBox categories={categories} />
+              <SearchBoxTour categories={categories} />
             </div>
           </div>
         </div>
@@ -216,7 +196,7 @@ function Home() {
             </Button>
           </div>
 
-          <BoxList tours={featuredTours} loading={loading} />
+          <BoxListTour tours={featuredTours} loading={loading} />
         </div>
 
         <div className="mb-20">

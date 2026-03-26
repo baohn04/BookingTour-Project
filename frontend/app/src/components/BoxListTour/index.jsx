@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Skeleton } from 'antd';
-import BoxItem from './BoxItem';
+import BoxListItem from './BoxListItem';
 
-function BoxList(props) {
+function BoxListTour(props) {
   const { tours, loading } = props;
 
   if (loading) {
@@ -29,7 +29,7 @@ function BoxList(props) {
       {tours.map((item) => (
         <Col xs={24} sm={12} md={8} lg={6} key={item.id || item._id}>
           <div className="h-full">
-            <BoxItem item={item} />
+            <BoxListItem item={item} />
           </div>
         </Col>
       ))}
@@ -37,4 +37,4 @@ function BoxList(props) {
   );
 }
 
-export default BoxList;
+export default BoxListTour;

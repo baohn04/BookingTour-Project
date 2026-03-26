@@ -4,7 +4,7 @@ import { MessageOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-function FloatingActions() {
+function FloatingActionButtons() {
   const cart = useSelector(state => state.cartReducer);
   const totalQuantity = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
 
@@ -44,4 +44,4 @@ function FloatingActions() {
   );
 }
 
-export default FloatingActions;
+export default FloatingActionButtons;

@@ -1,17 +1,18 @@
 import React from 'react';
 import { Typography, Tag, Button } from 'antd';
 import { NumberOutlined, CalendarOutlined, FireOutlined, HistoryOutlined, TeamOutlined } from '@ant-design/icons';
-import formatPrice from '../../helpers/formatPrice';
+import formatPriceHelper from '../../helpers/formatPriceHelper';
+import formatDateHelper from '../../helpers/formatDateHelper';
 import { Link } from 'react-router-dom';
 
 const { Text, Title } = Typography;
 
-function BoxItem(props) {
+function BoxListItem(props) {
   const { item } = props;
   const { title, code, images, price, discount, price_special, information, timeStart, stock } = item;
   const tourImage = images[0];
 
-  const formattedDate = timeStart ? new Date(timeStart).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Đang cập nhật';
+  const formattedDate = formatDateHelper(timeStart);
 
   return (
     <Link to={`/tours/detail/${item.slug}`} className="block h-full cursor-pointer hover:no-underline">
@@ -73,17 +74,17 @@ function BoxItem(props) {
               {discount > 0 ? (
                 <>
                   <Text className="text-text1 text-xs line-through mb-0.5">
-                    {formatPrice(price)}
+                    {formatPriceHelper(price)}
                   </Text>
                   <Text className="!text-primary text-lg font-bold leading-none">
-                    {formatPrice(price_special)}
+                    {formatPriceHelper(price_special)}
                   </Text>
                 </>
               ) : (
                 <>
                   <Text className="text-transparent text-xs select-none mb-0.5">-</Text>
                   <Text className="!text-primary text-lg font-bold leading-none">
-                    {formatPrice(price)}
+                    {formatPriceHelper(price)}
                   </Text>
                 </>
               )}
@@ -95,4 +96,4 @@ function BoxItem(props) {
   );
 }
 
-export default BoxItem;
+export default BoxListItem;

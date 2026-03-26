@@ -1,44 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+
 import CartList from "./CartList";
-import { clearCart } from "../../actions/cart";
-import { getListCart } from "../../services/cartServices";
+import { clearCart } from "../../actions/cartAction";
 import { Button } from "antd";
-import InfoBooking from "../../features/Cart/InfoBooking";
+import InfoBookingCart from "../../features/CartFeature/InfoBookingCart";
+import { useFetchCart } from "../../hooks/useCart";
 
 function Cart() {
   const cart = useSelector((state) => state.cartReducer);
   const dispatch = useDispatch();
 
-  const [cartDetails, setCartDetails] = useState([]);
-
-  useEffect(() => {
-    const fetchApi = async () => {
-      try {
-        const response = await getListCart(cart);
-
-        if (response && response.data) {
-          const infoCart = response.data.map(item => {
-            return {
-              ...item,
-              id: item.tourId,
-              quantity: item.quantity
-            };
-          });
-
-          setCartDetails(infoCart);
-        }
-      } catch (error) {
-        console.error("Lỗi lấy thông tin tour giỏ hàng:", error);
-      }
-    };
-
-    if (cart.length > 0) {
-      fetchApi();
-    } else {
-      setCartDetails([]);
-    }
-  }, [cart]);
+  const { cartDetails } = useFetchCart(cart);
 
   const total = cartDetails.reduce((sum, item) => {
     return sum + (item.total || 0);
@@ -73,7 +45,7 @@ function Cart() {
               </span>
             </div>
           </div>
-          <InfoBooking cartDetails={cartDetails} total={total} />
+          <InfoBookingCart cartDetails={cartDetails} total={total} />
         </div>
       ) : (
         <div className="text-center bg-gray-50 border border-gray-200 rounded-2xl py-12 px-4 shadow-sm">

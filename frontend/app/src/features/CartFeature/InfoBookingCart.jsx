@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Form, Input, Row, Col, Typography, Button, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { postOrder } from '../../services/orderServices';
-import { clearCart } from '../../actions/cart';
-import Checkout from './Checkout';
+import { clearCart } from '../../actions/cartAction';
 import { socket } from '../../socket/socket';
+import CheckoutCart from './CheckoutCart';
 
 const { Title } = Typography;
 
-function InfoBooking(props) {
+function InfoBookingCart(props) {
   const { cartDetails, total } = props;
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -121,7 +121,7 @@ function InfoBooking(props) {
         </Form>
       </div>
 
-      <Checkout
+      <CheckoutCart
         isVisible={isCheckoutVisible}
         onClose={() => setIsCheckoutVisible(false)}
         onConfirm={handleConfirmCheckout}
@@ -133,4 +133,4 @@ function InfoBooking(props) {
   );
 }
 
-export default InfoBooking;
+export default InfoBookingCart;

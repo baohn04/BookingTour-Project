@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { CalendarOutlined, NumberOutlined, EnvironmentOutlined, HistoryOutlined, TeamOutlined } from '@ant-design/icons';
-import formatPrice from '../../helpers/formatPrice';
+import formatPriceHelper from '../../helpers/formatPriceHelper';
 import { Link } from 'react-router-dom';
 
 
@@ -72,16 +72,16 @@ function TourCard({ tour }) {
         <div className="flex flex-col items-center xl:items-end mb-4">
           {discount > 0 ? (
             <>
-              <div className="text-text1 line-through text-[14px] mb-0.5">{formatPrice(price)}</div>
+              <div className="text-text1 line-through text-[14px] mb-0.5">{formatPriceHelper(price)}</div>
               <div className="text-text1 text-[13px] uppercase">
-                Chỉ còn <span className="font-bold text-[22px] text-primary normal-case tracking-tight ml-1">{formatPrice(price_special)}</span>
+                Chỉ còn <span className="font-bold text-[22px] text-primary normal-case tracking-tight ml-1">{formatPriceHelper(price_special)}</span>
               </div>
             </>
           ) : (
             <>
               <div className="text-transparent line-through text-[14px] mb-0.5">-</div>
               <div className="text-text1 text-[13px] uppercase">
-                Giá từ <span className="font-bold text-[22px] text-primary normal-case tracking-tight ml-1">{formatPrice(price)}</span>
+                Giá từ <span className="font-bold text-[22px] text-primary normal-case tracking-tight ml-1">{formatPriceHelper(price)}</span>
               </div>
             </>
           )}
