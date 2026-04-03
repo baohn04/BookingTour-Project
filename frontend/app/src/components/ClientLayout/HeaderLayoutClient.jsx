@@ -217,7 +217,7 @@ function HeaderLayoutClient() {
         placement="right"
         onClose={() => setMobileMenuOpen(false)}
         open={mobileMenuOpen}
-        width={280}
+        size="default"
       >
         <Menu
           mode="vertical"

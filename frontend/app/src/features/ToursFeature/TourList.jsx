@@ -18,7 +18,7 @@ function TourList(props) {
           <Select
             value={currentSort || "all"}
             onChange={onSortChange}
-            bordered={false}
+            variant="borderless"
             className="font-medium text-text1 min-w-[100px]"
             options={[
               { value: 'all', label: 'Tất cả' },

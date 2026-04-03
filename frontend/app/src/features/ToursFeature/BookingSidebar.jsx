@@ -80,7 +80,7 @@ function BookingSidebar(props) {
       </div>
 
       {/* Tickets form Section */}
-      <Space direction="vertical" size={16} className="w-full mb-6 pt-2">
+      <Space orientation="vertical" size={16} className="w-full mb-6 pt-2">
         <div className="bg-background border-b border-gray-100 pb-4 flex justify-between items-center w-full">
           <div className="flex flex-col w-[130px]">
             {/* Just generalized label */}
@@ -132,7 +132,7 @@ function BookingSidebar(props) {
       </div>
 
       {/* Action Buttons */}
-      <Space direction="vertical" size={16} className="w-full">
+      <Space orientation="vertical" size={16} className="w-full">
         <Button
           type="primary"
           size="large"

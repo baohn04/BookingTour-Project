@@ -59,7 +59,14 @@ const AdminLayout = () => {
     <Layout className="min-h-screen">
       <Sider
         width={260}
-        style={{ background: 'var(--color-text1)' }}
+        style={{ 
+          background: 'var(--color-text1)',
+          overflow: 'hidden',
+          height: '100vh',
+          position: 'sticky',
+          top: 0,
+          left: 0,
+        }}
       >
         <div className="flex flex-col h-full">
 

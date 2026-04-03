@@ -23,7 +23,7 @@ const adminV1Routes = (app: Express): void => {
 
   app.use(version + `/${PATH_ADMIN}/auth`, authRoutes);
 
-  app.use(version + `/${PATH_ADMIN}/dashboard`, authMiddleware.requireAuth, dashboardRoutes);
+  app.use(version + `/${PATH_ADMIN}/dashboard`, dashboardRoutes); // nhớ thêm lại authMiddleware.requireAuth sau khi auth
 
   app.use(version + `/${PATH_ADMIN}/categories`, authMiddleware.requireAuth, categoryRoutes);
 

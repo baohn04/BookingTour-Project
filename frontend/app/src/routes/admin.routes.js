@@ -1,6 +1,7 @@
 import AdminLayout from "../components/AdminLayout";
-import Dashboard from "../pages/Admin/Dashboard";
-import Tours from "../pages/Admin/Tours";
+import AdminDashboard from "../pages/Admin/AdminDashboard";
+import AdminTours from "../pages/Admin/AdminTours";
+
 
 export const adminRoutes = {
   // private admin
@@ -9,11 +10,11 @@ export const adminRoutes = {
   children: [
     {
       index: true,
-      element: <Dashboard />
+      element: <AdminDashboard />
     },
     {
       path: "tours",
-      element: <Tours />
+      element: <AdminTours />
     }
   ]
 };

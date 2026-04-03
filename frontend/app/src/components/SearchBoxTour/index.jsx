@@ -17,7 +17,7 @@ function SearchBoxTour(props) {
               <EnvironmentOutlined className="text-xl text-text1 mr-3" />
               <Input
                 placeholder="Nhập tên tour"
-                bordered={false}
+                variant="borderless"
                 className="!p-0 !bg-transparent text-[15px] w-full text-text1 font-medium placeholder:text-text1"
               />
             </div>
@@ -31,7 +31,7 @@ function SearchBoxTour(props) {
             <div className="flex items-center bg-background rounded-xl px-4 py-3 transition-all border border-transparent hover:border-primary focus-within:border-primary focus-within:shadow-sm">
               <CalendarOutlined className="text-xl text-text1 mr-3" />
               <RangePicker
-                bordered={false}
+                variant="borderless"
                 suffixIcon={null}
                 className="!p-0 !bg-transparent w-full text-[15px] font-medium"
                 placeholder={['Ngày đi', 'Ngày về']}
@@ -51,9 +51,9 @@ function SearchBoxTour(props) {
 
               <Select
                 defaultValue="all"
-                bordered={false}
+                variant="borderless"
                 className="flex-1 !ml-[-11px] w-[calc(100%+11px)] text-[15px] font-medium"
-                dropdownStyle={{ borderRadius: '12px', padding: '8px' }}
+                styles={{ popup: { root: { borderRadius: '12px', padding: '8px' } } }}
                 options={[
                   { value: 'all', label: 'Tất cả loại tour' },
                   ...categories.map((item) => ({

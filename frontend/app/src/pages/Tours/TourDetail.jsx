@@ -157,8 +157,8 @@ function TourDetail() {
           ) : (
             <Image.PreviewGroup
               preview={{
-                visible: previewVisible,
-                onVisibleChange: (visible) => setPreviewVisible(visible),
+                open: previewVisible,
+                onOpenChange: (open) => setPreviewVisible(open),
               }}
             >
               <Row gutter={[16, 16]} className="h-[300px] md:h-[500px]">
@@ -168,11 +168,13 @@ function TourDetail() {
                     src={images[0]}
                     alt={tourDetail?.title || "Tour cover"}
                     className="rounded-2xl md:rounded-l-2xl md:rounded-r-none object-cover transition-transform duration-300 hover:scale-[1.02]"
-                    wrapperStyle={{
-                      width: "100%",
-                      height: "100%",
-                      overflow: "hidden",
-                      borderRadius: "1rem",
+                    styles={{
+                      root: {
+                        width: "100%",
+                        height: "100%",
+                        overflow: "hidden",
+                        borderRadius: "1rem",
+                      }
                     }}
                     style={{ width: "100%", height: "100%" }}
                   />
@@ -186,11 +188,13 @@ function TourDetail() {
                         src={images[1] || images[0]}
                         alt="Tour detail 1"
                         className="rounded-tr-2xl object-cover transition-transform duration-300 hover:scale-[1.05]"
-                        wrapperStyle={{
-                          width: "100%",
-                          height: "100%",
-                          overflow: "hidden",
-                          borderTopRightRadius: "1rem",
+                        styles={{
+                          root: {
+                            width: "100%",
+                            height: "100%",
+                            overflow: "hidden",
+                            borderTopRightRadius: "1rem",
+                          }
                         }}
                         style={{ width: "100%", height: "100%" }}
                       />
@@ -201,11 +205,13 @@ function TourDetail() {
                         src={images[2] || images[0]}
                         alt="Tour detail 2"
                         className="rounded-br-2xl object-cover transition-transform duration-300 hover:scale-[1.05]"
-                        wrapperStyle={{
-                          width: "100%",
-                          height: "100%",
-                          overflow: "hidden",
-                          borderBottomRightRadius: "1rem",
+                        styles={{
+                          root: {
+                            width: "100%",
+                            height: "100%",
+                            overflow: "hidden",
+                            borderBottomRightRadius: "1rem",
+                          }
                         }}
                         style={{ width: "100%", height: "100%" }}
                       />
