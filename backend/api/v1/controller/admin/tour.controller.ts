@@ -74,6 +74,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       message: "Lấy danh sách tour thành công",
       data: tours,
+      pagination: objectPagination,
     });
   } catch (error) {
     res.status(500).json({
@@ -112,7 +113,10 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     price: number;
     discount: number;
     stock: number;
+    timeTour: string;
     timeStart: string | null;
+    startDeparture: string;
+    endDeparture: string;
     information: string;
     schedule: string;
     status: string;
@@ -124,7 +128,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     const countTour: number = await Tour.countDocuments();
     const code: string = generateTourCode(countTour + 1);
 
-    if (req.body.position === "") {
+    if (!req.body.position || req.body.position === "") {
       req.body.position = countTour + 1;
     } else {
       req.body.position = parseInt(req.body.position);
@@ -147,6 +151,9 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
       discount: parseInt(req.body.discount),
       stock: parseInt(req.body.stock),
       timeStart: req.body.timeStart,
+      timeTour: req.body.timeTour,
+      startDeparture: req.body.startDeparture,
+      endDeparture: req.body.endDeparture,
       information: req.body.information,
       schedule: req.body.schedule,
       status: req.body.status,
@@ -208,7 +215,10 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
     price: number;
     discount: number;
     stock: number;
+    timeTour: string;
     timeStart: string | null;
+    startDeparture: string;
+    endDeparture: string;
     information: string;
     schedule: string;
     status: string;
@@ -251,7 +261,10 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
       price: parseInt(req.body.price),
       discount: parseInt(req.body.discount),
       stock: parseInt(req.body.stock),
+      timeTour: req.body.timeTour,
       timeStart: req.body.timeStart,
+      startDeparture: req.body.startDeparture,
+      endDeparture: req.body.endDeparture,
       information: req.body.information,
       schedule: req.body.schedule,
       status: req.body.status,

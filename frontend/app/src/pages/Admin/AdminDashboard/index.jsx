@@ -133,7 +133,7 @@ function AdminDashboard() {
     <div>
       {/* 1. Header Section */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-1">Tổng quan</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-1">TỔNG QUAN</h1>
       </div>
 
       {/* 2. Top Statistic Cards Row */}

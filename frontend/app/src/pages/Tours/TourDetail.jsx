@@ -46,7 +46,6 @@ function TourDetail() {
 
   return (
     <div className="max-w-[1240px] mx-auto px-4 py-8 font-sans bg-background">
-      {/* 1. Header & Breadcrumb */}
       <Row gutter={[0, 20]}>
         <Col xs={24}>
           <Breadcrumb
@@ -64,7 +63,6 @@ function TourDetail() {
           />
         </Col>
 
-        {/* Title */}
         <Col xs={24}>
           {loading ? (
             <Skeleton active paragraph={{ rows: 1 }} title={{ width: "70%" }} />
@@ -75,7 +73,6 @@ function TourDetail() {
           )}
         </Col>
 
-        {/* Meta info */}
         <Col xs={24}>
           <Row justify="space-between" align="middle" gutter={[16, 16]}>
             <Col xs={24} md={16}>
@@ -83,14 +80,12 @@ function TourDetail() {
                 <Skeleton.Input active style={{ width: 300 }} />
               ) : (
                 <div className="flex items-center gap-3 text-text1 text-sm md:text-base flex-wrap">
-                  {/* Rating placeholder */}
                   <span className="font-semibold flex items-center gap-1">
                     <StarFilled className="text-yellow-500" />
                     4.8
                   </span>
                   <span className="text-gray-400">•</span>
 
-                  {/* Điểm đi - điểm đến */}
                   {tourDetail?.startDeparture && (
                     <>
                       <span className="font-medium flex items-center gap-1">
@@ -104,7 +99,6 @@ function TourDetail() {
                     </>
                   )}
 
-                  {/* Thời gian tour */}
                   {tourDetail?.timeTour && (
                     <>
                       <span className="font-medium flex items-center gap-1">
@@ -115,7 +109,6 @@ function TourDetail() {
                     </>
                   )}
 
-                  {/* Chỗ còn */}
                   {tourDetail?.stock !== undefined && (
                     <span className="font-medium flex items-center gap-1">
                       <TeamOutlined className="text-primary" />
@@ -147,7 +140,7 @@ function TourDetail() {
           </Row>
         </Col>
 
-        {/* 2. Image Grid Viewer */}
+        {/* Image Grid Viewer */}
         <Col xs={24} className="mt-4">
           {loading ? (
             <Skeleton.Image
@@ -162,7 +155,6 @@ function TourDetail() {
               }}
             >
               <Row gutter={[16, 16]} className="h-[300px] md:h-[500px]">
-                {/* Ảnh chính */}
                 <Col xs={24} md={16} className="h-full">
                   <Image
                     src={images[0]}
@@ -180,7 +172,6 @@ function TourDetail() {
                   />
                 </Col>
 
-                {/* 2 ảnh phụ */}
                 <Col xs={0} md={8} className="h-full hidden md:block">
                   <Row gutter={[0, 16]} className="h-full flex-col">
                     <Col flex="1" className="h-[calc(50%-8px)]">
@@ -228,7 +219,6 @@ function TourDetail() {
                 </Col>
               </Row>
 
-              {/* Ảnh ẩn để preview group */}
               <div style={{ display: "none" }}>
                 {images.slice(3).map((src, index) => (
                   <Image key={index + 3} src={src} />
@@ -239,12 +229,11 @@ function TourDetail() {
         </Col>
       </Row>
 
-      {/* 3. Main Detailed Content */}
+      {/* Main Detailed Content */}
       <Row gutter={[48, 48]} className="mt-12">
         {/* Left Column */}
         <Col xs={24} lg={16}>
 
-          {/* Thông tin nhanh */}
           {!loading && tourDetail && (
             <section className="bg-gray-50 rounded-2xl p-6 mb-8">
               <Row gutter={[16, 16]}>
@@ -320,7 +309,6 @@ function TourDetail() {
             </section>
           )}
 
-          {/* Tour Overview / Thông tin */}
           <section>
             <h2 className="text-2xl font-bold text-text1 mb-4">Mô tả Tour</h2>
             {loading ? (
@@ -337,7 +325,6 @@ function TourDetail() {
 
           <Divider className="my-10 border-gray-100" />
 
-          {/* Lịch trình (schedule) */}
           <section>
             <h2 className="text-2xl font-bold text-text1 mb-6">Lịch trình</h2>
             {loading ? (

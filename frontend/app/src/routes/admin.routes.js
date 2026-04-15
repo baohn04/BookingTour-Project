@@ -1,10 +1,11 @@
 import AdminLayout from "../components/AdminLayout";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import AdminTours from "../pages/Admin/AdminTours";
-
+import AdminNotFound from "../pages/Admin/AdminNotFound";
+import AdminCategories from "../pages/Admin/AdminCategories";
 
 export const adminRoutes = {
-  // private admin
+  // admin
   path: "/admin",
   element: <AdminLayout />,
   children: [
@@ -13,8 +14,16 @@ export const adminRoutes = {
       element: <AdminDashboard />
     },
     {
+      path: "categories",
+      element: <AdminCategories />
+    },
+    {
       path: "tours",
       element: <AdminTours />
+    },
+    {
+      path: "*",
+      element: <AdminNotFound />
     }
   ]
 };

@@ -65,6 +65,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       message: "Lấy danh mục thành công",
       data: categories,
+      pagination: objectPagination,
     });
   } catch (error) {
     res.status(500).json({
@@ -98,6 +99,27 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json({
       message: "Tạo danh mục thành công",
       data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// [GET] /admin/categories/edit/:id
+export const edit = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id: string = req.params.id;
+
+    const category = await Category.findOne({
+      _id: id,
+      deleted: false,
+    });
+
+    res.status(200).json({
+      message: "Lấy chi tiết danh mục thành công",
+      data: category,
     });
   } catch (error) {
     res.status(500).json({

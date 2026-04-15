@@ -5,6 +5,7 @@ import {
   CalendarOutlined,
   ProfileOutlined,
   UserOutlined,
+  TagOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, ConfigProvider, Avatar } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
@@ -35,6 +36,11 @@ const items = [
     label: <span className="font-medium">Tổng quan</span>,
   },
   {
+    key: '/admin/categories',
+    icon: <TagOutlined className="text-lg" />,
+    label: <span className="font-medium">Danh mục</span>,
+  },
+  {
     key: '/admin/tours',
     icon: <EnvironmentOutlined className="text-lg" />,
     label: <span className="font-medium">Tours</span>,
@@ -59,7 +65,7 @@ const AdminLayout = () => {
     <Layout className="min-h-screen">
       <Sider
         width={260}
-        style={{ 
+        style={{
           background: 'var(--color-text1)',
           overflow: 'hidden',
           height: '100vh',

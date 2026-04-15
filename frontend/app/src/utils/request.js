@@ -19,6 +19,16 @@ export const post = async (path, options) => {
   return result;
 }
 
+export const postForm = async (path, formData) => {
+  const response = await fetch(API_DOMAIN + path, {
+    method: "POST",
+    body: formData,
+  });
+  const result = await response.json();
+  return result;
+}
+
+
 export const patch = async (path, options) => {
   const response = await fetch(API_DOMAIN + path, {
     method: "PATCH",
@@ -27,6 +37,15 @@ export const patch = async (path, options) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(options),
+  });
+  const result = await response.json();
+  return result;
+}
+
+export const patchForm = async (path, formData) => {
+  const response = await fetch(API_DOMAIN + path, {
+    method: "PATCH",
+    body: formData,
   });
   const result = await response.json();
   return result;

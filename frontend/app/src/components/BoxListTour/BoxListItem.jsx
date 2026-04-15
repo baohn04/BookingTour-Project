@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Tag, Button } from 'antd';
-import { NumberOutlined, CalendarOutlined, FireOutlined, HistoryOutlined, TeamOutlined } from '@ant-design/icons';
+import { NumberOutlined, CalendarOutlined, FireOutlined, HistoryOutlined, TeamOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import formatPriceHelper from '../../helpers/formatPriceHelper';
 import formatDateHelper from '../../helpers/formatDateHelper';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ const { Text, Title } = Typography;
 
 function BoxListItem(props) {
   const { item } = props;
-  const { title, code, images, price, discount, price_special, information, timeStart, stock } = item;
+  const { title, code, images, price, discount, price_special, information, timeStart, startDeparture, timeTour, stock } = item;
   const tourImage = images[0];
 
   const formattedDate = formatDateHelper(timeStart);
@@ -52,10 +52,13 @@ function BoxListItem(props) {
 
           <div className="flex flex-col gap-1 mb-4 mt-auto">
             <Text className="text-text1 text-xs flex items-center gap-2">
+              <EnvironmentOutlined className="text-primary" /> Khởi hành: <span className="font-medium text-text1">{startDeparture}</span>
+            </Text>
+            <Text className="text-text1 text-xs flex items-center gap-2">
               <CalendarOutlined className="text-primary" /> Ngày đi: <span className="font-medium text-text1">{formattedDate}</span>
             </Text>
             <Text className="text-text1 text-xs flex items-center gap-2">
-              <HistoryOutlined className="text-primary" /> Thời gian: <span className="font-medium text-text1">5N4Đ</span>
+              <HistoryOutlined className="text-primary" /> Thời gian: <span className="font-medium text-text1">{timeTour}</span>
             </Text>
             <Text className="text-text1 text-xs flex items-center gap-2">
               <TeamOutlined className="text-primary" /> Số chỗ còn: <span className="font-medium text-text1">{stock || 0}</span>

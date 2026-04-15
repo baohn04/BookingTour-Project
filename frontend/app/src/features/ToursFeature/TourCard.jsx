@@ -4,10 +4,9 @@ import { CalendarOutlined, NumberOutlined, EnvironmentOutlined, HistoryOutlined,
 import formatPriceHelper from '../../helpers/formatPriceHelper';
 import { Link } from 'react-router-dom';
 
-
 function TourCard({ tour }) {
   if (!tour) return null;
-  const { title, code, images, price, discount, price_special, information, timeStart, stock, slug } = tour;
+  const { title, code, images, price, discount, price_special, information, timeStart, startDeparture, timeTour, stock, slug } = tour;
   const tourImage = images[0];
 
   const formattedDate = timeStart ? new Date(timeStart).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Đang cập nhật';
@@ -45,16 +44,15 @@ function TourCard({ tour }) {
           {title}
         </h3>
 
-        <p className="text-text1/70 text-[14px] mb-4 line-clamp-2 leading-relaxed max-w-[90%]">
-          {information || 'Chưa có thông tin cho tour này.'}
+        <p className="text-text1/70 text-[14px] mb-4 line-clamp-2 leading-relaxed max-w-[90%]" dangerouslySetInnerHTML={{ __html: information }}>
         </p>
 
         <div className="mt-auto flex flex-wrap gap-2 text-text1 text-[13px] font-medium">
           <span className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-100">
-            <EnvironmentOutlined className="text-primary" /> Khởi hành: Hà Nội
+            <EnvironmentOutlined className="text-primary" /> Khởi hành: {startDeparture}
           </span>
           <span className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-100">
-            <HistoryOutlined className="text-primary" /> Thời gian: 5N4Đ
+            <HistoryOutlined className="text-primary" /> Thời gian: {timeTour}
           </span>
           <span className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-100">
             <CalendarOutlined className="text-primary" /> Ngày đi: {formattedDate}

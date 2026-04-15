@@ -2,7 +2,8 @@ interface ObjectPagination {
   currentPage: number,
   limitItems: number,
   skip?: number,
-  totalPage?: number
+  totalPage?: number,
+  totalItems?: number
 }
 
 const paginationHelper = (objectPagination: ObjectPagination, query: Record<string, any>, countRecords: number): ObjectPagination => {
@@ -16,6 +17,7 @@ const paginationHelper = (objectPagination: ObjectPagination, query: Record<stri
 
   objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItems;
   objectPagination.totalPage = Math.ceil(countRecords / objectPagination.limitItems);
+  objectPagination.totalItems = countRecords;
 
   return objectPagination;
 }

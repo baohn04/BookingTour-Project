@@ -3,9 +3,10 @@ import Home from "../pages/Home";
 import Tours from "../pages/Tours";
 import TourDetail from "../pages/Tours/TourDetail";
 import Cart from "../pages/Cart";
+import NotFound from "../pages/NotFound";
 
 export const clientRoutes = {
-  // public client
+  // client
   path: "/",
   element: <LayoutDefault />,
   children: [
@@ -24,6 +25,10 @@ export const clientRoutes = {
     {
       path: "cart",
       element: <Cart />
+    },
+    {
+      path: "*",
+      element: <NotFound />
     }
   ]
 };
