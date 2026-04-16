@@ -5,7 +5,9 @@ import { getAdminDetailTour } from '../../services/adminTourServices';
 
 const { Title, Text } = Typography;
 
-const DetailTourModal = ({ visible, onCancel, tourId }) => {
+function DetailTourModal(props) {
+  const { visible, onCancel, tourId } = props;
+
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(false);
 

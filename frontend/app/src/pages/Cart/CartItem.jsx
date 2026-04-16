@@ -3,7 +3,8 @@ import { removeFromCart, updateQuantity } from "../../actions/cartAction";
 import { Table, Button } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 
-function CartItem({ items }) {
+function CartItem(props) {
+  const { items } = props;
   const dispatch = useDispatch();
 
   const handleClearCart = (id) => {

@@ -7,7 +7,9 @@ import dayjs from 'dayjs';
 
 const { Option } = Select;
 
-const EditTourModal = ({ visible, onCancel, onOk, form, tourId }) => {
+function EditTourModal(props) {
+  const { visible, onCancel, onOk, form, tourId } = props;
+
   const [categories, setCategories] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
 

@@ -4,7 +4,9 @@ import { CalendarOutlined, NumberOutlined, EnvironmentOutlined, HistoryOutlined,
 import formatPriceHelper from '../../helpers/formatPriceHelper';
 import { Link } from 'react-router-dom';
 
-function TourCard({ tour }) {
+function TourCard(props) {
+  const { tour } = props;
+
   if (!tour) return null;
   const { title, code, images, price, discount, price_special, information, timeStart, startDeparture, timeTour, stock, slug } = tour;
   const tourImage = images[0];

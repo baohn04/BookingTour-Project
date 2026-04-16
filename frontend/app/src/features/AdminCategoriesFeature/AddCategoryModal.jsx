@@ -4,7 +4,8 @@ import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
-const AddCategoryModal = ({ visible, onCancel, onOk, form }) => {
+function AddCategoryModal(props) {
+  const { visible, onCancel, onOk, form } = props;
 
   return (
     <Modal

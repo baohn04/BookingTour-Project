@@ -1,6 +1,8 @@
 import CartItem from "./CartItem";
 
-function CartList({ items }) {
+function CartList(props) {
+  const { items } = props;
+
   return (
     <div className="cart">
       <CartItem items={items} />

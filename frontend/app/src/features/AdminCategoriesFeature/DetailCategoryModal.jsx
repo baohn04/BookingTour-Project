@@ -4,7 +4,9 @@ import { InfoCircleOutlined, FileTextOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
-const DetailCategoryModal = ({ visible, onCancel, category, loading }) => {
+function DetailCategoryModal(props) {
+  const { visible, onCancel, category, loading } = props;
+
   return (
     <Modal
       title={<span className="text-xl font-bold text-text1 flex items-center gap-2"><InfoCircleOutlined className="text-blue-500" /> Chi tiết Danh Mục</span>}

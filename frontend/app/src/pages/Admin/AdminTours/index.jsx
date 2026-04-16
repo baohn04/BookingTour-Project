@@ -321,7 +321,7 @@ function AdminTours() {
           <Row gutter={[16, 16]} align="middle" justify="space-between">
             <Col xs={24} md={16}>
               <Space size="middle" className="flex-wrap">
-                {/* Lọc trạng thái */}
+                {/* Filter */}
                 <Select
                   value={queryParams.status}
                   style={{ width: 160 }}
@@ -332,7 +332,7 @@ function AdminTours() {
                     { value: 'inactive', label: 'Tạm dừng' },
                   ]}
                 />
-                {/* Sắp xếp */}
+                {/* Sort */}
                 <Select
                   value={`${queryParams.sortKey}-${queryParams.sortValue}`}
                   style={{ width: 220 }}
@@ -348,7 +348,7 @@ function AdminTours() {
                     { value: 'title-desc', label: 'Thứ tự Z-A' },
                   ]}
                 />
-                {/* Tìm kiếm */}
+                {/* Search */}
                 <Input.Search
                   placeholder="Tìm kiếm theo tên hoặc mã..."
                   allowClear
@@ -357,7 +357,6 @@ function AdminTours() {
                 />
               </Space>
             </Col>
-            {/* Bộ đếm kết quả */}
             <Col xs={24} md={8} className="text-right">
               <span className="text-gray-500 font-medium">
                 Tìm thấy <strong className="text-primary mx-1">{pagination?.totalItems || tours.length}</strong> kết quả
@@ -366,7 +365,7 @@ function AdminTours() {
           </Row>
         </div>
 
-        {/* Data Table with Skeleton */}
+        {/* Data Table */}
         <div className="p-0">
           <Skeleton active loading={loading} paragraph={{ rows: 10 }} className="p-6">
             <Table

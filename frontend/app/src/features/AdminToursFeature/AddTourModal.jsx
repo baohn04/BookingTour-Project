@@ -6,7 +6,9 @@ import { getAdminCreateTour } from '../../services/adminTourServices';
 
 const { Option } = Select;
 
-const AddTourModal = ({ visible, onCancel, onOk, form }) => {
+function AddTourModal(props) {
+  const { visible, onCancel, onOk, form } = props;
+
   const [categories, setCategories] = useState([]);
   const [loadingCats, setLoadingCats] = useState(false);
 

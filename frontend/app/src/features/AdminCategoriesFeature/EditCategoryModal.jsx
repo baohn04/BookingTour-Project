@@ -5,7 +5,9 @@ import { getAdminEditCategory } from '../../services/adminCategoryServices';
 
 const { Option } = Select;
 
-const EditCategoryModal = ({ visible, onCancel, onOk, form, categoryId }) => {
+function EditCategoryModal(props) {
+  const { visible, onCancel, onOk, form, categoryId } = props;
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
