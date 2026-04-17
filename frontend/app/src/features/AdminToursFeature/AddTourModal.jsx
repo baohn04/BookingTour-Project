@@ -44,6 +44,7 @@ function AddTourModal(props) {
       cancelText="Hủy"
       okButtonProps={{ className: "bg-blue-600 hover:!bg-blue-500 hover:!opacity-90 border-none text-white transition-colors" }}
       cancelButtonProps={{ className: "bg-red-500 hover:!bg-red-400 hover:!opacity-90 border-none text-white transition-colors" }}
+      forceRender
     >
       <Form
         form={form}

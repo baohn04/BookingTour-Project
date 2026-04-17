@@ -37,7 +37,7 @@ function DetailTourModal(props) {
       onCancel={onCancel}
       footer={null}
       width={1100}
-      bodyStyle={{ padding: '24px' }}
+      styles={{ body: { padding: '24px' } }}
       centered
       className="detail-tour-modal"
     >

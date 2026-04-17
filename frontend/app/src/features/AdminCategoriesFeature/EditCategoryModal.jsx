@@ -63,7 +63,7 @@ function EditCategoryModal(props) {
       cancelText="Hủy"
       okButtonProps={{ className: "bg-blue-600 hover:!bg-blue-500 border-none text-white", disabled: loading }}
       cancelButtonProps={{ className: "bg-red-500 hover:!bg-red-400 border-none text-white" }}
-      destroyOnClose
+      forceRender
     >
       <Spin spinning={loading} tip="Đang tải dữ liệu...">
         <Form form={form} layout="vertical" name="edit_category_form" className="mt-4">

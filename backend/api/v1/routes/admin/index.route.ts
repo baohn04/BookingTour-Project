@@ -29,7 +29,7 @@ const adminV1Routes = (app: Express): void => {
 
   app.use(version + `/${PATH_ADMIN}/tours`, tourRoutes); // nhớ thêm lại authMiddleware.requireAuth sau khi auth
 
-  app.use(version + `/${PATH_ADMIN}/orders`, authMiddleware.requireAuth, orderRoutes);
+  app.use(version + `/${PATH_ADMIN}/orders`, orderRoutes); // nhớ thêm lại authMiddleware.requireAuth sau khi auth
 
   app.use(version + `/${PATH_ADMIN}/roles`, authMiddleware.requireAuth, roleRoutes);
 

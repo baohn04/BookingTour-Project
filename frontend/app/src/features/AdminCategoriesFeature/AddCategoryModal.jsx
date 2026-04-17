@@ -19,6 +19,7 @@ function AddCategoryModal(props) {
       cancelText="Hủy"
       okButtonProps={{ className: "bg-blue-600 hover:!bg-blue-500 border-none text-white" }}
       cancelButtonProps={{ className: "bg-red-500 hover:!bg-red-400 border-none text-white" }}
+      forceRender
     >
       <Form form={form} layout="vertical" name="add_category_form" className="mt-4">
         <Form.Item

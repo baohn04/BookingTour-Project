@@ -62,12 +62,19 @@ export const index = async (req: Request, res: Response): Promise<void> => {
       .skip(objectPagination.skip || 0)
       .limit(objectPagination.limitItems);
 
+    const revenueResult = await Order.aggregate([
+      { $match: { deleted: false, status: "confirmed" } },
+      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
+    ]);
+    const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
+
     // Statistics
     const statistics = {
       total: await Order.countDocuments({ deleted: false }),
       pending: await Order.countDocuments({ deleted: false, status: "pending" }),
       confirmed: await Order.countDocuments({ deleted: false, status: "confirmed" }),
-      cancelled: await Order.countDocuments({ deleted: false, status: "cancelled" })
+      cancelled: await Order.countDocuments({ deleted: false, status: "cancelled" }),
+      totalRevenue: totalRevenue
     };
 
     res.status(200).json({
@@ -106,7 +113,7 @@ export const detail = async (req: Request, res: Response): Promise<void> => {
     const orderItems = await OrderItem.find({
       orderId: order.id,
       deleted: false
-    });
+    }).lean() as any[];
 
     for (const item of orderItems) {
       const infoTour = await Tour.findOne({

@@ -77,7 +77,7 @@ function EditTourModal(props) {
       cancelText="Hủy"
       okButtonProps={{ className: "bg-blue-600 hover:!bg-blue-500 border-none text-white", disabled: loadingData }}
       cancelButtonProps={{ className: "bg-red-500 hover:!bg-red-400 border-none text-white", disabled: loadingData }}
-      destroyOnClose
+      forceRender
     >
       <Spin spinning={loadingData} tip="Đang nạp dữ liệu...">
         <Form

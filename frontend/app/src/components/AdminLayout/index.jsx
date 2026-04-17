@@ -17,9 +17,9 @@ const menuTheme = {
   components: {
     Menu: {
       darkItemBg: 'transparent',
-      darkItemSelectedBg: 'var(--color-primary)', // Red/Orange active state
-      darkItemColor: '#9ca3af', // Gray text for inactive (Tailwind gray-400)
-      darkItemSelectedColor: 'var(--color-text2)', // White text
+      darkItemSelectedBg: 'var(--color-primary)',
+      darkItemColor: '#9ca3af',
+      darkItemSelectedColor: 'var(--color-text2)',
       darkItemHoverColor: 'var(--color-text2)',
       darkItemHoverBg: 'rgba(255,255,255,0.08)',
       itemBorderRadius: 8,
@@ -43,12 +43,12 @@ const items = [
   {
     key: '/admin/tours',
     icon: <EnvironmentOutlined className="text-lg" />,
-    label: <span className="font-medium">Tours</span>,
+    label: <span className="font-medium">Tour du lịch</span>,
   },
   {
-    key: '/admin/bookings',
+    key: '/admin/orders',
     icon: <ProfileOutlined className="text-lg" />,
-    label: <span className="font-medium">Bookings</span>,
+    label: <span className="font-medium">Đơn đặt tour</span>,
   },
   {
     key: '/admin/schedule',

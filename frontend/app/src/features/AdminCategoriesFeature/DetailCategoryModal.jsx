@@ -15,7 +15,7 @@ function DetailCategoryModal(props) {
       footer={null}
       width={700}
       centered
-      destroyOnClose
+      destroyOnHidden
     >
       <Spin spinning={loading} tip="Đang tải...">
         {category ? (
