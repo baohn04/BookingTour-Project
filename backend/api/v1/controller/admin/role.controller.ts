@@ -23,14 +23,13 @@ export const index = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-
 // [POST] /admin/roles/create
 export const createPost = async (req: Request, res: Response): Promise<void> => {
   try {
     const records = new Role(req.body);
     await records.save();
     res.status(201).json({
-      message: "Tạo role thành công",
+      message: "Tạo nhóm quyền thành công",
       data: records
     });
   } catch (error) {
@@ -40,6 +39,28 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
+// [GET] /admin/roles/edit/:id
+export const edit = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id: string = req.params.id;
+    const record = await Role.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if (!record) {
+      res.status(404).json({ message: "Không tìm thấy nhóm quyền" });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Lấy chi tiết nhóm quyền thành công",
+      data: record
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // [PATCH] /admin/roles/edit/:id
 export const editPatch = async (req: Request, res: Response): Promise<void> => {

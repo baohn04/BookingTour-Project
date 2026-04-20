@@ -65,7 +65,8 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     const records = await Admin.find(find)
       .select("-password -token")
       .limit(objectPagination.limitItems)
-      .skip(objectPagination.skip || 0);
+      .skip(objectPagination.skip || 0)
+      .lean();
 
     for (const record of records) {
       const role = await Role.findOne({
@@ -89,6 +90,23 @@ export const index = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// [GET] /admin/accounts-admin/create
+export const create = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const roles = await Role.find({
+      deleted: false
+    });
+
+    res.status(200).json({
+      message: "Lấy danh sách quyền thành công",
+      data: roles
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 
 // [POST] /admin/accounts-admin/create
 export const createPost = async (req: Request, res: Response): Promise<void> => {
@@ -152,8 +170,8 @@ export const edit = async (req: Request, res: Response): Promise<void> => {
       deleted: false
     });
 
-    res.render("admin/pages/accounts/edit", {
-      pageTitle: "Chỉnh sửa tài khoản",
+    res.status(200).json({
+      message: "Lấy chi tiết tài khoản thành công",
       data: data,
       roles: roles
     });

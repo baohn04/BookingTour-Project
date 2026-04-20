@@ -60,44 +60,44 @@ function AdminDashboard() {
 
   const tableColumns = [
     {
-      title: 'Booking Code',
+      title: 'Mã đơn',
       dataIndex: 'code',
       key: 'code',
       className: 'text-gray-600',
     },
     {
-      title: 'Customer Name',
+      title: 'Tên khách hàng',
       dataIndex: 'fullName',
       key: 'fullName',
       className: 'text-gray-800',
     },
     {
-      title: 'Phone',
+      title: 'Số điện thoại',
       dataIndex: 'phone',
       key: 'phone',
       className: 'text-gray-600',
     },
     {
-      title: 'Amount',
+      title: 'Tổng tiền',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
       className: 'text-gray-800 ',
       render: (amount) => amount ? `${amount.toLocaleString()} đ` : '0 đ',
     },
     {
-      title: 'Status',
+      title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
         let color = 'default';
         const st = status || 'pending';
-        if (st === 'confirmed') color = 'success';
+        if (st === 'confirmed') color = 'processing';
         else if (st === 'pending') color = 'warning';
         else if (st === 'cancelled') color = 'error';
 
         return (
           <Tag color={color} className="rounded-full px-3 py-1 border-none capitalize">
-            {st}
+            {st === 'confirmed' ? 'Đã xác nhận' : st === 'pending' ? 'Đang xử lý' : 'Đã hủy'}
           </Tag>
         );
       },
@@ -170,7 +170,7 @@ function AdminDashboard() {
           <Card
             variant="borderless"
             className="shadow-sm rounded-xl border border-gray-100 h-full"
-            title={<span className="text-gray-700 font-semibold text-base">Weekly Revenue</span>}
+            title={<span className="text-gray-700 font-semibold text-base">Doanh trong thu tuần</span>}
           >
             <Skeleton active loading={loading} paragraph={{ rows: 7 }} title={false}>
               <div style={{ height: 300 }}>
@@ -183,7 +183,7 @@ function AdminDashboard() {
           <Card
             variant="borderless"
             className="shadow-sm rounded-xl border border-gray-100 h-full"
-            title={<span className="text-gray-700 font-semibold text-base">Weekly Bookings</span>}
+            title={<span className="text-gray-700 font-semibold text-base">Số đơn trong tuần</span>}
           >
             <Skeleton active loading={loading} paragraph={{ rows: 7 }} title={false}>
               <div style={{ height: 300 }}>
@@ -199,7 +199,7 @@ function AdminDashboard() {
         <Card
           variant="borderless"
           className="shadow-sm rounded-xl border border-gray-100"
-          title={<span className="text-gray-700 font-semibold text-base">Recent Bookings</span>}
+          title={<span className="text-gray-700 font-semibold text-base">Các đơn gần đây</span>}
         >
           <Table
             columns={tableColumns}

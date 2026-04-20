@@ -2,10 +2,10 @@ import React from 'react';
 import {
   AppstoreOutlined,
   EnvironmentOutlined,
-  CalendarOutlined,
   ProfileOutlined,
   UserOutlined,
   TagOutlined,
+  SafetyCertificateOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, ConfigProvider, Avatar } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
@@ -38,22 +38,27 @@ const items = [
   {
     key: '/admin/categories',
     icon: <TagOutlined className="text-lg" />,
-    label: <span className="font-medium">Danh mục</span>,
+    label: <span className="font-medium">Quản lý danh mục</span>,
   },
   {
     key: '/admin/tours',
     icon: <EnvironmentOutlined className="text-lg" />,
-    label: <span className="font-medium">Tour du lịch</span>,
+    label: <span className="font-medium">Quản lý tour du lịch</span>,
   },
   {
     key: '/admin/orders',
     icon: <ProfileOutlined className="text-lg" />,
-    label: <span className="font-medium">Đơn đặt tour</span>,
+    label: <span className="font-medium">Quản lý đơn</span>,
   },
   {
-    key: '/admin/schedule',
-    icon: <CalendarOutlined className="text-lg" />,
-    label: <span className="font-medium">Schedules</span>,
+    key: '/admin/accounts',
+    icon: <UserOutlined className="text-lg" />,
+    label: <span className="font-medium">Quản lý tài khoản</span>,
+  },
+  {
+    key: '/admin/roles',
+    icon: <SafetyCertificateOutlined className="text-lg" />,
+    label: <span className="font-medium">Quản lý quyền</span>,
   },
 ];
 

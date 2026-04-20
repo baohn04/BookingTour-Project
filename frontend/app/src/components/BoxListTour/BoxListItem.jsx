@@ -46,9 +46,8 @@ function BoxListItem(props) {
             {title}
           </Title>
 
-          <Text className="text-text1 text-sm line-clamp-2 min-h-[42px] mb-3" title={information}>
-            {information || 'Chưa có thông tin'}
-          </Text>
+
+          <p className="text-text1 text-sm line-clamp-2 min-h-[42px] mb-3" dangerouslySetInnerHTML={{ __html: information }} />
 
           <div className="flex flex-col gap-1 mb-4 mt-auto">
             <Text className="text-text1 text-xs flex items-center gap-2">
