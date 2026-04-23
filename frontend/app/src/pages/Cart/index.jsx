@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import CartList from "./CartList";
-import { clearCart } from "../../actions/cartAction";
+import { clearCart } from "../../redux/actions/cartAction";
 import { Button } from "antd";
 import InfoBookingCart from "../../features/CartFeature/InfoBookingCart";
 import { useFetchCart } from "../../hooks/useCart";

@@ -60,7 +60,7 @@ export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQ
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 }
@@ -80,6 +80,13 @@ export const detail = async (req: Request<ITourDetailParams>, res: Response): Pr
       status: "active"
     }).select("-__v -createdAt -updatedAt").lean();
 
+    if (!tourDetail) {
+      res.status(404).json({
+        message: "Tour không tồn tại"
+      });
+      return;
+    }
+
     tourDetail["price_special"] = tourDetail.price * (1 - tourDetail.discount / 100);
 
     res.status(200).json({
@@ -88,7 +95,7 @@ export const detail = async (req: Request<ITourDetailParams>, res: Response): Pr
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 }
@@ -129,7 +136,7 @@ export const review = async (req: Request<{}, any, any, ITourReviewQuery>, res: 
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 }
@@ -161,7 +168,7 @@ export const reviewPost = async (req: Request<{}, any, ITourReviewPostBody>, res
     })
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     })
   }
 }

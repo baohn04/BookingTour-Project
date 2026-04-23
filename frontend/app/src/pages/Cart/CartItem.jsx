@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { removeFromCart, updateQuantity } from "../../actions/cartAction";
+import { removeFromCart, updateQuantity } from "../../redux/actions/cartAction";
 import { Table, Button } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 

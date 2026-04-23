@@ -4,9 +4,11 @@ import * as validate from "../../../../validates/admin/auth.validate";
 
 const router: Router = Router();
 
-router.post("/login", validate.loginPost, controller.loginPost);
+router.post("/refresh-token", controller.refreshToken);
 
-router.get("/logout", controller.logout);
+router.post("/login", validate.loginPost, controller.login);
+
+router.post("/logout", controller.logout);
 
 router.post("/password/forgot", validate.forgotPasswordPost, controller.forgotPasswordPost);
 

@@ -18,7 +18,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
@@ -34,7 +34,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
@@ -58,7 +58,9 @@ export const edit = async (req: Request, res: Response): Promise<void> => {
       data: record
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
+    });
   }
 };
 
@@ -73,7 +75,7 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
@@ -96,7 +98,7 @@ export const deleteItem = async (req: Request, res: Response): Promise<void> => 
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
@@ -116,7 +118,7 @@ export const permissions = async (req: Request, res: Response): Promise<void> =>
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
@@ -124,7 +126,12 @@ export const permissions = async (req: Request, res: Response): Promise<void> =>
 // [PATCH] /admin/roles/permissions
 export const permissionsPatch = async (req: Request, res: Response): Promise<void> => {
   try {
-    const permissions = JSON.parse(req.body.permissions);
+    interface IPermissionItem {
+      id: string;
+      permissions: string[];
+    }
+
+    const permissions: IPermissionItem[] = JSON.parse(req.body.permissions);
     for (const item of permissions) {
       await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
     }
@@ -133,7 +140,7 @@ export const permissionsPatch = async (req: Request, res: Response): Promise<voi
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };

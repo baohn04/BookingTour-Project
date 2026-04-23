@@ -2,29 +2,41 @@ import { Request, Response } from "express";
 import SettingGeneral from "../../models/setting-general.model";
 
 // [GET] /admin/settings/general
-export const general = async (req: Request, res: Response) => {
-  const settingGeneral = await SettingGeneral.findOne({}); // Lấy ra bảng ghi đầu tiên vì collection settings-general chỉ có 1 bảng ghi duy nhất
+export const general = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const settingGeneral = await SettingGeneral.findOne({}); // Lấy ra bảng ghi đầu tiên vì collection settings-general chỉ có 1 bảng ghi duy nhất
 
-  res.status(200).json({
-    message: "Lấy setting thành công",
-    data: settingGeneral
-  });
+    res.status(200).json({
+      message: "Lấy setting thành công",
+      data: settingGeneral
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
+    });
+  }
 }
 
 // [PATCH] /admin/settings/general
-export const generalPatch = async (req: Request, res: Response) => {
-  const settingGeneral = await SettingGeneral.findOne({});
+export const generalPatch = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const settingGeneral = await SettingGeneral.findOne({});
 
-  if (settingGeneral) {
-    await SettingGeneral.updateOne({
-      _id: settingGeneral.id
-    }, req.body);
-  } else {
-    const record = new SettingGeneral(req.body);
-    await record.save();
+    if (settingGeneral) {
+      await SettingGeneral.updateOne({
+        _id: settingGeneral.id
+      }, req.body);
+    } else {
+      const record = new SettingGeneral(req.body);
+      await record.save();
+    }
+
+    res.status(200).json({
+      message: "Cập nhật setting thành công",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
+    });
   }
-
-  res.status(200).json({
-    message: "Cập nhật setting thành công",
-  });
 };

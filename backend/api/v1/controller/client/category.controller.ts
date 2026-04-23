@@ -15,7 +15,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };

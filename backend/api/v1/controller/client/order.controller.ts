@@ -24,7 +24,7 @@ export interface IOrderRequest {
 }
 
 // [POST] /order/
-export const order = async (req: Request<{}, any, IOrderRequest>, res: Response): Promise<any> => {
+export const order = async (req: Request<{}, any, IOrderRequest>, res: Response): Promise<void> => {
   try {
     const data = req.body;
 
@@ -81,13 +81,14 @@ export const order = async (req: Request<{}, any, IOrderRequest>, res: Response)
       const origin = req.headers.origin as string;
       const payUrl = await generateMomoPaymentUrl(code, data.totalAmount, origin);
 
-      return res.status(201).json({
+      res.status(201).json({
         message: "Booking tour successfully!",
         data: {
           orderCode: code,
           payUrl: payUrl
         }
       });
+      return;
     }
 
     // Default cash response
@@ -99,7 +100,7 @@ export const order = async (req: Request<{}, any, IOrderRequest>, res: Response)
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
@@ -166,7 +167,7 @@ export const orderSuccess = async (req: Request<{}, any, any, IOrderSuccessQuery
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };

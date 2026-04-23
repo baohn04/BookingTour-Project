@@ -1,42 +1,58 @@
 import { Request, Response } from "express";
 import Admin from "../../models/admin.model";
+import { AuthRequest } from "../../types/express.d";
 
 import md5 from "md5";
 
+// [GET] /admin/info-admin/
+export const index = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    res.status(200).json({
+      code: 200,
+      user: req.user,
+      role: req.role
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra",
+    });
+  }
+};
+
 // [PATCH] /admin/info-admin/edit
-export const editPatch = async (req: Request, res: Response) => {
+export const editPatch = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const id: string = res.locals.user.id;
 
-    interface dataAcount {
-      fullName: string,
-      email: string,
-      password?: string,
-      phone: string,
-      avatar?: string,
-    };
+    interface IAccountData {
+      fullName: string;
+      email: string;
+      password?: string;
+      phone: string;
+      avatar?: string;
+    }
 
-    const dataAcount: dataAcount = {
+    const dataAccount: IAccountData = {
       fullName: req.body.fullName,
       email: req.body.email,
       phone: req.body.phone
     };
 
     if (req.body.password) {
-      dataAcount["password"] = md5(req.body.password);
+      dataAccount.password = md5(req.body.password);
     }
 
     if (req.body.avatar) {
-      dataAcount["avatar"] = req.body.avatar;
+      dataAccount.avatar = req.body.avatar;
     }
 
-    await Admin.updateOne({ _id: id }, dataAcount);
+    await Admin.updateOne({ _id: id }, dataAccount);
     res.status(200).json({
       message: "Đã cập nhật thông tin",
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra",
     });
   }
 };

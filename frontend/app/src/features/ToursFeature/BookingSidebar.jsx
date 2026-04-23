@@ -4,7 +4,7 @@ import { MinusOutlined, PlusOutlined, ThunderboltOutlined } from "@ant-design/ic
 import formatPriceHelper from "../../helpers/formatPriceHelper";
 import formatDateHelper from "../../helpers/formatDateHelper";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, updateQuantity } from "../../actions/cartAction";
+import { addToCart, updateQuantity } from "../../redux/actions/cartAction";
 
 const { Title, Text } = Typography;
 

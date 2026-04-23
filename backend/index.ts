@@ -26,6 +26,7 @@ const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
+    credentials: true
   },
 });
 global._io = io;
@@ -34,9 +35,12 @@ global._io = io;
 orderSocket(io);
 
 // CORS
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}));
 
-// Cookie Parser (for JWT refresh tokens)
+// Cookie Parser (for JWT tokens)
 app.use(cookieParser(process.env.TRAVELLAND_SECRET));
 
 // API Routes

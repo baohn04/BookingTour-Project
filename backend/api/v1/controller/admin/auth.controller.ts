@@ -1,12 +1,53 @@
 import { Request, Response } from "express";
 import Admin from "../../models/admin.model";
+import jwt from "jsonwebtoken";
 import * as generateAuth from "../../../../helpers/generateAuth";
 import md5 from "md5";
 import ForgotPassword from "../../models/forgot-password.model";
 import sendMail from "../../../../helpers/sendMail";
 
+export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+  const refreshToken: string = req.body.token;
+
+  if (!refreshToken) {
+    res.status(401).json({
+      message: "Token không tồn tại"
+    });
+    return;
+  }
+
+  const adminExist = await Admin.findOne({
+    token: refreshToken,
+    deleted: false
+  });
+
+  if (!adminExist) {
+    res.status(401).json({
+      message: "Token không hợp lệ"
+    });
+    return;
+  }
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, (err, decoded) => {
+    if (err) {
+      res.status(403).json({
+        message: "Token đã hết hạn"
+      });
+      return;
+    }
+
+    const user = decoded as { id: string };
+    const payload = { id: user.id };
+    const accessToken: string = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "1d" });
+    res.status(200).json({
+      message: "Refresh token thành công",
+      accessToken: accessToken
+    });
+  });
+};
+
 // [POST] /api/v1/admin/auth/login
-export const loginPost = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const email: string = req.body.email;
     const password: string = req.body.password;
@@ -37,38 +78,55 @@ export const loginPost = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = admin.token;
+    // Tạo JWT với payload chứa id của admin
+    const payload = { id: admin.id };
+
+    const accessToken: string = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "1d" });
+    const refreshToken: string = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET as string, { expiresIn: "7d" });
+
+    // Lưu refreshToken vào DB
+    await Admin.updateOne({ _id: admin.id }, { token: refreshToken });
 
     res.status(200).json({
+      code: 200,
       message: "Đăng nhập thành công",
-      token: token
+      userName: admin.fullName,
+      email: admin.email,
+      accessToken: accessToken,
+      refreshToken: refreshToken
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
 
 // [POST] /api/v1/admin/auth/logout
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  const refreshToken: string = req.body.refreshToken;
+
   try {
-    res.clearCookie("token");
+    // Xóa refreshToken trong DB để vô hiệu hóa phiên đăng nhập
+    if (refreshToken) {
+      await Admin.updateOne({ token: refreshToken }, { token: "" });
+    }
 
     res.status(200).json({
+      code: 200,
       message: "Đăng xuất thành công"
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
 
 // [POST] /api/v1/admin/auth/password/forgot
-export const forgotPasswordPost = async (req: Request, res: Response) => {
+export const forgotPasswordPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const email = req.body.email;
+    const email: string = req.body.email;
 
     const admin = await Admin.findOne({
       email: email,
@@ -82,8 +140,8 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
       return;
     }
 
-    const otp = generateAuth.generateRandomNumber(6);
-    const timeExpire = 3;
+    const otp: string = generateAuth.generateRandomNumber(6);
+    const timeExpire: number = 3;
 
     const objectForgotPassword = {
       email: email,
@@ -94,8 +152,8 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
     const forgotPassword = new ForgotPassword(objectForgotPassword);
     await forgotPassword.save();
 
-    const subject = "OTP Verification Code";
-    const html = `
+    const subject: string = "OTP Verification Code";
+    const html: string = `
       Your OTP code is: <b>${otp}</b>. This code will expire in ${timeExpire} minutes.
     `;
     sendMail(email, subject, html);
@@ -105,16 +163,16 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
 
 // [POST] /api/v1/admin/auth/password/otp
-export const otpPasswordPost = async (req: Request, res: Response) => {
+export const otpPasswordPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const email = req.body.email;
-    const otp = req.body.otp;
+    const email: string = req.body.email;
+    const otp: string = req.body.otp;
 
     const result = await ForgotPassword.findOne({
       email: email,
@@ -139,25 +197,25 @@ export const otpPasswordPost = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = admin.token;
+    // const token = admin.token;
 
     res.status(200).json({
       message: "Xác thực OTP thành công",
-      token: token
+      // token: token
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };
 
 // [POST] /api/v1/admin/auth/password/reset
-export const resetPasswordPost = async (req: Request, res: Response) => {
+export const resetPasswordPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    const token = req.cookies.token || req.body.token;
+    const password: string = req.body.password;
+    const confirmPassword: string = req.body.confirmPassword;
+    const token: string = req.cookies.token || req.body.token;
 
     const admin = await Admin.findOne({
       token: token
@@ -195,7 +253,7 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra"
     });
   }
 };

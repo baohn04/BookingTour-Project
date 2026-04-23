@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Row, Col, Typography, Button, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { postOrder } from '../../services/orderServices';
-import { clearCart } from '../../actions/cartAction';
+import { clearCart } from '../../redux/actions/cartAction';
 import { socket } from '../../socket/socket';
 import CheckoutCart from './CheckoutCart';
 

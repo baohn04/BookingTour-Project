@@ -8,6 +8,8 @@ const upload = multer();
 
 const router: Router = Router();
 
+router.get("/", controller.index);
+
 router.patch(
   "/edit/",
   upload.single("avatar"),
