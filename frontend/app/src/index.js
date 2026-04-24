@@ -2,11 +2,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import allReducers from './redux/reducers/rootReducer';
+import { thunk } from "redux-thunk";
+import rootReducers from './redux/reducers/rootReducer';
 
-const store = createStore(allReducers);
+const store = createStore(rootReducers, applyMiddleware(thunk));
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');

@@ -5,17 +5,13 @@ export const getAdminInfo = async () => {
   return result;
 };
 
+
 export const loginAdmin = async (options) => {
   const result = await post('admin/auth/login', options);
   return result;
 };
 
-export const logoutAdmin = async (refreshToken) => {
-  const result = await post('admin/auth/logout', { refreshToken });
-  return result;
-};
-
-export const refreshTokenAdmin = async (refreshToken) => {
-  const result = await post('admin/auth/refresh-token', { refreshToken });
+export const logoutAdmin = async () => {
+  const result = await post('admin/auth/logout');
   return result;
 };

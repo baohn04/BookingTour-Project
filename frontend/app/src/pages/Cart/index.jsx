@@ -7,10 +7,10 @@ import InfoBookingCart from "../../features/CartFeature/InfoBookingCart";
 import { useFetchCart } from "../../hooks/useCart";
 
 function Cart() {
-  const cart = useSelector((state) => state.cartReducer);
+  const cartItems = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  const { cartDetails } = useFetchCart(cart);
+  const { cartDetails } = useFetchCart(cartItems);
 
   const total = cartDetails.reduce((sum, item) => {
     return sum + (item.total || 0);
@@ -24,7 +24,7 @@ function Cart() {
     <div className="max-w-[1240px] mx-auto px-4 py-8 font-sans bg-background">
       <h1 className="text-3xl font-extrabold text-text1 mb-6">Giỏ hàng của bạn</h1>
 
-      {cart.length > 0 ? (
+      {cartItems.length > 0 ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <CartList items={cartDetails} />
 

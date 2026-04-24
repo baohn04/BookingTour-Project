@@ -5,9 +5,10 @@ import * as generateAuth from "../../../../helpers/generateAuth";
 import md5 from "md5";
 import ForgotPassword from "../../models/forgot-password.model";
 import sendMail from "../../../../helpers/sendMail";
+import Role from "../../models/role.model";
 
 export const refreshToken = async (req: Request, res: Response): Promise<void> => {
-  const refreshToken: string = req.body.token;
+  const refreshToken: string = req.cookies.refreshToken;
 
   if (!refreshToken) {
     res.status(401).json({
@@ -28,7 +29,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     return;
   }
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, (err, decoded) => {
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, (err: any, decoded: any) => {
     if (err) {
       res.status(403).json({
         message: "Token đã hết hạn"
@@ -56,6 +57,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       email: email,
       deleted: false
     });
+
 
     if (!admin) {
       res.status(401).json({
@@ -87,13 +89,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     // Lưu refreshToken vào DB
     await Admin.updateOne({ _id: admin.id }, { token: refreshToken });
 
+    const role = await Role.findOne({ _id: admin.role_id }).select("-__v -createdAt -updatedAt");
+
+    // Gửi refreshToken qua HttpOnly cookie (JavaScript không đọc được)
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+      path: '/'
+    });
+
     res.status(200).json({
-      code: 200,
       message: "Đăng nhập thành công",
       userName: admin.fullName,
       email: admin.email,
-      accessToken: accessToken,
-      refreshToken: refreshToken
+      role: role,
+      accessToken: accessToken
     });
   } catch (error) {
     res.status(500).json({
@@ -104,7 +116,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 // [POST] /api/v1/admin/auth/logout
 export const logout = async (req: Request, res: Response): Promise<void> => {
-  const refreshToken: string = req.body.refreshToken;
+  const refreshToken: string = req.cookies.refreshToken;
 
   try {
     // Xóa refreshToken trong DB để vô hiệu hóa phiên đăng nhập
@@ -112,8 +124,15 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       await Admin.updateOne({ token: refreshToken }, { token: "" });
     }
 
+    // Xóa HttpOnly cookie
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/'
+    });
+
     res.status(200).json({
-      code: 200,
       message: "Đăng xuất thành công"
     });
   } catch (error) {

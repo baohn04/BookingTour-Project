@@ -1,58 +1,99 @@
-import { getCookie } from './cookie';
+import axios from 'axios';
+import { getCookie, setCookie, deleteCookie } from './cookie';
 
 const API_DOMAIN = process.env.REACT_APP_API_URL;
 
-const request = async (path, options = {}) => {
-  const token = getCookie('accessToken');
+const axiosInstance = axios.create({
+  baseURL: API_DOMAIN,
+  timeout: 15000,
+  withCredentials: true,
+});
 
-  const headers = {
-    'Accept': 'application/json',
-    ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-    ...options.headers,
-  };
+// REQUEST INTERCEPTOR
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = getCookie('accessToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    if (!(config.data instanceof FormData)) {
+      config.headers['Content-Type'] = 'application/json';
+    }
+    config.headers['Accept'] = 'application/json';
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+let isRefreshing = false;
+let failedQueue = [];
 
-  const response = await fetch(API_DOMAIN + path, {
-    ...options,
-    headers,
-  });
-
-  // Tự động redirect khi token hết hạn hoặc không hợp lệ
-  if (response.status === 401 && !path.includes('auth/login')) {
-    window.location.href = '/admin/login';
-  }
-
-  const result = await response.json();
-  return result;
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token)));
+  failedQueue = [];
 };
 
-export const get = (path) => request(path, { 
-  method: 'GET' 
-});
+// RESPONSE INTERCEPTOR
+axiosInstance.interceptors.response.use(
+  (response) => response.data,
+  async (error) => {
+    // Không có response
+    if (!error.response) {
+      return Promise.reject(error);
+    }
 
-export const post = (path, data) => request(path, { 
-  method: 'POST', 
-  body: JSON.stringify(data) 
-});
+    const originalRequest = error.config;
+    const status = error.response.status;
 
-export const postForm = (path, formData) => request(path, { 
-  method: 'POST', 
-  body: formData 
-});
+    if (
+      status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes('auth/login') &&
+      !originalRequest.url.includes('auth/refresh-token')
+    ) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) =>
+          failedQueue.push({ resolve, reject })
+        ).then((token) => {
+          originalRequest.headers['Authorization'] = `Bearer ${token}`;
+          return axiosInstance(originalRequest);
+        });
+      }
 
-export const patch = (path, data) => request(path, { 
-  method: 'PATCH', 
-  body: JSON.stringify(data) 
-});
+      originalRequest._retry = true;
+      isRefreshing = true;
 
-export const patchForm = (path, formData) => request(path, { 
-  method: 'PATCH', 
-  body: formData 
-});
+      try {
+        const { data } = await axios.post(
+          API_DOMAIN + 'admin/auth/refresh-token',
+          {},
+          { withCredentials: true }
+        );
 
-export const del = (path) => request(path, { 
-  method: 'DELETE' 
-});
+        if (!data.accessToken) throw new Error('No access token returned');
+
+        setCookie('accessToken', data.accessToken, 1);
+        originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
+        processQueue(null, data.accessToken);
+        return axiosInstance(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+        deleteCookie('accessToken');
+        window.location.href = '/admin/login';
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error.response ? error.response.data : error);
+  }
+);
+
+export const get = (path) => axiosInstance.get(path);
+export const post = (path, data) => axiosInstance.post(path, data);
+export const put = (path, data) => axiosInstance.put(path, data);
+export const patch = (path, data) => axiosInstance.patch(path, data);
+export const postForm = (path, form) => axiosInstance.post(path, form);
+export const patchForm = (path, form) => axiosInstance.patch(path, form);
+export const del = (path) => axiosInstance.delete(path);

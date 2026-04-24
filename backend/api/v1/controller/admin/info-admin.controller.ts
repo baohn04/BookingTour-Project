@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Admin from "../../models/admin.model";
+import Role from "../../models/role.model";
 import { AuthRequest } from "../../types/express.d";
 
 import md5 from "md5";
@@ -7,10 +8,13 @@ import md5 from "md5";
 // [GET] /admin/info-admin/
 export const index = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    const user = req.user;
+    const role = await Role.findOne({ _id: user.role_id }).select("-__v -createdAt -updatedAt");
+
     res.status(200).json({
-      code: 200,
-      user: req.user,
-      role: req.role
+      userName: user.fullName,
+      email: user.email,
+      role: role,
     });
   } catch (error) {
     res.status(500).json({
@@ -18,7 +22,6 @@ export const index = async (req: AuthRequest, res: Response): Promise<void> => {
     });
   }
 };
-
 // [PATCH] /admin/info-admin/edit
 export const editPatch = async (req: AuthRequest, res: Response): Promise<void> => {
   try {

@@ -13,7 +13,7 @@ function DetailOrderModal(props) {
 
   useEffect(() => {
     if (visible && orderId) {
-      const fetchDetail = async () => {
+      const fetchData = async () => {
         setLoading(true);
         try {
           const res = await getAdminDetailOrder(orderId);
@@ -26,7 +26,7 @@ function DetailOrderModal(props) {
           setLoading(false);
         }
       };
-      fetchDetail();
+      fetchData();
     }
   }, [visible, orderId]);
 

@@ -8,7 +8,7 @@ function EditRoleModal(props) {
 
   useEffect(() => {
     if (visible && roleId) {
-      const fetchDetail = async () => {
+      const fetchData = async () => {
         setLoading(true);
         try {
           const res = await getAdminRoleEdit(roleId);
@@ -25,7 +25,7 @@ function EditRoleModal(props) {
           setLoading(false);
         }
       };
-      fetchDetail();
+      fetchData();
     } else {
       form.resetFields();
     }

@@ -11,8 +11,10 @@ import {
 
 import { Layout, Menu, ConfigProvider, Avatar, message, Button, Tooltip } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { getAdminInfo, logoutAdmin } from '../../services/adminAuthServices';
-import { deleteCookie, getCookie } from '../../utils/cookie';
+import { useSelector, useDispatch } from 'react-redux';
+import { doLogout, getUserInfo } from '../../redux/actions/accountAction';
+import { getCookie } from '../../utils/cookie';
+
 
 
 
@@ -71,28 +73,23 @@ const items = [
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [adminInfo, setAdminInfo] = React.useState(null);
+  const dispatch = useDispatch();
+  const adminInfo = useSelector((state) => state.account.userInfo);
 
   React.useEffect(() => {
-    const fetchAdminInfo = async () => {
-      const result = await getAdminInfo();
-      if (result.code === 200) {
-        setAdminInfo(result.user);
-      }
-    };
-    fetchAdminInfo();
-  }, []);
+    const token = getCookie('accessToken');
+    if (token && !adminInfo?.userName) {
+      dispatch(getUserInfo());
+    }
+  }, [dispatch, adminInfo]);
 
   const handleLogout = async () => {
     try {
-      const refreshToken = getCookie('refreshToken');
-      const result = await logoutAdmin(refreshToken);
-      if (result.code === 200) {
-        deleteCookie('accessToken');
-        deleteCookie('refreshToken');
+      const result = await dispatch(doLogout());
+      if (result) {
         message.success(result.message);
-        navigate('/admin/login');
       }
+      navigate('/admin/login');
     } catch (error) {
       console.error('Logout error:', error);
       message.error('Lỗi khi đăng xuất');
@@ -100,7 +97,6 @@ const AdminLayout = () => {
   };
 
   return (
-
     <Layout className="min-h-screen">
       <Sider
         width={260}
@@ -145,16 +141,18 @@ const AdminLayout = () => {
           <div className="p-5 flex items-center gap-3 mt-auto" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             <Avatar
               size={42}
-              src={adminInfo?.avatar}
-              icon={!adminInfo?.avatar && <UserOutlined />}
+              icon={<UserOutlined />}
               style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'var(--color-text2)' }}
             />
             <div className="flex flex-col flex-1 min-w-0">
               <span className="font-semibold text-sm truncate" style={{ color: 'var(--color-text2)' }}>
-                {adminInfo?.fullName || 'Đang tải...'}
+                {adminInfo?.userName}
               </span>
               <span className="text-gray-400 text-xs mt-0.5 truncate">
                 {adminInfo?.email}
+              </span>
+              <span className="text-gray-400 text-xs mt-0.5 truncate">
+                {adminInfo?.role.title}
               </span>
             </div>
             <Tooltip title="Đăng xuất">

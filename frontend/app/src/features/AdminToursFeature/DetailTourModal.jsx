@@ -13,7 +13,7 @@ function DetailTourModal(props) {
 
   useEffect(() => {
     if (visible && tourId) {
-      const fetchDetail = async () => {
+      const fetchData = async () => {
         setLoading(true);
         try {
           const res = await getAdminDetailTour(tourId);
@@ -26,7 +26,7 @@ function DetailTourModal(props) {
           setLoading(false);
         }
       };
-      fetchDetail();
+      fetchData();
     }
   }, [visible, tourId]);
 

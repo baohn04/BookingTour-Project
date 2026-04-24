@@ -14,7 +14,7 @@ function AddTourModal(props) {
 
   useEffect(() => {
     if (visible && categories.length === 0) {
-      const fetchCategories = async () => {
+      const fetchData = async () => {
         setLoadingCats(true);
         try {
           const res = await getAdminCreateTour();
@@ -28,7 +28,7 @@ function AddTourModal(props) {
         }
       };
 
-      fetchCategories();
+      fetchData();
     }
   }, [visible, categories.length]);
 

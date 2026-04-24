@@ -1,53 +1,51 @@
-const accountReducer = (state = [], action) => {
-  const INITIAL_STATE = {
-    account: {
-      
-    }
-  }
+const INITIAL_STATE = {
+  userInfo: {
+    userName: "",
+    email: "",
+    role: {},
+    accessToken: "",
+    refreshToken: ""
+  },
+  isLoading: false,
+  errMessage: ""
+}
 
-  let newState;
+const accountReducer = (state = INITIAL_STATE, action) => {
+  let newState = state;
   switch (action.type) {
-    case "LOGIN": {
-      newState = [
+    case "USER_LOGIN_REQUEST": {
+      newState = {
         ...state,
-        {
-          tourId: action.id,
-          quantity: action.quantity
-        }
-      ];
+        isLoading: true,
+        errMessage: ""
+      };
       break;
     }
-    case "UPDATE_QUANTITY": {
-      newState = state.map(item => {
-        if (item.tourId === action.id) {
-          return {
-            ...item,
-            quantity: action.absolute ? action.quantity : item.quantity + action.quantity
-          };
-        }
-        return item;
-      });
+    case "USER_LOGIN_FAILED": {
+      newState = {
+        ...state,
+        isLoading: false,
+        errMessage: action.error
+      };
       break;
     }
-    case "REMOVE_FROM_CART": {
-      newState = state.filter(item => item.tourId !== action.id);
+    case "USER_LOGIN_SUCCESS": {
+      newState = {
+        ...state,
+        userInfo: action.data,
+        isLoading: false,
+        errMessage: ""
+      };
       break;
     }
-    case "CLEAR_CART": {
-      newState = [];
+    case "USER_LOGOUT": {
+      newState = INITIAL_STATE;
       break;
     }
     default:
       return state;
   }
-
-  // Cập nhật lại localStorage
-  if (newState) {
-    localStorage.setItem("cart", JSON.stringify(newState));
-    window.dispatchEvent(new Event("cartUpdated"));
-    return newState;
-  }
-  return state;
+  return newState;
 };
 
 export default accountReducer;

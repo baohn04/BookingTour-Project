@@ -2,9 +2,9 @@ import { combineReducers } from "redux";
 import cartReducer from "./cartReducer";
 import accountReducer from "./accountReducer";
 
-const allReducers = combineReducers({
+const rootReducers = combineReducers({
   cart: cartReducer,
   account: accountReducer
 });
 
-export default allReducers;
+export default rootReducers;

@@ -1,25 +1,24 @@
 import React from 'react';
 import { Form, Input, Button, Typography, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { loginAdmin } from '../../../services/adminAuthServices';
-import { setCookie } from '../../../utils/cookie';
+import { useDispatch } from 'react-redux';
+import { doLogin } from '../../../redux/actions/accountAction';
 
 const { Text } = Typography;
 function LoginAdmin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const result = await loginAdmin(values);
-      if (result.code === 200) {
-        setCookie('accessToken', result.accessToken, 1);
-        setCookie('refreshToken', result.refreshToken, 7);
+      const result = await dispatch(doLogin(values));
+      if (result && result.accessToken) {
         message.success(result.message);
         navigate('/admin');
       } else {
-        message.error(result.message);
+        message.error(result?.message || 'Đăng nhập thất bại');
       }
     } catch (error) {
       message.error('Có lỗi xảy ra, vui lòng thử lại sau');
