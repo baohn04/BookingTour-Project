@@ -126,12 +126,12 @@ export const permissions = async (req: Request, res: Response): Promise<void> =>
 // [PATCH] /admin/roles/permissions
 export const permissionsPatch = async (req: Request, res: Response): Promise<void> => {
   try {
-    interface IPermissionItem {
+    interface PermissionItem {
       id: string;
       permissions: string[];
     }
 
-    const permissions: IPermissionItem[] = JSON.parse(req.body.permissions);
+    const permissions: PermissionItem[] = JSON.parse(req.body.permissions);
     for (const item of permissions) {
       await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
     }

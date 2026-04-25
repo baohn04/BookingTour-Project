@@ -14,8 +14,14 @@ const ORDER_STATUS_LIST = [
 
 // [GET] /admin/orders
 export const index = async (req: Request, res: Response): Promise<void> => {
+  interface OrderSearchQuery {
+    deleted: boolean;
+    status?: string;
+    $or?: Array<{ code: RegExp } | { fullName: RegExp } | { phone: RegExp }>;
+  }
+
   try {
-    const find = {
+    const find: OrderSearchQuery = {
       deleted: false,
     };
 
@@ -26,7 +32,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     }));
 
     if (req.query.status) {
-      find["status"] = req.query.status.toString();
+      find.status = req.query.status.toString();
     }
     // End Filter Status
 
@@ -35,7 +41,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
 
     if (keyword && keyword !== "undefined") {
       const keywordRegex = new RegExp(keyword, "i");
-      find["$or"] = [
+      find.$or = [
         { code: keywordRegex },
         { fullName: keywordRegex },
         { phone: keywordRegex }
@@ -123,15 +129,18 @@ export const detail = async (req: Request, res: Response): Promise<void> => {
       });
 
       if (infoTour) {
-        item["info"] = infoTour;
-        item["image"] = "";
+        const price = infoTour.price ?? 0; 
+        const discount = infoTour.discount ?? 0;
+
+        item.info = infoTour;
+        item.image = "";
 
         if (infoTour.images && infoTour.images.length > 0) {
-          item["image"] = infoTour.images[0];
+          item.image = infoTour.images[0];
         }
 
-        item["price_special"] = infoTour.price * (1 - infoTour.discount / 100);
-        item["total"] = item["price_special"] * item["quantity"];
+        item.price_special = price * (1 - discount / 100);
+        item.total = item.price_special * item.quantity;
       }
     }
 

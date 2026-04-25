@@ -2,18 +2,19 @@ import { Request, Response } from "express";
 import Tour from "../../models/tour.model";
 import Category from "../../models/category.model";
 import Review from "../../models/review.model";
+import { BaseTour, TourResponse } from "../../interfaces/tour.interface";
 
-export interface ITourIndexParams {
+interface TourIndexParams {
   slugCategory: string;
 }
 
-export interface ITourIndexQuery {
+interface TourIndexQuery {
   sortKey?: string;
   sortValue?: string;
 }
 
 // [GET] /tours/:slugCategory
-export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQuery>, res: Response): Promise<void> => {
+export const index = async (req: Request<TourIndexParams, any, any, TourIndexQuery>, res: Response): Promise<void> => {
   try {
     const slugCategory = req.params.slugCategory;
 
@@ -23,7 +24,7 @@ export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQ
       status: "active"
     }).select("-__v -createdAt -updatedAt");
 
-    let tours = [];
+    let tours: any[] = [];
 
     if (category) {
       const categoryId = category.id;
@@ -38,7 +39,7 @@ export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQ
       if (req.query.sortKey && req.query.sortValue) {
         sort[req.query.sortKey] = req.query.sortValue;
       } else {
-        sort["position"] = "desc";
+        sort.position = "desc";
       }
 
       tours = await Tour.find(find)
@@ -48,7 +49,7 @@ export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQ
 
       for (const tour of tours) {
         if (tour.price) {
-          tour["price_special"] = tour.price * (1 - tour.discount / 100);
+          tour.price_special = tour.price * (1 - tour.discount / 100);
         }
       }
     }
@@ -65,12 +66,12 @@ export const index = async (req: Request<ITourIndexParams, any, any, ITourIndexQ
   }
 }
 
-export interface ITourDetailParams {
+export interface TourDetailParams {
   slugTour: string;
 }
 
 // [GET] /tours/detail/:slugTour
-export const detail = async (req: Request<ITourDetailParams>, res: Response): Promise<void> => {
+export const detail = async (req: Request<TourDetailParams>, res: Response): Promise<void> => {
   try {
     const slugTour = req.params.slugTour;
 
@@ -78,7 +79,7 @@ export const detail = async (req: Request<ITourDetailParams>, res: Response): Pr
       slug: slugTour,
       deleted: false,
       status: "active"
-    }).select("-__v -createdAt -updatedAt").lean();
+    }).select("-__v -createdAt -updatedAt").lean() as TourResponse;
 
     if (!tourDetail) {
       res.status(404).json({
@@ -87,7 +88,7 @@ export const detail = async (req: Request<ITourDetailParams>, res: Response): Pr
       return;
     }
 
-    tourDetail["price_special"] = tourDetail.price * (1 - tourDetail.discount / 100);
+    tourDetail.price_special = tourDetail.price * (1 - tourDetail.discount / 100);
 
     res.status(200).json({
       message: "Success",
@@ -100,14 +101,14 @@ export const detail = async (req: Request<ITourDetailParams>, res: Response): Pr
   }
 }
 
-export interface ITourReviewQuery {
+export interface TourReviewQuery {
   tourId?: string;
   limit?: string;
   skip?: string;
 }
 
 // [GET] /tours/review
-export const review = async (req: Request<{}, any, any, ITourReviewQuery>, res: Response): Promise<void> => {
+export const review = async (req: Request<{}, any, any, TourReviewQuery>, res: Response): Promise<void> => {
   try {
     const tourId = req.query.tourId;
 
@@ -141,7 +142,7 @@ export const review = async (req: Request<{}, any, any, ITourReviewQuery>, res: 
   }
 }
 
-export interface ITourReviewPostBody {
+export interface TourReviewPostBody {
   name: string;
   email: string;
   comment: string;
@@ -150,7 +151,7 @@ export interface ITourReviewPostBody {
 }
 
 // [POST] /tour/review
-export const reviewPost = async (req: Request<{}, any, ITourReviewPostBody>, res: Response): Promise<void> => {
+export const reviewPost = async (req: Request<{}, any, TourReviewPostBody>, res: Response): Promise<void> => {
   try {
     const { name, email, comment, rating, tourId } = req.body;
 

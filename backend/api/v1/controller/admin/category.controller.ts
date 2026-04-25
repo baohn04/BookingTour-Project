@@ -6,8 +6,14 @@ import paginationHelper from "../../../../helpers/pagination";
 
 // [GET] /admin/categories
 export const index = async (req: Request, res: Response): Promise<void> => {
+  interface CategorySearchQuery {
+    deleted: boolean;
+    status?: string;
+    $or?: Array<{ title: RegExp } | { slug: RegExp }>;
+  }
+
   try {
-    const find = {
+    const find: CategorySearchQuery = {
       deleted: false,
     };
 
@@ -15,7 +21,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     const filterStatus = filterStatusHelper(req.query);
 
     if (req.query.status) {
-      find["status"] = req.query.status.toString();
+      find.status = req.query.status.toString();
     }
     // End Filter Status
 
@@ -28,18 +34,18 @@ export const index = async (req: Request, res: Response): Promise<void> => {
       const stringSlug = convertToSlug(keyword);
       const stringSlugRegex = new RegExp(stringSlug, "i");
 
-      find["$or"] = [{ title: keywordRegex }, { slug: stringSlugRegex }];
+      find.$or = [{ title: keywordRegex }, { slug: stringSlugRegex }];
     }
     // End Search
 
     // Sort
-    const sort = {};
+    const sort: Record<string, any> = {};
 
     if (req.query.sortKey && req.query.sortValue) {
       const sortKey = req.query.sortKey.toString();
       sort[sortKey] = req.query.sortValue.toString();
     } else {
-      sort["position"] = "desc";
+      sort.position = "desc";
     }
     // End Sort
 
@@ -149,7 +155,7 @@ export const editPatch = async (req: Request, res: Response): Promise<void> => {
     };
 
     if (req.body.image) {
-      dataCategory["image"] = req.body.image;
+      dataCategory.image = req.body.image;
     }
 
     await Category.updateOne(

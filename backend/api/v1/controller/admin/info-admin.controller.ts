@@ -9,6 +9,12 @@ import md5 from "md5";
 export const index = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const user = req.user;
+
+    if (!user) {
+      res.status(401).json({ message: "Không tìm thấy thông tin" });
+      return;
+    }
+
     const role = await Role.findOne({ _id: user.role_id }).select("-__v -createdAt -updatedAt");
 
     res.status(200).json({
@@ -27,7 +33,7 @@ export const editPatch = async (req: AuthRequest, res: Response): Promise<void> 
   try {
     const id: string = res.locals.user.id;
 
-    interface IAccountData {
+    interface AccountData {
       fullName: string;
       email: string;
       password?: string;
@@ -35,7 +41,7 @@ export const editPatch = async (req: AuthRequest, res: Response): Promise<void> 
       avatar?: string;
     }
 
-    const dataAccount: IAccountData = {
+    const dataAccount: AccountData = {
       fullName: req.body.fullName,
       email: req.body.email,
       phone: req.body.phone

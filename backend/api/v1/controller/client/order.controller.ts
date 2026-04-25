@@ -4,27 +4,11 @@ import Tour from "../../models/tour.model";
 import OrderItem from "../../models/order-item.model";
 import { generateOrderCode } from "../../../../helpers/generate";
 import { generateMomoPaymentUrl } from "../../../../helpers/payment";
+import { OrderRequest, BaseOrderItem, OrderSuccessQuery } from "../../interfaces/order.interface";
 
-export interface IOrderInfo {
-  fullName: string;
-  phone: string;
-  note?: string;
-}
-
-export interface IOrderItem {
-  tourId: string;
-  quantity: number;
-}
-
-export interface IOrderRequest {
-  info: IOrderInfo;
-  paymentMethod: string;
-  totalAmount: number;
-  cart: IOrderItem[];
-}
 
 // [POST] /order/
-export const order = async (req: Request<{}, any, IOrderRequest>, res: Response): Promise<void> => {
+export const order = async (req: Request<{}, any, OrderRequest>, res: Response): Promise<void> => {
   try {
     const data = req.body;
 
@@ -56,7 +40,7 @@ export const order = async (req: Request<{}, any, IOrderRequest>, res: Response)
 
     // Lưu data.cart vào bảng orders_item
     for (const item of data.cart) {
-      const dataItem = {
+      const dataItem: Record<string, any> = {
         orderId: orderId,
         tourId: item.tourId,
         quantity: item.quantity,
@@ -69,9 +53,9 @@ export const order = async (req: Request<{}, any, IOrderRequest>, res: Response)
       });
 
       if (infoTour) {
-        dataItem["price"] = infoTour.price;
-        dataItem["discount"] = infoTour.discount;
-        dataItem["timeStart"] = infoTour.timeStart;
+        dataItem.price = infoTour.price;
+        dataItem.discount = infoTour.discount;
+        dataItem.timeStart = infoTour.timeStart;
       }
 
       await new OrderItem(dataItem).save();
@@ -105,13 +89,16 @@ export const order = async (req: Request<{}, any, IOrderRequest>, res: Response)
   }
 };
 
-export interface IOrderSuccessQuery {
-  orderCode?: string;
-  orderInfo?: string;
-}
-
 // [GET] /order/success
-export const orderSuccess = async (req: Request<{}, any, any, IOrderSuccessQuery>, res: Response): Promise<void> => {
+export const orderSuccess = async (req: Request<{}, any, any, OrderSuccessQuery>, res: Response): Promise<void> => {
+  interface OrderItemResponse extends BaseOrderItem {
+    price_special?: number,
+    total?: number,
+    title?: string,
+    slug?: string,
+    image?: string
+  }
+
   try {
     const orderCode = req.query.orderCode || req.query.orderInfo;
 
@@ -136,24 +123,24 @@ export const orderSuccess = async (req: Request<{}, any, any, IOrderSuccessQuery
 
     const orderItems = await OrderItem.find({
       orderId: order._id.toString(),
-    }).select("-__v -createdAt -updatedAt").lean() as any[];
+    }).select("-__v -createdAt -updatedAt").lean() as OrderItemResponse[];
 
     for (const item of orderItems) {
-      item["price_special"] = item.price * (1 - item.discount / 100);
-      item["total"] = item["price_special"] * item.quantity;
+      item.price_special = item.price * (1 - item.discount / 100);
+      item.total = item.price_special * item.quantity;
 
       const tourInfo = await Tour.findOne({
         _id: item.tourId
       }).select("-__v -createdAt -updatedAt").lean();
 
       if (tourInfo) {
-        item["title"] = tourInfo.title;
-        item["slug"] = tourInfo.slug;
-        item["image"] = tourInfo.images?.[0] || "";
+        item.title = tourInfo.title || "";
+        item.slug = tourInfo.slug || "";
+        item.image = tourInfo.images?.[0] || "";
       }
     }
 
-    const totalPrice = orderItems.reduce((sum, item) => sum + (item["total"] || 0), 0);
+    const totalPrice = orderItems.reduce((sum, item) => sum + (item.total || 0), 0);
 
     res.status(200).json({
       message: "Lấy thông tin đơn hàng thành công",

@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import Category from "../../models/category.model";
 import Tour from "../../models/tour.model";
+import { TourResponse } from "../../interfaces/tour.interface";
 
-// [GET] /
+// [GET] /home
 export const home = async (req: Request, res: Response): Promise<void> => {
+
   try {
     const categories = await Category.find({
       deleted: false,
@@ -13,14 +15,14 @@ export const home = async (req: Request, res: Response): Promise<void> => {
     const featuredTours = await Tour.find({
       deleted: false,
       status: "active"
-    }).sort({ discount: "desc" }).limit(8).select("-__v -createdAt -updatedAt").lean();
+    }).sort({ discount: "desc" }).limit(8).select("-__v -createdAt -updatedAt").lean() as TourResponse[];
 
     for (const tour of featuredTours) {
       if (tour.images.length > 0) {
-        tour["image"] = tour.images[0];
+        tour.image = tour.images[0];
       }
       if (tour.price) {
-        tour["price_special"] = tour.price * (1 - tour.discount / 100);
+        tour.price_special = tour.price * (1 - tour.discount / 100);
       }
     }
 

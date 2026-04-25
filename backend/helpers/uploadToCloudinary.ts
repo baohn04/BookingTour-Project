@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
 import streamifier from "streamifier";
 import dotenv from "dotenv";
 dotenv.config();
@@ -11,11 +11,11 @@ cloudinary.config({
 });
 // End Configuration
 
-let streamUpload = (buffer: any) => {
+const streamUpload = (buffer: Buffer): Promise<UploadApiResponse> => {
   return new Promise((resolve, reject) => {
-    let stream = cloudinary.uploader.upload_stream(
+    const stream = cloudinary.uploader.upload_stream(
       { resource_type: "auto" },
-      (error, result) => {
+      (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
         if (result) {
           resolve(result);
         } else {
@@ -28,9 +28,10 @@ let streamUpload = (buffer: any) => {
   });
 };
 
-const uploadToCloudinary = async (buffer: any) => {
-  let result = await streamUpload(buffer);
-  return result["secure_url"] || result["url"];
+// 3. Khai báo hàm này sẽ trả về một chuỗi (URL của ảnh)
+const uploadToCloudinary = async (buffer: Buffer): Promise<string> => {
+  const result = await streamUpload(buffer);
+  return result.secure_url || result.url;
 };
 
 export default uploadToCloudinary;

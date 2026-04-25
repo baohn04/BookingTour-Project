@@ -29,6 +29,9 @@ const io = new Server(server, {
     credentials: true
   },
 });
+declare global {
+  var _io: Server; 
+}
 global._io = io;
 
 // Đăng ký socket handlers

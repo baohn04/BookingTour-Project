@@ -1,17 +1,9 @@
 import { Request, Response } from "express";
 import Tour from "../../models/tour.model";
-
-export interface ICartItem {
-  tourId: string;
-  quantity: number;
-  info?: any;
-  image?: string;
-  price_special?: number;
-  total?: number;
-}
+import { CartItem } from "../../interfaces/order.interface";
 
 // [POST] /cart/list-json
-export const listJson = async (req: Request<{}, any, ICartItem[]>, res: Response): Promise<void> => {
+export const listJson = async (req: Request<{}, any, CartItem[]>, res: Response): Promise<void> => {
   try {
     const tours = req.body;
     const toursResult = [];
@@ -27,11 +19,11 @@ export const listJson = async (req: Request<{}, any, ICartItem[]>, res: Response
       }).select("-__v -createdAt -updatedAt").lean() as any;
 
       if (infoTour) {
-        tour["info"] = infoTour;
-        tour["image"] = "";
+        tour.info = infoTour;
+        tour.image = "";
 
         if (infoTour.images && infoTour.images.length > 0) {
-          tour["image"] = infoTour.images[0];
+          tour.image = infoTour.images[0];
         }
 
         const price = infoTour.price || 11990000;
@@ -42,8 +34,8 @@ export const listJson = async (req: Request<{}, any, ICartItem[]>, res: Response
           priceAdult = price * (1 - discount / 100);
         }
 
-        tour["price_special"] = priceAdult;
-        tour["total"] = priceAdult * (Number(quantity) || 1);
+        tour.price_special = priceAdult;
+        tour.total = priceAdult * (Number(quantity) || 1);
 
         toursResult.push(tour);
       }

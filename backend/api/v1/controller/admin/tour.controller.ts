@@ -5,11 +5,22 @@ import convertToSlug from "../../../../helpers/convertToSlug";
 import paginationHelper from "../../../../helpers/pagination";
 import Tour from "../../models/tour.model";
 import { generateTourCode } from "../../../../helpers/generate";
+import { BaseTour } from "../../interfaces/tour.interface";
 
 // [GET] /admin/tours
 export const index = async (req: Request, res: Response): Promise<void> => {
+  interface TourSearchQuery {
+    deleted: boolean,
+    status?: string,
+    $or?: Array<{ title: RegExp } | { slug: RegExp }>;
+  }
+
+  interface TourResponse extends BaseTour {
+    price_special?: number
+  }
+
   try {
-    const find = {
+    const find: TourSearchQuery = {
       deleted: false,
     };
 
@@ -17,7 +28,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     const filterStatus = filterStatusHelper(req.query);
 
     if (req.query.status) {
-      find["status"] = req.query.status.toString();
+      find.status = req.query.status.toString();
     }
     // End Filter Status
 
@@ -30,18 +41,18 @@ export const index = async (req: Request, res: Response): Promise<void> => {
       const stringSlug = convertToSlug(keyword);
       const stringSlugRegex = new RegExp(stringSlug, "i");
 
-      find["$or"] = [{ title: keywordRegex }, { slug: stringSlugRegex }];
+      find.$or = [{ title: keywordRegex }, { slug: stringSlugRegex }];
     }
     // End Search
 
     // Sort
-    const sort = {};
+    const sort: Record<string, any> = {};
 
     if (req.query.sortKey && req.query.sortValue) {
       const sortKey = req.query.sortKey.toString();
       sort[sortKey] = req.query.sortValue.toString();
     } else {
-      sort["position"] = "desc";
+      sort.position = "desc";
     }
     // End Sort
 
@@ -62,12 +73,12 @@ export const index = async (req: Request, res: Response): Promise<void> => {
     const tours = await Tour.find(find)
       .sort(sort)
       .skip(objectPagination.skip || 0)
-      .limit(objectPagination.limitItems).lean();
+      .limit(objectPagination.limitItems).select("-__v -createdAt -updatedAt").lean() as TourResponse[];
 
     // Price discount
     tours.forEach((item) => {
       if (item.price && item.discount) {
-        item["price_special"] = item.price * (1 - item.discount / 100);
+        item.price_special = item.price * (1 - item.discount / 100);
       }
     });
 
