@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import {
   Row,
   Col,
-  Input,
   Button,
   Badge,
   Space,
@@ -13,7 +12,6 @@ import {
   Dropdown
 } from "antd";
 import {
-  SearchOutlined,
   MenuOutlined,
   ShoppingCartOutlined,
   HomeOutlined,
@@ -21,6 +19,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { getSettingGeneral } from "../../services/settingGeneralServices";
+import SearchSuggestionBar from "../SearchSuggestionBar";
 
 const { Text } = Typography;
 
@@ -100,12 +99,7 @@ function HeaderLayoutClient() {
 
           {/* Search Bar */}
           <Col xs={0} sm={8} md={10} lg={10} xl={11}>
-            <Input
-              placeholder="Tìm kiếm tour du lịch..."
-              prefix={<SearchOutlined className="text-text1" />}
-              size="large"
-              className="rounded-3xl border-text1 hover:bg-background hover:!border-primary"
-            />
+            <SearchSuggestionBar size="middle" />
           </Col>
 
           {/* Desktop Navigation */}
@@ -122,7 +116,7 @@ function HeaderLayoutClient() {
                 {/* Tour Types */}
                 <Link to="/categories">
                   <Button type="text" className="font-medium text-text1 hover:text-primary border-none shadow-none" icon={<AppstoreOutlined />}>
-                    Loại Tour
+                    Danh mục tour du lịch
                   </Button>
                 </Link>
 
@@ -194,12 +188,7 @@ function HeaderLayoutClient() {
 
           {/* Responsive Search */}
           <Col xs={24} sm={0}>
-            <Input
-              placeholder="Search destinations or activities"
-              prefix={<SearchOutlined className="text-text1" />}
-              size="middle"
-              className="rounded-3xl bg-background border-text1"
-            />
+            <SearchSuggestionBar size="middle" placeholder="Tìm kiếm tour du lịch..." />
           </Col>
         </Row>
       </div>

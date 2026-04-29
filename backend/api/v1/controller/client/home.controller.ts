@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Category from "../../models/category.model";
 import Tour from "../../models/tour.model";
+import Review from "../../models/review.model";
 import { TourResponse } from "../../interfaces/tour.interface";
 
 // [GET] /home
@@ -26,11 +27,17 @@ export const home = async (req: Request, res: Response): Promise<void> => {
       }
     }
 
+    const reviews = await Review.find({
+      rating: { $gte: 4 },
+      deleted: false
+    }).sort({ createdAt: "desc" }).limit(5).lean();
+
     res.status(200).json({
       message: "Lấy dữ liệu trang chủ thành công",
       data: {
         categories: categories,
-        featuredTours: featuredTours
+        featuredTours: featuredTours,
+        reviews: reviews
       }
     });
   } catch (error) {

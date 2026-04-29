@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Button, Row, Col, Avatar, Skeleton } from 'antd';
+import { Typography, Button, Row, Col, Avatar, Skeleton, Rate } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import { Link } from 'react-router-dom';
@@ -15,35 +15,8 @@ const { Title, Text } = Typography;
 
 const HERO_BG = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2073&q=80";
 
-const reviews = [
-  {
-    id: 1,
-    name: 'John Smith',
-    role: 'Traveler',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-    title: 'Excellent Service!',
-    content: 'I had an amazing experience with this company. The service was top-notch, and the staff was incredibly friendly. I highly recommend them!',
-  },
-  {
-    id: 2,
-    name: 'Emily Davis',
-    role: 'Explorer',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-    title: 'Unforgettable Journey',
-    content: 'The tour guide was knowledgeable and the itinerary was perfect. Every moment was memorable. Will definitely book again!',
-  },
-  {
-    id: 3,
-    name: 'Michael Brown',
-    role: 'Photographer',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-    title: 'Highly Recommended',
-    content: 'Seamless booking process and great customer support. The trip exceeded my expectations in every way.',
-  }
-];
-
 function Home() {
-  const { loading, categories, featuredTours } = useFetchHomeInfo();
+  const { loading, categories, featuredTours, reviews } = useFetchHomeInfo();
 
   return (
     <div className="home-page pb-20">
@@ -201,7 +174,7 @@ function Home() {
 
         <div className="mb-20">
           <Title level={2} className="text-text1 !text-3xl md:!text-4xl !font-bold !text-center !mb-12">
-            Customer Reviews
+            Đánh giá từ khách hàng
           </Title>
 
           {loading ? (
@@ -212,31 +185,33 @@ function Home() {
           ) : (
             <div className="max-w-4xl mx-auto custom-ant-carousel">
               <Swiper
-                modules={[Pagination, Autoplay]}
+                modules={[Autoplay]}
                 spaceBetween={30}
                 slidesPerView={1}
-                pagination={{ clickable: true }}
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
-                loop={true}
-                className="pb-12"
+                loop={reviews && reviews.length > 1}
+                className="pb-8"
               >
-                {reviews.map((review) => (
+                {reviews && reviews.map((review) => (
                   <SwiperSlide key={review.id || review._id} className="px-4 text-center">
                     <div className="flex flex-col items-center">
                       <div className="relative mb-6">
                         <Avatar
-                          src={review.avatar}
+                          src={`https://ui-avatars.com/api/?name=${review.name}&background=random`}
                           size={100}
                           className="border-4 border-white shadow-lg"
                         />
                       </div>
 
-                      <Text className="!text-primary !text-lg !font-semibold mb-3 block">
-                        {review.title}
-                      </Text>
+                      <Rate
+                        disabled
+                        allowHalf
+                        value={review.rating}
+                        className="text-yellow-500 mb-3 text-xl"
+                      />
 
                       <Text className="text-text1 !text-lg md:!text-2xl !leading-relaxed max-w-2xl mx-auto mb-6 block font-medium">
-                        "{review.content}"
+                        "{review.comment}"
                       </Text>
 
                       <div>
@@ -244,7 +219,7 @@ function Home() {
                           {review.name}
                         </Text>
                         <Text className="text-text1 !text-sm">
-                          {review.role}
+                          Khách hàng
                         </Text>
                       </div>
                     </div>

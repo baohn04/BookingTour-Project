@@ -8,7 +8,7 @@ function NotFound() {
       <Result
         status="404"
         title={<span className="text-5xl font-black text-primary">404</span>}
-        subTitle={<span className="text-text1 font-medium text-lg mt-2 block">Rất tiếc! Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</span>}
+        subTitle={<span className="text-text1 font-medium text-lg mt-2 block">Rất tiếc! Trang bạn đang tìm kiếm không tồn tại.</span>}
         extra={
           <Link to="/">
             <Button

@@ -3,6 +3,17 @@ import Tour from "../../models/tour.model";
 import Category from "../../models/category.model";
 import Review from "../../models/review.model";
 import { BaseTour, TourResponse } from "../../interfaces/tour.interface";
+import convertToSlug from "../../../../helpers/convertToSlug";
+
+// ── Search Query Interface ────────────────────────────────────────────────────
+interface TourSearchQuery {
+  keyword?: string;
+  timeStart?: string;    // ISO date string – lower bound
+  timeEnd?: string;      // ISO date string – upper bound
+  categoryId?: string;
+  sortKey?: string;
+  sortValue?: string;
+}
 
 interface TourIndexParams {
   slugCategory: string;
@@ -173,3 +184,62 @@ export const reviewPost = async (req: Request<{}, any, TourReviewPostBody>, res:
     })
   }
 }
+
+// [GET] /tours/search
+export const search = async (req: Request<{}, any, any, TourSearchQuery>, res: Response): Promise<void> => {
+  try {
+    const { keyword, timeStart, timeEnd, categoryId, sortKey, sortValue } = req.query;
+
+    const find: Record<string, any> = {
+      deleted: false,
+      status: "active",
+    };
+
+    if (keyword && keyword.trim() !== "") {
+      const keywordRegex = new RegExp(keyword.trim(), "i");
+      const slugRegex = new RegExp(convertToSlug(keyword.trim()), "i");
+      find.$or = [{ title: keywordRegex }, { slug: slugRegex }];
+    }
+
+    if (timeStart || timeEnd) {
+      find.timeStart = {};
+      if (timeStart) {
+        find.timeStart.$gte = new Date(timeStart);
+      }
+      if (timeEnd) {
+        find.timeStart.$lte = new Date(timeEnd);
+      }
+    }
+
+    if (categoryId && categoryId !== "all") {
+      find.category_ids = categoryId;
+    }
+    const sort: Record<string, any> = {};
+    if (sortKey && sortValue) {
+      sort[sortKey] = sortValue;
+    } else {
+      sort.position = "desc";
+    }
+
+    const tours = await Tour.find(find)
+      .sort(sort)
+      .select("-__v -createdAt -updatedAt")
+      .lean();
+
+    tours.forEach((tour: any) => {
+      if (tour.price && tour.discount !== undefined) {
+        tour.price_special = tour.price * (1 - tour.discount / 100);
+      }
+    });
+
+    res.status(200).json({
+      message: "Success",
+      data: tours,
+      total: tours.length,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Đã có lỗi xảy ra",
+    });
+  }
+};

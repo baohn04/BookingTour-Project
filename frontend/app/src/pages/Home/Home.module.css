@@ -1,6 +1,6 @@
 /* Custom Swiper Pagination */
 .swiper-pagination {
-  bottom: -5px !important;
+  bottom: 0px !important;
 }
 
 .swiper-pagination-bullet {

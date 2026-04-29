@@ -3,10 +3,11 @@ import {
   TwitterOutlined,
   InstagramOutlined,
   LinkedinFilled,
-  AppleFilled,
-  AndroidFilled
+  EnvironmentOutlined,
+  MailOutlined,
+  PhoneOutlined
 } from "@ant-design/icons";
-import { Input, Button, Space, Typography } from "antd";
+import { Space, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSettingGeneral } from "../../services/settingGeneralServices";
@@ -19,82 +20,76 @@ function FooterLayoutClient() {
   useEffect(() => {
     const fetchApi = async () => {
       const result = await getSettingGeneral();
-      setSettingGeneral(result.data);
+      if (result && result.data) {
+        setSettingGeneral(result.data);
+      }
     };
     fetchApi();
   }, []);
+
   const footerLinks = {
-    company: [
-      { label: "About Us", link: "/about" },
-      { label: "Tourz Reviews", link: "/reviews" },
-      { label: "Contact Us", link: "/contact" },
-      { label: "Travel Guides", link: "/guides" },
-      { label: "Data Policy", link: "/privacy" },
-      { label: "Cookie Policy", link: "/cookies" },
-      { label: "Legal", link: "/legal" },
-      { label: "Sitemap", link: "/sitemap" },
+    services: [
+      { label: "Tour trong nước", link: "/tours/trong-nuoc" },
+      { label: "Tour quốc tế", link: "/tours/quoc-te" },
+      { label: "Tour giờ chót", link: "/tours/gio-chot" },
+      { label: "Cẩm nang du lịch", link: "/guides" },
     ],
-    support: [
-      { label: "Get in Touch", link: "/contact" },
-      { label: "Help center", link: "/help" },
-      { label: "Live chat", link: "/chat" },
-      { label: "How it works", link: "/how-it-works" },
+    policies: [
+      { label: "Chính sách bảo mật", link: "/privacy" },
+      { label: "Điều khoản sử dụng", link: "/terms" },
+      { label: "Quy định thanh toán", link: "/payment-policy" },
+      { label: "Chính sách hoàn hủy", link: "/refund-policy" },
     ]
   };
 
   const SocialIcon = ({ icon }) => (
-    <div className="w-9 h-9 rounded-full bg-background flex items-center justify-center text-text1 hover:bg-primary hover:text-text2 transition-all cursor-pointer">
+    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-text2 transition-all duration-300 cursor-pointer">
       {icon}
     </div>
   );
 
   return (
-    <footer className="bg-background border-t border-text2 pt-16 pb-8">
+    <footer className="bg-[#f8fafc] border-t border-gray-200 pt-20 pb-10 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Top Section: Contact & Socials */}
-        <div className="flex flex-col md:flex-row justify-between items-center pb-12 border-b border-text2 mb-12 gap-6">
-          <div className="flex items-center gap-2">
-            <Text className="text-lg text-text1">Số điện thoại:</Text>
-            <Text className="text-xl font-bold text-primary">{settingGeneral.phone}</Text>
-          </div>
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
 
-          <div className="flex items-center gap-4">
-            <Text className="font-semibold text-text1">Theo dõi chúng tôi</Text>
-            <Space size={12}>
-              <SocialIcon icon={<FacebookFilled />} />
-              <SocialIcon icon={<TwitterOutlined />} />
-              <SocialIcon icon={<InstagramOutlined />} />
-              <SocialIcon icon={<LinkedinFilled />} />
-            </Space>
-          </div>
-        </div>
-
-        {/* Main Grid Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-
-          {/* Column 1: Contact */}
+          {/* Column 1: Brand & Contact */}
           <div className="space-y-6">
-            <Title level={4} style={{ margin: 0 }}>Contact</Title>
-            <div className="space-y-4">
-              <p className="text-text1 leading-relaxed">
-                {settingGeneral.address || "328 Queensberry Street, North Melbourne VIC3051, Australia."}
-              </p>
-              <div>
-                <a href={settingGeneral.email ? `mailto:${settingGeneral.email}` : "mailto:hi@viatours.com"} className="text-text1 font-medium hover:text-primary transition-colors">
-                  {settingGeneral.email || "hi@viatours.com"}
-                </a>
+            <div className="flex items-center gap-2 mb-6">
+              <Title level={3} style={{ margin: 0, color: 'var(--color-text1)', fontSize: '24px', fontWeight: 800 }}>
+                {settingGeneral.websiteName || "Booking Tour"}
+              </Title>
+            </div>
+
+            <p className="text-text1/70 leading-relaxed text-[15px]">
+              Chúng tôi mang đến những trải nghiệm du lịch độc đáo, an toàn và đầy cảm hứng cho mọi hành trình của bạn.
+            </p>
+
+            <div className="space-y-4 pt-4">
+              <div className="flex items-start gap-3 text-text1/80">
+                <EnvironmentOutlined className="text-primary mt-1" />
+                <span className="text-[14px]">{settingGeneral.address || "123 Đường Du Lịch, Quận 1, TP. Hồ Chí Minh"}</span>
+              </div>
+              <div className="flex items-center gap-3 text-text1/80">
+                <PhoneOutlined className="text-primary" />
+                <span className="text-[14px] font-semibold">{settingGeneral.phone || "1900 1234"}</span>
+              </div>
+              <div className="flex items-center gap-3 text-text1/80">
+                <MailOutlined className="text-primary" />
+                <span className="text-[14px]">{settingGeneral.email || "contact@travelland.com"}</span>
               </div>
             </div>
           </div>
 
-          {/* Column 2: Company */}
+          {/* Column 2: Quick Links */}
           <div>
-            <Title level={4} style={{ margin: 0, marginBottom: '24px' }}>Company</Title>
-            <ul className="space-y-3 list-none p-0 m-0">
-              {footerLinks.company.map((item, index) => (
+            <Title level={4} className="!text-text1 !font-bold !mb-8">Dịch vụ</Title>
+            <ul className="space-y-4 list-none p-0 m-0">
+              {footerLinks.services.map((item, index) => (
                 <li key={index}>
-                  <Link to={item.link} className="text-text1 hover:text-primary transition-colors">
+                  <Link to={item.link} className="text-text1/70 hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block">
                     {item.label}
                   </Link>
                 </li>
@@ -102,13 +97,13 @@ function FooterLayoutClient() {
             </ul>
           </div>
 
-          {/* Column 3: Support */}
+          {/* Column 3: Policies */}
           <div>
-            <Title level={4} style={{ margin: 0, marginBottom: '24px' }}>Support</Title>
-            <ul className="space-y-3 list-none p-0 m-0">
-              {footerLinks.support.map((item, index) => (
+            <Title level={4} className="!text-text1 !font-bold !mb-8">Chính sách</Title>
+            <ul className="space-y-4 list-none p-0 m-0">
+              {footerLinks.policies.map((item, index) => (
                 <li key={index}>
-                  <Link to={item.link} className="text-text1 hover:text-primary transition-colors">
+                  <Link to={item.link} className="text-text1/70 hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block">
                     {item.label}
                   </Link>
                 </li>
@@ -116,53 +111,40 @@ function FooterLayoutClient() {
             </ul>
           </div>
 
-          {/* Column 4: Newsletter & Apps */}
-          <div className="space-y-8">
-            {/* Newsletter */}
+          {/* Column 4: Social & Payments */}
+          <div className="space-y-10">
             <div>
-              <Title level={4} style={{ margin: 0, marginBottom: '16px' }}>Newsletter</Title>
-              <p className="text-text1 mb-4">
-                Subscribe to the free newsletter and stay up to date
-              </p>
-              <div className="relative">
-                <Input
-                  placeholder="Your email address"
-                  className="rounded-xl py-3 px-4 bg-background border-text2 hover:border-text2 focus:border-primary focus:shadow-none pr-16"
-                />
-                <Button
-                  type="text"
-                  className="absolute right-1 top-1 bottom-1 font-semibold text-text1 hover:text-primary hover:bg-transparent"
-                >
-                  Send
-                </Button>
-              </div>
+              <Title level={4} className="!text-text1 !font-bold !mb-8">Theo dõi chúng tôi</Title>
+              <Space size={16}>
+                <SocialIcon icon={<FacebookFilled className="text-xl" />} />
+                <SocialIcon icon={<TwitterOutlined className="text-xl" />} />
+                <SocialIcon icon={<InstagramOutlined className="text-xl" />} />
+                <SocialIcon icon={<LinkedinFilled className="text-xl" />} />
+              </Space>
             </div>
 
-            {/* Mobile Apps */}
             <div>
-              <Title level={4} style={{ margin: 0, marginBottom: '16px' }}>Mobile Apps</Title>
-              <div className="space-y-3">
-                <Link to="#" className="flex items-center gap-2 text-text1 hover:text-primary transition-colors">
-                  <AppleFilled className="text-xl" />
-                  <span>iOS App</span>
-                </Link>
-                <Link to="#" className="flex items-center gap-2 text-text1 hover:text-primary transition-colors">
-                  <AndroidFilled className="text-xl" />
-                  <span>Android App</span>
-                </Link>
+              <Title level={4} className="!text-text1 !font-bold !mb-6">Phương thức thanh toán</Title>
+              <div className="flex flex-wrap gap-3">
+                {["Cash", "MoMo", "VNPAY"].map((p) => (
+                  <div key={p} className="px-3 py-1.5 bg-white border border-gray-200 rounded text-[12px] font-bold text-text1/50">
+                    {p}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* Copyright (Optional but recommended) */}
-        <div className="mt-16 pt-8 border-t border-text2 flex flex-col md:flex-row justify-between items-center gap-4">
-          <Text className="text-text1">© {new Date().getFullYear()} Copyright: {settingGeneral.copyright || settingGeneral.websiteName || "Travelland"}. All rights reserved.</Text>
-          <div className="flex gap-6 text-text1">
-            <Link to="#" className="hover:text-text1">Privacy</Link>
-            <Link to="#" className="hover:text-text1">Terms</Link>
-            <Link to="#" className="hover:text-text1">Sitemap</Link>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-6">
+          <Text className="text-text1/50 text-[14px]">
+            © {new Date().getFullYear()} {settingGeneral.websiteName || "Travelland"}. Design by <span className="font-bold text-primary">Nhat Bao</span>.
+          </Text>
+          <div className="flex gap-8 text-[14px] font-medium">
+            <Link to="/" className="text-text1/50 hover:text-primary transition-colors">Trang chủ</Link>
+            <Link to="/about" className="text-text1/50 hover:text-primary transition-colors">Về chúng tôi</Link>
+            <Link to="/contact" className="text-text1/50 hover:text-primary transition-colors">Liên hệ</Link>
           </div>
         </div>
 

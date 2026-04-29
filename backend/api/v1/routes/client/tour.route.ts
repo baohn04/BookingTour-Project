@@ -3,6 +3,8 @@ import * as controller from "../../controller/client/tour.controller";
 
 const router: Router = Router();
 
+router.get("/search", controller.search);
+
 router.get("/:slugCategory", controller.index);
 
 router.get("/detail/:slugTour", controller.detail);
