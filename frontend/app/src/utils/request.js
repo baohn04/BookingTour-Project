@@ -72,14 +72,14 @@ axiosInstance.interceptors.response.use(
 
         if (!data.accessToken) throw new Error('No access token returned');
 
-        setCookie('accessToken', data.accessToken, 1);
+        setCookie('accessToken', data.accessToken, 7);
         originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
         processQueue(null, data.accessToken);
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err, null);
         deleteCookie('accessToken');
-        window.location.href = '/admin/login';
+        window.location.href = '/admin/auth/login';
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

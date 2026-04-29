@@ -12,16 +12,18 @@ export const doLogin = (dataLogin) => {
     try {
       const result = await loginAdmin(dataLogin);
       if (result.accessToken) {
-        setCookie('accessToken', result.accessToken, 1);
+        setCookie('accessToken', result.accessToken, 7);
         dispatch({ type: USER_LOGIN_SUCCESS, data: result });
       } else {
         dispatch({ type: USER_LOGIN_FAILED, error: result.message });
       }
       return result;
     } catch (error) {
-      dispatch({ type: USER_LOGIN_FAILED, error: "Đã có lỗi xảy ra" });
+      // request.js interceptor đã trả về error.response.data nên error ở đây chính là object từ server
+      const errorMessage = error?.message || "Đã có lỗi xảy ra";
+      dispatch({ type: USER_LOGIN_FAILED, error: errorMessage });
       console.log("Error: ", error);
-      return null;
+      return { error: true, message: errorMessage };
     }
   }
 }
@@ -35,7 +37,7 @@ export const doLogout = () => {
       return result;
     } catch (error) {
       console.log("Logout error: ", error);
-      return null;
+      return { error: true, message: error.response?.data?.message || "Đã có lỗi xảy ra" };
     }
   }
 }

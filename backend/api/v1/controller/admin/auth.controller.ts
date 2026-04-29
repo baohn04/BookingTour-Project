@@ -178,7 +178,8 @@ export const forgotPasswordPost = async (req: Request, res: Response): Promise<v
     sendMail(email, subject, html);
 
     res.status(200).json({
-      message: "OTP đã được gửi thành công"
+      message: "OTP đã được gửi thành công",
+      timeExpire: timeExpire
     });
   } catch (error) {
     res.status(500).json({
@@ -216,11 +217,13 @@ export const otpPasswordPost = async (req: Request, res: Response): Promise<void
       return;
     }
 
-    // const token = admin.token;
+    // Tạo JWT token dùng riêng cho việc đổi mật khẩu, thời hạn 15 phút
+    const payload = { id: admin.id };
+    const resetToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "15m" });
 
     res.status(200).json({
       message: "Xác thực OTP thành công",
-      // token: token
+      token: resetToken
     });
   } catch (error) {
     res.status(500).json({
@@ -234,15 +237,33 @@ export const resetPasswordPost = async (req: Request, res: Response): Promise<vo
   try {
     const password: string = req.body.password;
     const confirmPassword: string = req.body.confirmPassword;
-    const token: string = req.cookies.token || req.body.token;
+    const token: string = req.body.token;
+
+    if (!token) {
+      res.status(401).json({
+        message: "Token không tồn tại"
+      });
+      return;
+    }
+
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+    } catch (err) {
+      res.status(401).json({
+        message: "Token không hợp lệ hoặc đã hết hạn"
+      });
+      return;
+    }
 
     const admin = await Admin.findOne({
-      token: token
+      _id: decoded.id,
+      deleted: false
     });
 
     if (!admin) {
-      res.status(401).json({
-        message: "Token không hợp lệ hoặc đã hết hạn"
+      res.status(404).json({
+        message: "Tài khoản không tồn tại"
       });
       return;
     }
@@ -262,13 +283,13 @@ export const resetPasswordPost = async (req: Request, res: Response): Promise<vo
     }
 
     await Admin.updateOne({
-      token: token,
+      _id: admin.id,
     }, {
       password: md5(password)
     });
 
     res.status(200).json({
-      message: "Đặt lại mật khẩu thành công"
+      message: "Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại!"
     });
   } catch (error) {
     res.status(500).json({

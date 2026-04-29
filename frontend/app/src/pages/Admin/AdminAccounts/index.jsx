@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Input, Space, Button, Select, Skeleton, Popconfirm, message, Tooltip, Avatar, Tag, Form } from 'antd';
+import { useSelector } from 'react-redux';
 import { DeleteOutlined, EditOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { useAdminAccounts } from '../../../hooks/useAdminAccounts';
 import AddAccountModal from '../../../features/AdminAccountsFeature/AddAccountModal';
@@ -11,6 +12,7 @@ const { Option } = Select;
 
 function AdminAccounts() {
   const { accounts, pagination, loading, queryParams, setQueryParams, refetchAccounts } = useAdminAccounts();
+  const permissions = useSelector(state => state.account?.userInfo?.role?.permissions || []);
 
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -148,13 +150,16 @@ function AdminAccounts() {
       render: (status, record) => {
         let color = status === 'active' ? 'success' : 'error';
         const toggleStatus = status === 'active' ? 'inactive' : 'active';
+        const hasEditPerm = permissions.includes('account-edit');
 
         return (
-          <Tooltip title="Nhấn để đổi trạng thái">
+          <Tooltip title={hasEditPerm ? "Nhấn để đổi trạng thái" : "Không có quyền đổi trạng thái"}>
             <Tag
               color={color}
-              className="rounded-full px-3 py-1 border-none font-medium cursor-pointer hover:opacity-80 hover:shadow-sm transition-all"
-              onClick={() => handleChangeStatus(toggleStatus, record._id)}
+              className={`rounded-full px-3 py-1 border-none font-medium ${hasEditPerm ? 'cursor-pointer hover:opacity-80 hover:shadow-sm transition-all' : 'cursor-not-allowed opacity-60'}`}
+              onClick={() => {
+                if (hasEditPerm) handleChangeStatus(toggleStatus, record._id);
+              }}
             >
               {status === 'active' ? 'Hoạt động' : 'Dừng hoạt động'}
             </Tag>
@@ -167,22 +172,23 @@ function AdminAccounts() {
       key: 'actions',
       render: (_, record) => (
         <Space size="large">
-          <Tooltip title="Chi tiết/Sửa">
+          <Tooltip title={permissions.includes('account-edit') ? "Chi tiết/Sửa" : "Không có quyền"}>
             <EditOutlined
-              className="text-blue-500 text-lg hover:text-blue-600 transition-colors cursor-pointer"
-              onClick={() => showEditModal(record._id)}
+              className={`text-lg transition-colors ${permissions.includes('account-edit') ? 'text-blue-500 hover:text-blue-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              onClick={() => permissions.includes('account-edit') && showEditModal(record._id)}
             />
           </Tooltip>
-          <Tooltip title="Xóa">
+          <Tooltip title={permissions.includes('account-delete') ? "Xóa" : "Không có quyền"}>
             <Popconfirm
               title="Xóa tài khoản này?"
               description="Thao tác này không thể hoàn tác!"
+              disabled={!permissions.includes('account-delete')}
               onConfirm={() => handleDelete(record._id)}
               okText="Đồng ý"
               cancelText="Hủy"
               okButtonProps={{ danger: true }}
             >
-              <DeleteOutlined className="text-red-500 text-lg hover:text-red-600 transition-colors cursor-pointer" />
+              <DeleteOutlined className={`text-lg transition-colors ${permissions.includes('account-delete') ? 'text-red-500 hover:text-red-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`} />
             </Popconfirm>
           </Tooltip>
         </Space>
@@ -200,16 +206,19 @@ function AdminAccounts() {
           </h1>
           <p className="text-gray-500 text-sm mt-1">Danh sách tài khoản quản trị hệ thống</p>
         </div>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          style={{ backgroundColor: 'red' }}
-          size="large"
-          className="flex items-center rounded-md"
-          onClick={showCreateModal}
-        >
-          Thêm mới
-        </Button>
+        <Tooltip title={!permissions.includes('account-create') && "Không có quyền thêm mới"}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            style={{ backgroundColor: permissions.includes('account-create') ? 'red' : '#d9d9d9' }}
+            size="large"
+            className="flex items-center rounded-md"
+            onClick={permissions.includes('account-create') ? showCreateModal : undefined}
+            disabled={!permissions.includes('account-create')}
+          >
+            Thêm mới
+          </Button>
+        </Tooltip>
       </div>
 
       {/* Table Section */}

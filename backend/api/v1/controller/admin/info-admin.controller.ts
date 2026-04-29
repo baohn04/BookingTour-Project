@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Admin from "../../models/admin.model";
-import Role from "../../models/role.model";
 import { AuthRequest } from "../../types/express.d";
 
 import md5 from "md5";
@@ -9,17 +8,13 @@ import md5 from "md5";
 export const index = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const user = req.user;
-
-    if (!user) {
-      res.status(401).json({ message: "Không tìm thấy thông tin" });
-      return;
-    }
-
-    const role = await Role.findOne({ _id: user.role_id }).select("-__v -createdAt -updatedAt");
+    const role = req.role;
 
     res.status(200).json({
       userName: user.fullName,
       email: user.email,
+      phone: user.phone,
+      avatar: user.avatar,
       role: role,
     });
   } catch (error) {
@@ -28,6 +23,7 @@ export const index = async (req: AuthRequest, res: Response): Promise<void> => {
     });
   }
 };
+
 // [PATCH] /admin/info-admin/edit
 export const editPatch = async (req: AuthRequest, res: Response): Promise<void> => {
   try {

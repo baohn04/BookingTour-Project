@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, Typography, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { doLogin } from '../../../redux/actions/accountAction';
 
@@ -71,11 +71,13 @@ function LoginAdmin() {
             />
           </Form.Item>
 
-          <div className="flex justify-end -mt-2">
-            <button type="button" className="text-gray-400 hover:text-primary transition-colors text-sm">
-              Quên mật khẩu?
-            </button>
-          </div>
+          <Link to="/admin/auth/forgot-password">
+            <div className="flex justify-end">
+              <button type="button" className="text-gray-400 hover:text-primary transition-colors text-sm">
+                Quên mật khẩu?
+              </button>
+            </div>
+          </Link>
 
           <Form.Item className="pt-4">
             <Button
@@ -88,7 +90,7 @@ function LoginAdmin() {
               style={{ backgroundColor: 'blue' }}
             >
 
-              Sign In
+              Đăng nhập
             </Button>
           </Form.Item>
         </Form>

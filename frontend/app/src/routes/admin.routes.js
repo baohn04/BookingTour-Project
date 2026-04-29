@@ -8,14 +8,20 @@ import AdminAccounts from "../pages/Admin/AdminAccounts";
 import AdminRoles from "../pages/Admin/AdminRoles";
 import LoginAdmin from "../components/Auth/Admin/LoginAdmin";
 import PrivateRoutesAdmin from "../components/Auth/Admin/PrivateRoutesAdmin";
+import ForgotPasswordAdmin from "../components/Auth/Admin/ForgotPasswordAdmin";
+import ResetPasswordAdmin from "../components/Auth/Admin/ResetPassowrdAdmin";
 
 
 export const adminRoutes = {
   path: "/admin",
   children: [
     {
-      path: "login",
-      element: <LoginAdmin />
+      path: "auth",
+      children: [
+        { path: "login", element: <LoginAdmin /> },
+        { path: "forgot-password", element: <ForgotPasswordAdmin /> },
+        { path: "reset-password", element: <ResetPasswordAdmin /> }
+      ]
     },
     {
       element: <PrivateRoutesAdmin />,

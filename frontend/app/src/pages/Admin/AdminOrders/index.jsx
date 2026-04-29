@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Card, Table, Tag, Input, Space, Select, Skeleton, Popconfirm, message } from 'antd';
+import { Card, Table, Tag, Input, Space, Select, Skeleton, Popconfirm, message, Tooltip } from 'antd';
+import { useSelector } from 'react-redux';
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useAdminOrders } from '../../../hooks/useAdminOrders';
 import { deleteAdminOrder } from '../../../services/adminOrderServices';
@@ -10,6 +11,7 @@ const { Option } = Select;
 
 function AdminOrders() {
   const { orders, statistics, pagination, loading, queryParams, setQueryParams, refetchOrders } = useAdminOrders();
+  const permissions = useSelector(state => state.account?.userInfo?.role?.permissions || []);
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [detailOrderId, setDetailOrderId] = useState(null);
 
@@ -105,16 +107,19 @@ function AdminOrders() {
             title="Xem chi tiết"
             onClick={() => showDetailModal(record._id)}
           />
-          <Popconfirm
-            title="Xóa đơn hàng này?"
-            description="Bạn có chắc chắn muốn xóa đơn hàng này không?"
-            onConfirm={() => handleDelete(record._id)}
-            okText="Đồng ý"
-            cancelText="Hủy"
-            okButtonProps={{ danger: true }}
-          >
-            <DeleteOutlined className="text-red-500 text-lg hover:text-red-600 transition-colors cursor-pointer" title="Xóa" />
-          </Popconfirm>
+          <Tooltip title={permissions.includes('order-delete') ? "Xóa" : "Không có quyền"}>
+            <Popconfirm
+              title="Xóa đơn hàng này?"
+              description="Bạn có chắc chắn muốn xóa đơn hàng này không?"
+              disabled={!permissions.includes('order-delete')}
+              onConfirm={() => handleDelete(record._id)}
+              okText="Đồng ý"
+              cancelText="Hủy"
+              okButtonProps={{ danger: true }}
+            >
+              <DeleteOutlined className={`text-lg transition-colors ${permissions.includes('order-delete') ? 'text-red-500 hover:text-red-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`} title="Xóa" />
+            </Popconfirm>
+          </Tooltip>
         </Space>
       ),
     },

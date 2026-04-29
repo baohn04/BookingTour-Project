@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Descriptions, Tag, Divider, Row, Col, Spin, Typography, Table, Image, Button, Space, message } from 'antd';
+import { Modal, Descriptions, Tag, Divider, Row, Col, Spin, Typography, Table, Image, Button, Space, message, Tooltip } from 'antd';
+import { useSelector } from 'react-redux';
 import { UserOutlined, ShoppingCartOutlined, CreditCardOutlined } from '@ant-design/icons';
 import { getAdminDetailOrder, changeOrderStatus } from '../../services/adminOrderServices';
 import formatDateHelper from '../../helpers/formatDateHelper';
@@ -10,6 +11,7 @@ function DetailOrderModal(props) {
   const { visible, onCancel, orderId, refetchOrders } = props;
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const permissions = useSelector(state => state.account?.userInfo?.role?.permissions || []);
 
   useEffect(() => {
     if (visible && orderId) {
@@ -117,14 +119,19 @@ function DetailOrderModal(props) {
 
   const renderFooter = () => {
     if (!order) return null;
+    const hasEditPerm = permissions.includes('order-edit');
     return (
       <Space className="w-full justify-between items-center mt-2">
         <Button onClick={onCancel}>Đóng</Button>
         <Space>
           {order.status === 'pending' && (
             <>
-              <Button danger onClick={() => handleUpdateStatus('cancelled')}>Hủy đơn hàng</Button>
-              <Button type="primary" onClick={() => handleUpdateStatus('confirmed')}>Xác nhận Đơn</Button>
+              <Tooltip title={!hasEditPerm && "Không có quyền chỉnh sửa đơn hàng"}>
+                <Button danger onClick={() => hasEditPerm && handleUpdateStatus('cancelled')} disabled={!hasEditPerm}>Hủy đơn hàng</Button>
+              </Tooltip>
+              <Tooltip title={!hasEditPerm && "Không có quyền chỉnh sửa đơn hàng"}>
+                <Button type="primary" onClick={() => hasEditPerm && handleUpdateStatus('confirmed')} disabled={!hasEditPerm}>Xác nhận Đơn</Button>
+              </Tooltip>
             </>
           )}
         </Space>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Input, Tag, Space, Tooltip, Form, Select, Row, Col, message, Popconfirm, Skeleton } from 'antd';
+import { useSelector } from 'react-redux';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import AddTourModal from '../../../features/AdminToursFeature/AddTourModal';
 import EditTourModal from '../../../features/AdminToursFeature/EditTourModal';
@@ -9,6 +10,7 @@ import { changeTourStatus, createAdminTour, editAdminTour, deleteAdminTour } fro
 
 function AdminTours() {
   const { tours, pagination, loading, refetchTours, queryParams, setQueryParams } = useAdminTours();
+  const permissions = useSelector(state => state.account?.userInfo?.role?.permissions || []);
 
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -220,8 +222,10 @@ function AdminTours() {
       render: (status, record) => {
         let color = status === 'active' ? 'success' : 'error';
         const targetStatus = status === 'active' ? 'inactive' : 'active';
+        const hasEditPerm = permissions.includes('tour-edit');
 
         const handleChangeStatus = async () => {
+          if (!hasEditPerm) return;
           try {
             message.loading({ content: 'Đang cập nhật...', key: 'updateStatus' });
             await changeTourStatus(targetStatus, record._id);
@@ -233,10 +237,10 @@ function AdminTours() {
         };
 
         return (
-          <Tooltip title="Nhấn để đổi trạng thái">
+          <Tooltip title={hasEditPerm ? "Nhấn để đổi trạng thái" : "Không có quyền đổi trạng thái"}>
             <Tag
               color={color}
-              className="rounded-full px-3 py-1 border-none font-medium cursor-pointer hover:opacity-80 hover:shadow-sm transition-all"
+              className={`rounded-full px-3 py-1 border-none font-medium ${hasEditPerm ? 'cursor-pointer hover:opacity-80 hover:shadow-sm transition-all' : 'cursor-not-allowed opacity-60'}`}
               onClick={handleChangeStatus}
             >
               {status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
@@ -250,12 +254,10 @@ function AdminTours() {
       key: 'actions',
       render: (_, record) => (
         <Space size="large">
-          <Tooltip title="Chỉnh sửa">
+          <Tooltip title={permissions.includes('tour-edit') ? "Chỉnh sửa" : "Không có quyền"}>
             <EditOutlined
-              className="text-gray-500 text-lg hover:text-primary transition-colors cursor-pointer"
-              onClick={() => {
-                showEditModal(record._id);
-              }}
+              className={`text-lg transition-colors ${permissions.includes('tour-edit') ? 'text-gray-500 hover:text-primary cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              onClick={() => permissions.includes('tour-edit') && showEditModal(record._id)}
             />
           </Tooltip>
           <Tooltip title="Xem chi tiết">
@@ -264,10 +266,11 @@ function AdminTours() {
               onClick={() => showDetailModal(record._id)}
             />
           </Tooltip>
-          <Tooltip title="Xoá">
+          <Tooltip title={permissions.includes('tour-delete') ? "Xóa" : "Không có quyền"}>
             <Popconfirm
               title="Xoá tour này?"
               description="Bạn có chắc chắn muốn xoá Tour này không?"
+              disabled={!permissions.includes('tour-delete')}
               onConfirm={async () => {
                 try {
                   message.loading({ content: 'Đang xoá...', key: 'delTour' });
@@ -282,7 +285,7 @@ function AdminTours() {
               cancelText="Hủy"
               okButtonProps={{ danger: true }}
             >
-              <DeleteOutlined className="text-red-500 text-lg hover:text-red-600 transition-colors cursor-pointer" />
+              <DeleteOutlined className={`text-lg transition-colors ${permissions.includes('tour-delete') ? 'text-red-500 hover:text-red-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`} />
             </Popconfirm>
           </Tooltip>
         </Space>
@@ -300,17 +303,20 @@ function AdminTours() {
           </h1>
           <p className="text-gray-500 text-sm mt-1">Hệ thống danh sách điều hành Tour</p>
         </div>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          className="border-none font-semibold h-10 px-5 rounded hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: 'red' }}
-          size="large"
-          shape="round"
-          onClick={showCreateModal}
-        >
-          Thêm mới
-        </Button>
+        <Tooltip title={!permissions.includes('tour-create') && "Không có quyền thêm mới"}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            className="border-none font-semibold h-10 px-5 rounded hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: permissions.includes('tour-create') ? 'red' : '#d9d9d9' }}
+            size="large"
+            shape="round"
+            onClick={permissions.includes('tour-create') ? showCreateModal : undefined}
+            disabled={!permissions.includes('tour-create')}
+          >
+            Thêm mới
+          </Button>
+        </Tooltip>
       </div>
 
       {/* Main Content Card */}

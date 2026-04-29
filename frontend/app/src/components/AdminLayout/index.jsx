@@ -89,7 +89,7 @@ const AdminLayout = () => {
       if (result) {
         message.success(result.message);
       }
-      navigate('/admin/login');
+      navigate('/admin/auth/login');
     } catch (error) {
       console.error('Logout error:', error);
       message.error('Lỗi khi đăng xuất');
@@ -141,6 +141,7 @@ const AdminLayout = () => {
           <div className="p-5 flex items-center gap-3 mt-auto" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             <Avatar
               size={42}
+              src={adminInfo?.avatar}
               icon={<UserOutlined />}
               style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'var(--color-text2)' }}
             />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Space, Tooltip, Popconfirm, message, Skeleton, Form } from 'antd';
+import { useSelector } from 'react-redux';
 import { PlusOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { useAdminRoles } from '../../../hooks/useAdminRoles';
 import { createAdminRole, editAdminRole, deleteAdminRole, updatePermissions } from '../../../services/adminRoleServices';
@@ -9,6 +10,7 @@ import PermissionsModal from '../../../features/AdminRolesFeature/PermissionsMod
 
 function AdminRoles() {
   const { roles, loading, refetchRoles } = useAdminRoles();
+  const permissions = useSelector(state => state.account?.userInfo?.role?.permissions || []);
 
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -148,21 +150,22 @@ function AdminRoles() {
       width: 150,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Chỉnh sửa">
+          <Tooltip title={permissions.includes('role-edit') ? "Chỉnh sửa" : "Không có quyền"}>
             <EditOutlined
-              className="text-blue-500 text-lg hover:text-blue-600 cursor-pointer"
-              onClick={() => showEditModal(record._id)}
+              className={`text-lg transition-colors ${permissions.includes('role-edit') ? 'text-blue-500 hover:text-blue-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              onClick={() => permissions.includes('role-edit') && showEditModal(record._id)}
             />
           </Tooltip>
-          <Tooltip title="Xóa">
+          <Tooltip title={permissions.includes('role-delete') ? "Xóa" : "Không có quyền"}>
             <Popconfirm
               title="Xóa nhóm quyền này?"
               onConfirm={() => handleDelete(record._id)}
+              disabled={!permissions.includes('role-delete')}
               okText="Xóa"
               cancelText="Hủy"
               okButtonProps={{ danger: true }}
             >
-              <DeleteOutlined className="text-red-500 text-lg hover:text-red-600 cursor-pointer" />
+              <DeleteOutlined className={`text-lg transition-colors ${permissions.includes('role-delete') ? 'text-red-500 hover:text-red-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`} />
             </Popconfirm>
           </Tooltip>
         </Space>
@@ -182,25 +185,31 @@ function AdminRoles() {
         </div>
 
         <Space size="middle">
-          <Button
-            icon={<CheckCircleOutlined />}
-            size="large"
-            className="rounded-md flex items-center shadow-sm font-medium border-gray-300"
-            onClick={() => setIsPermissionsModalVisible(true)}
-          >
-            Phân quyền
-          </Button>
+          <Tooltip title={!permissions.includes('role-permissions') && "Không có quyền phân quyền"}>
+            <Button
+              icon={<CheckCircleOutlined />}
+              size="large"
+              className="rounded-md flex items-center shadow-sm font-medium border-gray-300"
+              onClick={() => permissions.includes('role-permissions') && setIsPermissionsModalVisible(true)}
+              disabled={!permissions.includes('role-permissions')}
+            >
+              Phân quyền
+            </Button>
+          </Tooltip>
 
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            size="large"
-            style={{ backgroundColor: 'red' }}
-            className="rounded-md flex items-center shadow-sm font-medium bg-primary border-none"
-            onClick={showCreateModal}
-          >
-            Thêm mới
-          </Button>
+          <Tooltip title={!permissions.includes('role-create') && "Không có quyền thêm mới"}>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              size="large"
+              style={{ backgroundColor: permissions.includes('role-create') ? 'red' : '#d9d9d9' }}
+              className="rounded-md flex items-center shadow-sm font-medium bg-primary border-none"
+              onClick={permissions.includes('role-create') ? showCreateModal : undefined}
+              disabled={!permissions.includes('role-create')}
+            >
+              Thêm mới
+            </Button>
+          </Tooltip>
         </Space>
       </div>
 

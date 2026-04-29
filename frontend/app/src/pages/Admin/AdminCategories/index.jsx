@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Table, Button, Input, Tag, Space, Tooltip, Form, Select, Row, Col, message, Popconfirm, Skeleton
 } from 'antd';
+import { useSelector } from 'react-redux';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 
 import { useAdminCategories } from '../../../hooks/useAdminCategories';
@@ -19,6 +20,7 @@ import DetailCategoryModal from '../../../features/AdminCategoriesFeature/Detail
 
 function AdminCategories() {
   const { categories, pagination, loading, refetchCategories, queryParams, setQueryParams } = useAdminCategories();
+  const permissions = useSelector(state => state.account?.userInfo?.role?.permissions || []);
 
   // Modal states
   const [isCreateVisible, setIsCreateVisible] = useState(false);
@@ -177,8 +179,10 @@ function AdminCategories() {
       width: 140,
       render: (status, record) => {
         const targetStatus = status === 'active' ? 'inactive' : 'active';
+        const hasEditPerm = permissions.includes('category-edit');
 
         const handleChangeStatus = async () => {
+          if (!hasEditPerm) return;
           try {
             message.loading({ content: 'Đang cập nhật...', key: 'updateCatStatus' });
             await changeCategoryStatus(targetStatus, record._id);
@@ -190,10 +194,10 @@ function AdminCategories() {
         };
 
         return (
-          <Tooltip title="Nhấn để đổi trạng thái">
+          <Tooltip title={hasEditPerm ? "Nhấn để đổi trạng thái" : "Không có quyền đổi trạng thái"}>
             <Tag
               color={status === 'active' ? 'success' : 'error'}
-              className="rounded-full px-3 py-1 border-none font-medium cursor-pointer hover:opacity-80 transition-all"
+              className={`rounded-full px-3 py-1 border-none font-medium ${hasEditPerm ? 'cursor-pointer hover:opacity-80 transition-all' : 'cursor-not-allowed opacity-60'}`}
               onClick={handleChangeStatus}
             >
               {status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
@@ -208,10 +212,10 @@ function AdminCategories() {
       width: 130,
       render: (_, record) => (
         <Space size="large">
-          <Tooltip title="Chỉnh sửa">
+          <Tooltip title={permissions.includes('category-edit') ? "Chỉnh sửa" : "Không có quyền"}>
             <EditOutlined
-              className="text-gray-500 text-lg hover:text-primary transition-colors cursor-pointer"
-              onClick={() => showEditModal(record._id)}
+              className={`text-lg transition-colors ${permissions.includes('category-edit') ? 'text-gray-500 hover:text-primary cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+              onClick={() => permissions.includes('category-edit') && showEditModal(record._id)}
             />
           </Tooltip>
           <Tooltip title="Xem chi tiết">
@@ -220,10 +224,11 @@ function AdminCategories() {
               onClick={() => showDetailModal(record._id)}
             />
           </Tooltip>
-          <Tooltip title="Xoá">
+          <Tooltip title={permissions.includes('category-delete') ? "Xoá" : "Không có quyền"}>
             <Popconfirm
               title="Xoá danh mục này?"
               description="Thao tác này không thể hoàn tác!"
+              disabled={!permissions.includes('category-delete')}
               onConfirm={async () => {
                 try {
                   message.loading({ content: 'Đang xoá...', key: 'delCat' });
@@ -238,7 +243,7 @@ function AdminCategories() {
               cancelText="Hủy"
               okButtonProps={{ danger: true }}
             >
-              <DeleteOutlined className="text-red-500 text-lg hover:text-red-600 transition-colors cursor-pointer" />
+              <DeleteOutlined className={`text-lg transition-colors ${permissions.includes('category-delete') ? 'text-red-500 hover:text-red-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`} />
             </Popconfirm>
           </Tooltip>
         </Space>
@@ -256,17 +261,20 @@ function AdminCategories() {
           </h1>
           <p className="text-gray-500 text-sm mt-1">Hệ thống phân loại Danh mục Tour</p>
         </div>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          className="border-none font-semibold h-10 px-5 hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: 'red' }}
-          size="large"
-          shape="round"
-          onClick={showCreateModal}
-        >
-          Thêm mới
-        </Button>
+        <Tooltip title={!permissions.includes('category-create') && "Không có quyền thêm mới"}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            className="border-none font-semibold h-10 px-5 hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: permissions.includes('category-create') ? 'red' : '#d9d9d9' }}
+            size="large"
+            shape="round"
+            onClick={permissions.includes('category-create') ? showCreateModal : undefined}
+            disabled={!permissions.includes('category-create')}
+          >
+            Thêm mới
+          </Button>
+        </Tooltip>
       </div>
 
       {/* Content Card */}

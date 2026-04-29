@@ -5,7 +5,7 @@ import { getCookie } from '../../../utils/cookie';
 function PrivateRoutesAdmin() {
     const token = getCookie('accessToken');
 
-    return token ? <Outlet /> : <Navigate to="/admin/login" />;
+    return token ? <Outlet /> : <Navigate to="/admin/auth/login" />;
 }
 
 export default PrivateRoutesAdmin;
