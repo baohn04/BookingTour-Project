@@ -19,6 +19,7 @@ function TourList(props) {
             value={currentSort || "all"}
             onChange={onSortChange}
             variant="borderless"
+            style={{ width: '200px' }}
             className="font-medium text-text1 min-w-[100px]"
             options={[
               { value: 'all', label: 'Tất cả' },

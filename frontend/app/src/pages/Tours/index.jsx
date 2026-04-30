@@ -45,13 +45,13 @@ function Tours() {
       </div>
 
       <h1 className="text-[32px] sm:text-[44px] leading-tight font-extrabold text-text1">
-        Khám phá các tour {infoCategory.title}
+        Khám phá {infoCategory.title}
       </h1>
 
       <Row gutter={[32, 32]} className="mt-10">
         <Col xs={24} lg={8} xl={6}>
           <div className="sticky top-6">
-            <TourFilter />
+            <TourFilter searchParams={searchParams} setSearchParams={setSearchParams} />
           </div>
         </Col>
 

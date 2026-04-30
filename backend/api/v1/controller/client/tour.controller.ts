@@ -22,6 +22,13 @@ interface TourIndexParams {
 interface TourIndexQuery {
   sortKey?: string;
   sortValue?: string;
+  priceMin?: string;
+  priceMax?: string;
+  startDeparture?: string;
+  endDeparture?: string;
+  timeStart?: string;
+  timeEnd?: string;
+  timeTour?: string;
 }
 
 // [GET] /tours/:slugCategory
@@ -40,11 +47,43 @@ export const index = async (req: Request<TourIndexParams, any, any, TourIndexQue
     if (category) {
       const categoryId = category.id;
 
-      let find = {
+      const find: Record<string, any> = {
         category_ids: categoryId,
         deleted: false,
         status: "active"
       };
+
+      // ── Lọc theo ngân sách (price sau giảm = price * (1 - discount/100)) ──
+      // Dùng price gốc để so sánh phạm vi (đơn giản, dữ liệu thực tế nên dùng aggregate nếu cần giá sau giảm)
+      const priceMin = req.query.priceMin ? Number(req.query.priceMin) : undefined;
+      const priceMax = req.query.priceMax ? Number(req.query.priceMax) : undefined;
+      if (priceMin !== undefined || priceMax !== undefined) {
+        find.price = {};
+        if (priceMin !== undefined) find.price.$gte = priceMin;
+        if (priceMax !== undefined) find.price.$lte = priceMax;
+      }
+
+      // ── Lọc theo điểm khởi hành ──────────────────────────────────────────
+      if (req.query.startDeparture && req.query.startDeparture !== "all") {
+        find.startDeparture = new RegExp(req.query.startDeparture, "i");
+      }
+
+      // ── Lọc theo điểm đến ────────────────────────────────────────────────
+      if (req.query.endDeparture && req.query.endDeparture !== "all") {
+        find.endDeparture = new RegExp(req.query.endDeparture, "i");
+      }
+
+      // ── Lọc theo khoảng ngày khởi hành ───────────────────────────────────
+      if (req.query.timeStart || req.query.timeEnd) {
+        find.timeStart = {};
+        if (req.query.timeStart) find.timeStart.$gte = new Date(req.query.timeStart);
+        if (req.query.timeEnd) find.timeStart.$lte = new Date(req.query.timeEnd);
+      }
+
+      // ── Lọc theo thời gian tour ───────────────────────────────────────────
+      if (req.query.timeTour && req.query.timeTour !== "all") {
+        find.timeTour = new RegExp(req.query.timeTour, "i");
+      }
 
       const sort: Record<string, any> = {};
       if (req.query.sortKey && req.query.sortValue) {
