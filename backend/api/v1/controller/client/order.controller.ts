@@ -56,6 +56,12 @@ export const order = async (req: Request<{}, any, OrderRequest>, res: Response):
         dataItem.price = infoTour.price;
         dataItem.discount = infoTour.discount;
         dataItem.timeStart = infoTour.timeStart;
+
+        // Cập nhật lại số lượng chỗ còn trống của tour
+        await Tour.updateOne(
+          { _id: item.tourId },
+          { $inc: { stock: -item.quantity } }
+        );
       }
 
       await new OrderItem(dataItem).save();
