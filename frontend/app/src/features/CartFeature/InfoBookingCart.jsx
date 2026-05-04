@@ -15,7 +15,7 @@ function InfoBookingCart(props) {
   const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
   const [formData, setFormData] = useState(null);
 
-  const cart = useSelector(state => state.cartReducer);
+  const cart = useSelector(state => state.cart || []);
   const dispatch = useDispatch();
 
   const onFinish = (values) => {

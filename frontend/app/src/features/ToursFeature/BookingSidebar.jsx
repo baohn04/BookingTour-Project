@@ -14,7 +14,7 @@ function BookingSidebar(props) {
 
   //Redux
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cartReducer);
+  const cart = useSelector((state) => state.cart || []);
 
   const formattedDate = formatDateHelper(tourDetail?.timeStart);
 

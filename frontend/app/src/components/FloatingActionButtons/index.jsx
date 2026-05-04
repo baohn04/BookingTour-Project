@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 function FloatingActionButtons() {
-  const cart = useSelector(state => state.cartReducer);
+  const cart = useSelector(state => state.cart || []);
   const totalQuantity = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
 
   return (

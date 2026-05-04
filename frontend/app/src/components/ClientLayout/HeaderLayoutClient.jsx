@@ -28,7 +28,7 @@ function HeaderLayoutClient() {
   const [settingGeneral, setSettingGeneral] = useState({});
   const [currentLang, setCurrentLang] = useState('vi');
 
-  const cart = useSelector(state => state.cartReducer);
+  const cart = useSelector(state => state.cart || []);
   const totalQuantity = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
 
   useEffect(() => {
