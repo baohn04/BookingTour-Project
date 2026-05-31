@@ -1,31 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getAdminRoles } from '../services/adminRoleServices';
 
 export const useAdminRoles = () => {
-  const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchRoles = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await getAdminRoles();
-      if (res && res.data) {
-        setRoles(res.data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch roles", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRoles();
-  }, [fetchRoles]);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['adminRoles'],
+    queryFn: getAdminRoles,
+  });
 
   return {
-    roles,
-    loading,
-    refetchRoles: fetchRoles
+    roles: data?.data ?? [],
+    loading: isLoading,
+    refetchRoles: refetch,
   };
 };

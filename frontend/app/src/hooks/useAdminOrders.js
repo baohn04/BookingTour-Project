@@ -1,12 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getAdminOrders } from '../services/adminOrderServices';
 
+const buildQueryString = (queryParams) => {
+  const params = new URLSearchParams();
+  if (queryParams.status) params.append('status', queryParams.status);
+  if (queryParams.keyword) params.append('keyword', queryParams.keyword);
+  if (queryParams.page) params.append('page', queryParams.page);
+  if (queryParams.limit) params.append('limit', queryParams.limit);
+  return params.toString();
+};
+
 export const useAdminOrders = (initialPage = 1, limit = 5) => {
-  const [orders, setOrders] = useState([]);
-  const [statistics, setStatistics] = useState({ total: 0, pending: 0, confirmed: 0, cancelled: 0 });
-  const [pagination, setPagination] = useState(null);
-  const [loading, setLoading] = useState(true);
-  
   const [queryParams, setQueryParams] = useState({
     page: initialPage,
     limit: limit,
@@ -14,38 +19,17 @@ export const useAdminOrders = (initialPage = 1, limit = 5) => {
     keyword: '',
   });
 
-  const fetchOrders = useCallback(async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (queryParams.status) params.append('status', queryParams.status);
-      if (queryParams.keyword) params.append('keyword', queryParams.keyword);
-      if (queryParams.page) params.append('page', queryParams.page);
-      if (queryParams.limit) params.append('limit', queryParams.limit);
-
-      const response = await getAdminOrders(params.toString());
-      if (response && response.data) {
-        setOrders(response.data.orders || []);
-        setPagination(response.data.pagination);
-        setStatistics(response.data.statistics || { total: 0, pending: 0, confirmed: 0, cancelled: 0 });
-      }
-    } catch (error) {
-      console.error("Failed to fetch admin orders:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [queryParams]);
-
-  useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['adminOrders', queryParams],
+    queryFn: () => getAdminOrders(buildQueryString(queryParams)),
+  });
 
   return {
-    orders,
-    statistics,
-    pagination,
-    loading,
-    refetchOrders: fetchOrders,
+    orders: data?.data?.orders ?? [],
+    statistics: data?.data?.statistics ?? { total: 0, pending: 0, confirmed: 0, cancelled: 0 },
+    pagination: data?.data?.pagination ?? null,
+    loading: isLoading,
+    refetchOrders: refetch,
     queryParams,
     setQueryParams,
   };

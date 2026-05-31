@@ -6,15 +6,28 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { thunk } from "redux-thunk";
 import rootReducers from './redux/reducers/rootReducer';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const store = createStore(rootReducers, applyMiddleware(thunk));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+      staleTime: 30 * 1000, // 30 giây
+    },
+  },
+});
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <Provider store={store}>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </Provider>
 );
 
