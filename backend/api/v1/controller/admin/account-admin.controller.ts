@@ -77,7 +77,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
       const role = await Role.findOne({
         _id: record.role_id,
         deleted: false,
-      }).select("-__v -createdAt -updatedAt").lean();
+      }).select("-__v -createdAt -updatedAt").lean() as AdminResponse["role"] | null;
       if (role) {
         record.role = {
           _id: role._id.toString(),
